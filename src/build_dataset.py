@@ -56,7 +56,7 @@ if __name__ == '__main__':
 
     image_catalog = pd.read_csv(os.path.join(DATA, 'catalog/image_catalog2.0train.csv'), comment='#', index_col=0)
     image_catalog['is_lens'] = (image_catalog['mag_lens'] > 1.2) & (image_catalog['n_sources'] != 0)
-    image_catalog[['ID', 'is_lens']].to_csv(os.path.join(RESULTS, 'lens_id_labels.csv'))
+    image_catalog[['ID', 'is_lens']].to_csv(os.path.join(RESULTS, 'lens_id_labels.csv'), index=False)
     train_outpath = os.path.join(DATA, 'train_multiband')
     test_outpath = os.path.join(DATA, 'test_multiband')
     if not os.path.isdir(test_outpath):
