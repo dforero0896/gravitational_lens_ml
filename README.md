@@ -28,4 +28,12 @@ Now you can run
 ```python
 python src/build_dataset.py ./
 ```
-to build the dataset as multiband images to be used by `keras`.
+to build the dataset as multiband images to be used by `keras`.\
+To do that, you need the `tifffile` library:
+```
+conda install -c conda-forge tifffile
+```
+or
+```
+pip install tifffile
+```
