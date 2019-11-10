@@ -21,6 +21,9 @@ data
 	test_multiband  # created by build_dataset.py
 	train_multiband # created by build_dataset.py
 ```
+This is easily done if you just download the dataset into the `data` folder and extract there. The `.gitignore` will ignore every file in the directory but the `README.md`.
+Please find the training set [here](http://metcalf1.difa.unibo.it/DATA3/datapack2.0train.tar.gz) and the test set [here](http://metcalf1.difa.unibo.it/DATA3/datapack2.0test.tar.gz).
+Although, you can run `bash src/get_dataset.sh` and it should be done for you. Mind that it could take some time.
 Now you can run 
 ```python
 python src/build_dataset.py ./
