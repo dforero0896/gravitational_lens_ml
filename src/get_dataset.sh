@@ -7,9 +7,9 @@ echo Getting train data into $DATA
 if [[ ! -e $DATA/datapack2.0train.tar.gz ]];then
 wget -P $DATA http://metcalf1.difa.unibo.it/DATA3/datapack2.0train.tar.gz
 fi
-tar xvzf $DATA/datapack2.0train.tar.gz
+tar xvzf $DATA/datapack2.0train.tar.gz -C $DATA
 echo Getting test data into $DATA
 if [[ ! -e $DATA/datapack2.0test.tar.gz ]];then
 wget -P $DATA http://metcalf1.difa.unibo.it/DATA3/datapack2.0test.tar.gz
 fi
-tar xvzf $DATA/datapack2.0test.tar.gz
+tar xvzf $DATA/datapack2.0test.tar.gz -C $DATA
