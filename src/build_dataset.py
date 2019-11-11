@@ -35,7 +35,9 @@ def build_image(id_, set_, bands = ['EUC_VIS', 'EUC_H', 'EUC_J', 'EUC_Y'], img_s
         t.close()
     return data
 def save_img_dataset(id_list, set_, outpath='.'):
+    sys.stdout.write('Saving into directory %s\n'%os.path.realpath(outpath))
     for id_ in id_list:
+        sys.stdout.write('Processing ID: %i\r'%id_)
         outname = os.path.join(outpath, 'image_%s_multiband.tiff'%id_)
         if os.path.isfile(outname):
             continue
