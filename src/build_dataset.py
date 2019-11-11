@@ -27,10 +27,10 @@ def build_image(id_, set_, bands = ['EUC_VIS', 'EUC_H', 'EUC_J', 'EUC_Y'], img_s
         else:
             band_data = tables[0][0].data
         band_data[np.isnan(band_data)] = 0.
-	interval = AsymmetricPercentileInterval(0.25, 99.75, n_samples=10000)
+        interval = AsymmetricPercentileInterval(0.25, 99.75, n_samples=10000)
         vmin, vmax = interval.get_limits(band_data)
         stretch = MinMaxInterval() +  LogStretch()
-	data[:,:,i] = stretch(((np.clip(band_data, -vmin*0.7, vmax))/(vmax)))
+        data[:,:,i] = stretch(((np.clip(band_data, -vmin*0.7, vmax))/(vmax)))
     for t in tables:
         t.close()
     return data
