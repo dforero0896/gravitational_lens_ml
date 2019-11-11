@@ -33,9 +33,11 @@ def build_image(id_, set_, bands = ['EUC_VIS', 'EUC_H', 'EUC_J', 'EUC_Y'], img_s
         data[:,:,i] = stretch(((np.clip(band_data, -vmin*0.7, vmax))/(vmax)))
     for t in tables:
         t.close()
-    return data
+    return data.astype(np.float32)
 def save_img_dataset(id_list, set_, outpath='.'):
+    sys.stdout.write('Saving into directory %s\n'%os.path.realpath(outpath))
     for id_ in id_list:
+        sys.stdout.write('Processing ID: %i\r'%id_)
         outname = os.path.join(outpath, 'image_%s_multiband.tiff'%id_)
         if os.path.isfile(outname):
             continue
