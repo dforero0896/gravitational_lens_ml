@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from astropy.io import fits
 from astropy.wcs import WCS
+from astropy.visualization import AsymmetricPercentileInterval, LogStretch, MinMaxInterval
 from reproject import reproject_interp
 import numpy as np
 import matplotlib.pyplot as plt
@@ -26,9 +27,10 @@ def build_image(id_, set_, bands = ['EUC_VIS', 'EUC_H', 'EUC_J', 'EUC_Y'], img_s
         else:
             band_data = tables[0][0].data
         band_data[np.isnan(band_data)] = 0.
-        vmax = np.max(band_data)
-        vmin = np.min(band_data)
-        data[:,:,i] = np.clip(band_data, vmin, vmax)/vmax * scale
+	interval = AsymmetricPercentileInterval(0.25, 99.75, n_samples=10000)
+        vmin, vmax = interval.get_limits(band_data)
+        stretch = MinMaxInterval() +  LogStretch()
+	data[:,:,i] = stretch(((np.clip(band_data, -vmin*0.7, vmax))/(vmax)))
     for t in tables:
         t.close()
     return data
@@ -53,7 +55,6 @@ if __name__ == '__main__':
     RESULTS = os.path.join(WORKDIR, 'results')
     TRAIN = os.path.join(DATA, 'datapack2.0train/Public')
     TEST = os.path.join(DATA, 'datapack2.0test/Public')
-
     image_catalog = pd.read_csv(os.path.join(DATA, 'catalog/image_catalog2.0train.csv'), comment='#', index_col=0)
     image_catalog['is_lens'] = (image_catalog['mag_lens'] > 1.2) & (image_catalog['n_sources'] != 0)
     image_catalog[['ID', 'is_lens']].to_csv(os.path.join(RESULTS, 'lens_id_labels.csv'), index=False)
