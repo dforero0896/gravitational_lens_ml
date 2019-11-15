@@ -6,8 +6,9 @@ import pandas as pd
 import os
 import re
 from sklearn.model_selection import train_test_split
-
-WORKDIR='/home/daniel/gdrive/EPFL/2019-2020/MachineLearning/Project/gravitational_lens_ml'
+import sys
+if len(sys.argv) != 2:                                                                                                                                                                       sys.exit('ERROR:\tPlease provide the path of the project directory.\nUSAGE:\t%s PROJECT_DIR\n'%sys.argv[0])                                                                      
+WORKDIR=os.path.abspath(sys.argv[1])  
 SRC = os.path.join(WORKDIR, 'src')
 DATA = os.path.join(WORKDIR,'data')
 RESULTS = os.path.join(WORKDIR, 'results')

@@ -38,7 +38,7 @@ local_test_df = pd.DataFrame()
 local_test_df['filenames'] = local_test_files
 local_test_df['labels'] = lens_df.loc[local_test_id, 'is_lens'].values.astype(int)
 
-batch_size = 24
+batch_size = 1 
 epochs = 15
 IMG_HEIGHT = 200
 IMG_WIDTH = 200
@@ -73,11 +73,11 @@ image_data_gen_val = TiffImageDataGenerator(dtype='float32')
 train_data_gen = image_data_gen_train.image_generator_dataframe(train_df,
                                   directory=TRAIN_MULTIBAND,
                                   x_col='filenames',
-                                 y_col='labels', batch_size = 1, validation=False)
+                                 y_col='labels', batch_size = batch_size, validation=False)
 val_data_gen = image_data_gen_val.image_generator_dataframe(train_df,
                                   directory=TRAIN_MULTIBAND,
                                   x_col='filenames',
-                                 y_col='labels', batch_size = 1, validation=True)
+                                 y_col='labels', batch_size = batch_size, validation=True)
 
 model = Sequential([
     Conv2D(16, 3, padding='same', activation='relu', 
@@ -106,12 +106,11 @@ cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path,
                                                  verbose=1)
 history = model.fit_generator(
     train_data_gen,
-    steps_per_epoch=total_train,
+    steps_per_epoch=10000,
     epochs=epochs,
     validation_data=val_data_gen,
-    validation_steps=total_val,
+    validation_steps=10000,
     callbacks = [cp_callback]
-    
 )
 
 model.save(os.path.join(RESULTS,'simple_cnn.h5'))
