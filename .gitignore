@@ -1,3 +1,4 @@
 # exclude everything
 data/*
 **/core*
+**/*ckpt*
