@@ -10,6 +10,8 @@ if not bool(int(sys.argv[1])):
 import tensorflow as tf
 from data_generator_function import TiffImageDataGenerator
 import numpy as np
+import matplotlib as mpl
+mpl.use('Agg')
 import matplotlib.pyplot as plt
 import pandas as pd
 import re

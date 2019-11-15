@@ -2,3 +2,4 @@ data/*
 **/core*
 **/*ckpt*
 **/*.pyc
+**/*.h5
