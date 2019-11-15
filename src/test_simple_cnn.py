@@ -106,7 +106,7 @@ cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path,
                                                  verbose=1)
 history = model.fit_generator(
     train_data_gen,
-    steps_per_epoch=total_train,
+    steps_per_epoch=total_train+1000,
     epochs=epochs,
     validation_data=val_data_gen,
     validation_steps=total_val,
