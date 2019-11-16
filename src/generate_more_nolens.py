@@ -1,36 +1,42 @@
 #!/usr/bin/env python
+from __future__ import absolute_import, division, print_function, unicode_literals
+import os
+import sys
+if len(sys.argv) != 3:
+        sys.exit('ERROR:\tPlease provide the path of the project directory.\nUSAGE:\t%s PROJECT_DIR PARALLEL?\n'%sys.argv[0])
 from data_generator_function import TiffImageDataGenerator
 import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
-import os
 import re
-from sklearn.model_selection import train_test_split
-import sys
-if len(sys.argv) != 2:                                                                                                                                                                       sys.exit('ERROR:\tPlease provide the path of the project directory.\nUSAGE:\t%s PROJECT_DIR\n'%sys.argv[0])                                                                      
-WORKDIR=os.path.abspath(sys.argv[1])  
+from helpers import *
+from data_generator_function import TiffImageDataGenerator
+parallel = bool(int(sys.argv[2]))
+if parallel:
+    from mpi4py import MPI
+    size = MPI.COMM_WORLD.Get_size()   # Size of communicator
+    rank = MPI.COMM_WORLD.Get_rank()   # Ranks in communicator
+    name = MPI.Get_processor_name()    # Node where this MPI process runs
+
+
+WORKDIR=os.path.abspath(sys.argv[1])
+sys.stdout.write('Project directory: %s\n'%WORKDIR)
 SRC = os.path.join(WORKDIR, 'src')
 DATA = os.path.join(WORKDIR,'data')
 RESULTS = os.path.join(WORKDIR, 'results')
 TRAIN_MULTIBAND = os.path.join(DATA, 'train_multiband')
 TEST_MULTIBAND = os.path.join(DATA, 'test_multiband')
-
-def get_file_id(filename, delimiters = '_|\.|-'):
-    id_ = [int(s) for s in re.split(delimiters, filename) if s.isdigit()][0]
-    return id_
+TRAIN_MULTIBAND_AUGMENT = os.path.join(DATA, 'train_multiband_augment')
+if not os.path.isdir(TRAIN_MULTIBAND_AUGMENT):
+    os.mkdir(TRAIN_MULTIBAND_AUGMENT)
 lens_df = pd.read_csv(os.path.join(RESULTS, 'lens_id_labels.csv'), index_col = 0)
-local_test_files = os.listdir(TRAIN_MULTIBAND)
-local_test_id = [
-    get_file_id(filename)
-    for filename in local_test_files
-]
-local_test_df = pd.DataFrame()
-local_test_df['filenames'] = local_test_files
-local_test_df['labels'] = lens_df.loc[local_test_id, 'is_lens'].values.astype(int)
-train_df, val_df = train_test_split(local_test_df, test_size=0.1, random_state=42)
-total_train = len(train_df)
-total_val = len(val_df)
-train_data_gen = TiffImageDataGenerator(featurewise_center=False,
+local_test_df = build_generator_dataframe(lens_df, TRAIN_MULTIBAND)
+no_lens_df = local_test_df[local_test_df['labels'] == 0]
+indices = range(len(lens_df[lens_df['is_lens'] == False]), len(lens_df[lens_df['is_lens'] == True]))
+if parallel:
+    new_indices = np.array_split(indices, size)
+    indices = new_indices[rank]
+augment_nolens = TiffImageDataGenerator(featurewise_center=False,
                                           samplewise_center=False,
                                           featurewise_std_normalization=False,
                                           samplewise_std_normalization=False,
@@ -41,7 +47,7 @@ train_data_gen = TiffImageDataGenerator(featurewise_center=False,
                                           height_shift_range=0.0,
                                           brightness_range=(0.8, 1.1),
                                           shear_range=0.0,
-                                          zoom_range=(0.9, 1.1),
+                                          zoom_range=(0.9, 1),
                                           channel_shift_range=0.0,
                                           fill_mode='wrap',
                                           cval=0.0,
@@ -50,16 +56,18 @@ train_data_gen = TiffImageDataGenerator(featurewise_center=False,
                                           rescale=None,
                                           preprocessing_function=None,
                                           data_format='channels_last',
-                                          validation_split=0.2,
                                           dtype='float32')
-
-
-fig, ax = plt.subplots(1,4, figsize = (10, 2.5))
-for a in ax.ravel():
-    img, label = next(train_data_gen.image_generator_dataframe(train_df,
+augment_nolens_gen = augment_nolens.image_generator_dataframe(no_lens_df,
                                   directory=TRAIN_MULTIBAND,
                                   x_col='filenames',
-                                 y_col='labels', batch_size = 1, validation=True))
-    a.imshow(img[0][:,:,2])
-    a.set_xlabel(label[0])
-plt.show()
+                                 y_col='labels', batch_size = 1, validation=False) 
+for i in indices:
+    random_mod_nolens, label = next(augment_nolens_gen)
+    outname = os.path.join(TRAIN_MULTIBAND_AUGMENT, 'image_%i_augment.tiff'%i)
+    tifffile.imwrite(outname, random_mod_nolens)
+    break
+    
+if parallel:
+    MPI.Finalize()
+
+    
