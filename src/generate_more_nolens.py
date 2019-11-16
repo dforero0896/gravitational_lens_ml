@@ -17,7 +17,7 @@ if parallel:
     size = MPI.COMM_WORLD.Get_size()   # Size of communicator
     rank = MPI.COMM_WORLD.Get_rank()   # Ranks in communicator
     name = MPI.Get_processor_name()    # Node where this MPI process runs
-
+    sys.stdout.write('Using %i tasks. This is number %i\n'%(size, rank))
 
 WORKDIR=os.path.abspath(sys.argv[1])
 sys.stdout.write('Project directory: %s\n'%WORKDIR)
@@ -62,10 +62,11 @@ augment_nolens_gen = augment_nolens.image_generator_dataframe(no_lens_df,
                                   x_col='filenames',
                                  y_col='labels', batch_size = 1, validation=False) 
 for i in indices:
-    random_mod_nolens, label = next(augment_nolens_gen)
     outname = os.path.join(TRAIN_MULTIBAND_AUGMENT, 'image_%i_augment.tiff'%i)
+    if os.path.isfile(outname):
+        continue
+    random_mod_nolens, label = next(augment_nolens_gen)
     tifffile.imwrite(outname, random_mod_nolens)
-    break
     
 if parallel:
     MPI.Finalize()
