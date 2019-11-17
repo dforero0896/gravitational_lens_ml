@@ -29,8 +29,7 @@ def build_generator_dataframe(id_label_df, directory):
     return df
 
 def main():
-    os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
-    
+    ###### Paths
     WORKDIR='/home/lapy/PhD/Courses/MachineLearning/Project2/'
     SRC = os.path.join(WORKDIR, 'gravitational_lens_ml/src')
     DATA = os.path.join(WORKDIR,'')
@@ -39,14 +38,13 @@ def main():
     #TEST = os.path.join(DATA, 'datapack2.0test/')
     TRAIN_MULTIBAND = os.path.join(DATA, 'train_multiband')
     #TEST_MULTIBAND = os.path.join(DATA, 'test_multiband')
-
+    
     image_catalog = pd.read_csv(os.path.join(DATA, 'datapack2.0train/image_catalog2.0train.csv'), comment='#', index_col=0)
     print(image_catalog.shape)
     
     # Training parameters
     batch_size = 32  # orig paper trained all networks with batch_size=128
     epochs = 1
-    data_augmentation = True
     num_classes = 10
 
     # Model parameter
@@ -62,13 +60,11 @@ def main():
     # ResNet110 |18(12)| 92.65     | 93.39+-.16| 93.15     | 93.63     | 165(180)
     # ResNet164 |27(18)| -----     | 94.07     | -----     | 94.54     | ---(---)
     # ResNet1001| (111)| -----     | 92.39     | -----     | 95.08+-.14| ---(---)
-    # ---------------------------------------------------------------------------
+    # --------------------------------------------------------------------------- 
     n = 3
-
     # Model version
     # Orig paper: version = 1 (ResNet v1), Improved ResNet: version = 2 (ResNet v2)
     version = 1
-
     # Computed depth from supplied model parameter n
     if version == 1:
         depth = n * 6 + 2
@@ -85,6 +81,7 @@ def main():
     total_train = len(train_df)
     total_val = len(val_df)
     
+    ###### Create Tiff Image Data Generator objects for train and validation
     image_data_gen_train = TiffImageDataGenerator(featurewise_center=False,
                                           samplewise_center=False,
                                           featurewise_std_normalization=False,
@@ -109,6 +106,7 @@ def main():
 
     image_data_gen_val = TiffImageDataGenerator(dtype='float32')
 
+    ###### Create generators for Images and Labels
     train_data_gen = image_data_gen_train.image_generator_dataframe(train_df,
                                   directory=TRAIN_MULTIBAND,
                                   x_col='filenames',
@@ -118,11 +116,17 @@ def main():
                                   directory=TRAIN_MULTIBAND,
                                   x_col='filenames',
                                  y_col='labels', batch_size = 1, validation=True)
-
-    image, label=next(train_data_gen)
-
+ 
+    ###### Obtain the shape of the input data (train images)
+    temp_data_gen = image_data_gen_train.image_generator_dataframe(train_df,
+                                  directory=TRAIN_MULTIBAND,
+                                  x_col='filenames',
+                                 y_col='labels', batch_size = 1, validation=False)
+    
+    image, label=next(temp_data_gen)
     input_shape = image[0].shape
 
+    ###### Create model
     if version == 2:
         model = myf.resnet_v2(input_shape=input_shape, depth=depth)
     else:
@@ -135,7 +139,6 @@ def main():
 
     # Prepare model model saving directory.
     save_dir =  os.path.join(RESULTS, 'checkpoints/restnet/')
-
     model_name = 'cifar10_%s_model.{epoch:03d}.h5' % model_type
     if not os.path.isdir(save_dir):
         os.makedirs(save_dir)
@@ -156,7 +159,9 @@ def main():
 
     callbacks = [checkpoint, lr_reducer, lr_scheduler]
 
-    print('Using real-time data augmentation.')
+
+    ###### Train the RestNet
+    print('Train the RestNest using real-time data augmentation.')
         
     history = model.fit_generator(train_data_gen,
                                 steps_per_epoch=total_train,
