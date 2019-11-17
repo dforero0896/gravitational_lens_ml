@@ -67,7 +67,6 @@ for i in indices:
     if os.path.isfile(outname) and not overwrite:
         continue
     random_mod_nolens, label = next(augment_nolens_gen)
-    print(random_mod_nolens[0].shape)
     tifffile.imwrite(outname, random_mod_nolens[0])
     
 if parallel:
