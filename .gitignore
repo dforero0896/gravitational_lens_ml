@@ -1,5 +1,5 @@
-# exclude everything
-data/*
-
-# exception to the rule
-!data/README.md 
+**/data
+**/core*
+**/*ckpt*
+**/*.pyc
+**/*.h5
