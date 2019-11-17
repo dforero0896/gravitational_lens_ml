@@ -2,8 +2,8 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 import os
 import sys
-if len(sys.argv) != 3:
-        sys.exit('ERROR:\tPlease provide the path of the project directory.\nUSAGE:\t%s PROJECT_DIR PARALLEL?\n'%sys.argv[0])
+if len(sys.argv) != 4:
+        sys.exit('ERROR:\tPlease provide the path of the project directory.\nUSAGE:\t%s PROJECT_DIR PARALLEL? OVERWITE\n'%sys.argv[0])
 from data_generator_function import TiffImageDataGenerator
 import numpy as np
 import matplotlib.pyplot as plt
@@ -12,6 +12,7 @@ import re
 from helpers import *
 from data_generator_function import TiffImageDataGenerator
 parallel = bool(int(sys.argv[2]))
+overwrite = bool(int(sys.argv[3]))
 if parallel:
     from mpi4py import MPI
     size = MPI.COMM_WORLD.Get_size()   # Size of communicator
@@ -63,10 +64,11 @@ augment_nolens_gen = augment_nolens.image_generator_dataframe(no_lens_df,
                                  y_col='labels', batch_size = 1, validation=False) 
 for i in indices:
     outname = os.path.join(TRAIN_MULTIBAND_AUGMENT, 'image_%i_augment.tiff'%i)
-    if os.path.isfile(outname):
+    if os.path.isfile(outname) and not overwrite:
         continue
     random_mod_nolens, label = next(augment_nolens_gen)
-    tifffile.imwrite(outname, random_mod_nolens)
+    print(random_mod_nolens[0].shape)
+    tifffile.imwrite(outname, random_mod_nolens[0])
     
 if parallel:
     MPI.Finalize()
