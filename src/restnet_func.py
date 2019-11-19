@@ -69,7 +69,7 @@ def resnet_layer(inputs,
         x = conv(x)
     return x
 
-def resnet_v1(input_shape, depth, num_classes=10):
+def resnet_v1(input_shape, depth, num_classes=2):
     """ResNet Version 1 Model builder [a]
 
     Stacks of 2 x (3 x 3) Conv2D-BN-ReLU
@@ -142,7 +142,7 @@ def resnet_v1(input_shape, depth, num_classes=10):
     model = tf.keras.models.Model(inputs=inputs, outputs=outputs)
     return model
 
-def resnet_v2(input_shape, depth, num_classes=10):
+def resnet_v2(input_shape, depth, num_classes=2):
     """ResNet Version 2 Model builder [b]
 
     Stacks of (1 x 1)-(3 x 3)-(1 x 1) BN-ReLU-Conv2D or also known as
@@ -236,3 +236,4 @@ def resnet_v2(input_shape, depth, num_classes=10):
     # Instantiate model.
     model = tf.keras.models.Model(inputs=inputs, outputs=outputs)
     return model
+    

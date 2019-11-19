@@ -1,10 +1,8 @@
-import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
 import os
 import sys
-import tifffile
 import re
+import numpy as np
+import pandas as pd
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
 
@@ -12,7 +10,7 @@ from data_generator_function import TiffImageDataGenerator
 import restnet_func as myf
 
 
-def get_file_id(filename, delimiters = '_|\.|-'):
+def get_file_id(filename, delimiters='_|\\.|-'):
     id_ = [int(s) for s in re.split(delimiters, filename) if s.isdigit()][0]
     return id_
 
@@ -30,22 +28,21 @@ def build_generator_dataframe(id_label_df, directory):
 
 def main():
     ###### Paths
-    WORKDIR='/home/lapy/PhD/Courses/MachineLearning/Project2/'
-    SRC = os.path.join(WORKDIR, 'gravitational_lens_ml/src')
-    DATA = os.path.join(WORKDIR,'')
-    RESULTS = os.path.join(WORKDIR, 'gravitational_lens_ml/results')
-    TRAIN = os.path.join(DATA, 'datapack2.0train/')
-    #TEST = os.path.join(DATA, 'datapack2.0test/')
+    WORKDIR = os.path.abspath(sys.argv[2])
+    sys.stdout.write('Project directory: %s\n'%WORKDIR)
+    #SRC = os.path.join(WORKDIR, 'src')
+    DATA = os.path.join(WORKDIR, 'data')
+    RESULTS = os.path.join(WORKDIR, 'results')
     TRAIN_MULTIBAND = os.path.join(DATA, 'train_multiband')
     #TEST_MULTIBAND = os.path.join(DATA, 'test_multiband')
-    
+
     image_catalog = pd.read_csv(os.path.join(DATA, 'datapack2.0train/image_catalog2.0train.csv'), comment='#', index_col=0)
     print(image_catalog.shape)
     
     # Training parameters
-    batch_size = 32  # orig paper trained all networks with batch_size=128
+    #batch_size = 32  # orig paper trained all networks with batch_size=128
     epochs = 1
-    num_classes = 10
+    num_classes = 2
 
     # Model parameter
     # ----------------------------------------------------------------------------
@@ -74,9 +71,10 @@ def main():
     # Model name, depth and version
     model_type = 'ResNet%dv%d' % (depth, version)
         
-    lens_df = pd.read_csv(os.path.join(RESULTS, 'lens_id_labels.csv'), index_col = 0)
+    lens_df = pd.read_csv(os.path.join(RESULTS, 'lens_id_labels.csv'), index_col=0)
     local_test_df = build_generator_dataframe(lens_df, TRAIN_MULTIBAND)
     
+    ###### Split the TRAIN_MULTIBAND set into train and validation sets. Set test_size below!
     train_df, val_df = train_test_split(local_test_df, test_size=0.1, random_state=42)
     total_train = len(train_df)
     total_val = len(val_df)
@@ -108,29 +106,29 @@ def main():
 
     ###### Create generators for Images and Labels
     train_data_gen = image_data_gen_train.image_generator_dataframe(train_df,
-                                  directory=TRAIN_MULTIBAND,
-                                  x_col='filenames',
-                                 y_col='labels', batch_size = 1, validation=False)
+                                directory=TRAIN_MULTIBAND,
+                                x_col='filenames',
+                                y_col='labels', batch_size=1, validation=False)
     
     val_data_gen = image_data_gen_val.image_generator_dataframe(train_df,
-                                  directory=TRAIN_MULTIBAND,
-                                  x_col='filenames',
-                                 y_col='labels', batch_size = 1, validation=True)
+                                directory=TRAIN_MULTIBAND,
+                                x_col='filenames',
+                                y_col='labels', batch_size=1, validation=True)
  
     ###### Obtain the shape of the input data (train images)
     temp_data_gen = image_data_gen_train.image_generator_dataframe(train_df,
-                                  directory=TRAIN_MULTIBAND,
-                                  x_col='filenames',
-                                 y_col='labels', batch_size = 1, validation=False)
-    
-    image, label=next(temp_data_gen)
+                                directory=TRAIN_MULTIBAND,
+                                x_col='filenames',
+                                y_col='labels', batch_size=1, validation=False)
+
+    image, _ = next(temp_data_gen)
     input_shape = image[0].shape
 
     ###### Create model
     if version == 2:
-        model = myf.resnet_v2(input_shape=input_shape, depth=depth)
+        model = myf.resnet_v2(input_shape=input_shape, depth=depth, num_classes=num_classes)
     else:
-        model = myf.resnet_v1(input_shape=input_shape, depth=depth)
+        model = myf.resnet_v1(input_shape=input_shape, depth=depth, num_classes=num_classes)
 
     model.compile(loss='sparse_categorical_crossentropy',
                 optimizer=tf.keras.optimizers.Adam(learning_rate=myf.lr_schedule(0)),
@@ -138,7 +136,7 @@ def main():
     model.summary()
 
     # Prepare model model saving directory.
-    save_dir =  os.path.join(RESULTS, 'checkpoints/restnet/')
+    save_dir = os.path.join(RESULTS, 'checkpoints/restnet/')
     model_name = 'cifar10_%s_model.{epoch:03d}.h5' % model_type
     if not os.path.isdir(save_dir):
         os.makedirs(save_dir)
@@ -164,19 +162,25 @@ def main():
     ###### Train the RestNet
     print('Train the RestNest using real-time data augmentation.')
         
-    history = model.fit_generator(train_data_gen,
+    model.fit_generator(train_data_gen,
                                 steps_per_epoch=total_train,
                                 epochs=epochs,
                                 validation_data=val_data_gen,
                                 validation_steps=total_val,
-                                callbacks=callbacks, 
-                            )
+                                callbacks=callbacks)
           
     # Score trained model.
-    scores = model.evaluate_generator(val_data_gen, verbose=1, steps = total_val)
+    scores = model.evaluate_generator(val_data_gen, verbose=1, steps=total_val)
     print('Test loss:', scores[0])
     print('Test accuracy:', scores[1])
 
 
-if __name__== '__main__':
+if __name__ == '__main__':
+    if len(sys.argv) != 3:
+        print('ERROR:\tPlease provide:\n1. GPU (yes = 1 / no = 0);\n2. the path of the project directory.\nUSAGE:\t%s USE_GPU PROJECT_DIR\n'%sys.argv[0])
+        sys.exit(2)
+    if not bool(int(sys.argv[1])):
+        sys.stdout.write('Not using GPU.')
+        os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
     main()
+    
