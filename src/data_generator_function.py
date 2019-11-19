@@ -28,7 +28,7 @@ class TiffImageDataGenerator(ImageDataGenerator):
                               x_col='filename',
                               y_col='class',
                               batch_size=64,
-                              validation=False):
+                              validation=False, bands = [True, True, True, True]):
         """Loads tiff image data by batches and automatically applies transformations.
 
         param: dataframe (pandas.DataFrame): Dataframe containing columns 'filename' and 'class'.
@@ -49,7 +49,7 @@ class TiffImageDataGenerator(ImageDataGenerator):
 
             # Read in each input, perform preprocessing and get labels
             for input_path in batch_paths:
-                input = self.get_input(os.path.join(directory, input_path))
+                input = self.get_input(os.path.join(directory, input_path))[:,:,bands]
                 output = dataframe[dataframe[x_col] == input_path][y_col].values[0]
                 if self.preprocessing_function:
                     input = self.preprocessing_function(input)

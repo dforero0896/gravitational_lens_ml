@@ -23,7 +23,7 @@ def build_generator_dataframe(id_label_df, directory):
         for filename in files
     ]
     df = pd.DataFrame()
-    df['filenames'] = files
+    df['filenames'] = [os.path.realpath(os.path.join(directory, f)) for f in files]
     df['labels'] = id_label_df.loc[ids, 'is_lens'].values.astype(int)
     df['ID'] = ids
     return df
