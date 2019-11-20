@@ -19,6 +19,7 @@ import re
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Conv2D, Flatten, Dropout, MaxPooling2D
+from tensorflow import keras
 from helpers import build_generator_dataframe, get_file_id
 WORKDIR=os.path.abspath(sys.argv[2])
 sys.stdout.write('Project directory: %s\n'%WORKDIR)
@@ -78,6 +79,14 @@ val_data_gen = image_data_gen_val.image_generator_dataframe(train_df,
                                   directory=TRAIN_MULTIBAND,
                                   x_col='filenames',
                                  y_col='labels', batch_size = batch_size, validation=True)
+# Define metrics for the model.
+metrics = [keras.metrics.TruePositives(name='tp'),
+      keras.metrics.FalsePositives(name='fp'),
+      keras.metrics.TrueNegatives(name='tn'),
+      keras.metrics.FalseNegatives(name='fn'), 
+      keras.metrics.BinaryAccuracy(name='accuracy'),
+      keras.metrics.AUC(name='auc')]
+
 
 model = Sequential([
     Conv2D(16, 3, padding='same', activation='relu', 
@@ -96,7 +105,7 @@ model = Sequential([
 
 model.compile(optimizer='adam',
               loss='binary_crossentropy',
-              metrics=['accuracy'])
+              metrics=metrics)
 model.summary()
 
 checkpoint_path = os.path.join(RESULTS, 'checkpoints/simple_cnn/simple_cnn.ckpt')

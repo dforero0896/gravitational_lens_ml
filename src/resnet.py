@@ -6,7 +6,7 @@ import pandas as pd
 import pickle
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
-
+from tensorflow import keras
 from data_generator_function import TiffImageDataGenerator
 import resnet_func as myf
 
@@ -136,6 +136,14 @@ def main():
         model = myf.resnet_v2(input_shape=input_shape, depth=depth, num_classes=num_classes)
     else:
         model = myf.resnet_v1(input_shape=input_shape, depth=depth, num_classes=num_classes)
+
+    # Define metrics for the model.
+    #metrics = [keras.metrics.TruePositives(name='tp'),
+    #  keras.metrics.FalsePositives(name='fp'),
+    #  keras.metrics.TrueNegatives(name='tn'),
+    #  keras.metrics.FalseNegatives(name='fn'), 
+    #  keras.metrics.BinaryAccuracy(name='accuracy'),
+    #  keras.metrics.AUC(name='auc')]
 
     model.compile(loss='sparse_categorical_crossentropy',
                 optimizer=tf.keras.optimizers.Adam(learning_rate=myf.lr_schedule(0)),
