@@ -35,8 +35,8 @@ dataframe_for_generator = build_generator_dataframe(lens_df, TRAIN_MULTIBAND)
 # Extract data proportions for loss weighting
 n_lens_clean = len(lens_df[lens_df['is_lens'] == True])
 n_nolens_clean = len(lens_df[lens_df['is_lens'] == False])
-equal_class_coeff = n_lens_clean/n_nolens_clean
-natural_class_coeff = 1e3*n_lens_clean/n_nolens_clean 
+equal_class_coeff = [n_nolens_clean/(n_nolens_clean + n_lens_clean), n_lens_clean/(n_lens_clean + n_nolens_clean)]
+natural_class_coeff = [1000 * n_nolens_clean/(n_nolens_clean + n_lens_clean), n_lens_clean/(n_lens_clean + n_nolens_clean)]
 
 batch_size = 100 
 epochs = 15
@@ -121,13 +121,17 @@ cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path,
 # Define class weights for unevenly distributed (biased) dataset.
 if data_bias == 'natural':
     sys.stdout.write('Using natural data bias: 1000x more non lenses than lenses.\n')
-    nolens_class_coeff = natural_class_coeff
+    class_coeff = natural_class_coeff
 elif data_bias == 'none':
     sys.stdout.write('Using no data bias (simulate equal proportion among classes).\n')
-    nolens_class_coeff = equal_class_coeff
+    class_coeff = equal_class_coeff
+elif data_bias == 'raw':
+    sys.stdout.write('Using the raw bias (no weights applied).\n')
+    class_coeff = 1.
 else:
     raise NotImplementedError('data_bias must be either natural or none.')
-class_weights = {0:nolens_class_coeff, 1:1}
+class_weights = {0:class_coeff[0], 1:class_coeff[1]}
+sys.stdout.write('Using weights: %s'%class_weights)
 
 es_callback = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', min_delta=1, patience=2, verbose=0, mode='auto', baseline=None, restore_best_weights=True)
 history = model.fit_generator(
