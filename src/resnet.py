@@ -3,11 +3,12 @@ import sys
 import re
 import numpy as np
 import pandas as pd
+import pickle
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
 
 from data_generator_function import TiffImageDataGenerator
-import restnet_func as myf
+import resnet_func as myf
 
 
 def get_file_id(filename, delimiters='_|\\.|-'):
@@ -43,7 +44,7 @@ def main():
     #batch_size = 32  # orig paper trained all networks with batch_size=128
     epochs = 1
     num_classes = 2
-
+    data_bias = 'none'
     # Model parameter
     # ----------------------------------------------------------------------------
     #           |      | 200-epoch | Orig Paper| 200-epoch | Orig Paper| sec/epoch
@@ -70,12 +71,18 @@ def main():
 
     # Model name, depth and version
     model_type = 'ResNet%dv%d' % (depth, version)
-        
+    ###### Create the dataframe containing filenames and labels.    
+    # This is ok if we use weighted losses. #TODO: Weighted loss
     lens_df = pd.read_csv(os.path.join(RESULTS, 'lens_id_labels.csv'), index_col=0)
-    local_test_df = build_generator_dataframe(lens_df, TRAIN_MULTIBAND)
+    dataframe_for_generator = build_generator_dataframe(lens_df, TRAIN_MULTIBAND)
+    # Extract data proportions for loss weighting
+    n_lens_clean = len(lens_df[lens_df['is_lens'] == True])
+    n_nolens_clean = len(lens_df[lens_df['is_lens'] == False])
+    equal_class_coeff = n_lens_clean/n_nolens_clean
+    natural_class_coeff = 1e3*n_lens_clean/n_nolens_clean
     
     ###### Split the TRAIN_MULTIBAND set into train and validation sets. Set test_size below!
-    train_df, val_df = train_test_split(local_test_df, test_size=0.1, random_state=42)
+    train_df, val_df = train_test_split(dataframe_for_generator, test_size=0.1, random_state=42)
     total_train = len(train_df)
     total_val = len(val_df)
     
@@ -130,14 +137,14 @@ def main():
     else:
         model = myf.resnet_v1(input_shape=input_shape, depth=depth, num_classes=num_classes)
 
-    model.compile(loss='sparse_categorical_crossentropy',
+    model.compile(loss='binary_crossentropy',
                 optimizer=tf.keras.optimizers.Adam(learning_rate=myf.lr_schedule(0)),
                 metrics=['accuracy'])
     model.summary()
 
     # Prepare model model saving directory.
-    save_dir = os.path.join(RESULTS, 'checkpoints/restnet/')
-    model_name = 'cifar10_%s_model.{epoch:03d}.h5' % model_type
+    save_dir = os.path.join(RESULTS, 'checkpoints/resnet/')
+    model_name = 'gravlens_%s_model.{epoch:03d}.h5' % model_type
     if not os.path.isdir(save_dir):
         os.makedirs(save_dir)
     filepath = os.path.join(save_dir, model_name)
@@ -158,19 +165,31 @@ def main():
 
     callbacks = [checkpoint, lr_reducer, lr_scheduler]
 
-
-    ###### Train the RestNet
-    print('Train the RestNest using real-time data augmentation.')
+    # Prepare class weights.
+    if data_bias == 'natural':
+        nolens_class_coeff = natural_class_coeff
+    elif data_bias == 'none':
+        nolens_class_coeff = equal_class_coeff
+    else:
+        raise NotImplementedError('data_bias must be either natural or none.')
+    class_weights = {0:nolens_class_coeff, 1:1}
+    
+    ###### Train the ResNet
+    print('Train the ResNet using real-time data augmentation.')
         
-    model.fit_generator(train_data_gen,
+    history = model.fit_generator(train_data_gen,
                                 steps_per_epoch=total_train,
                                 epochs=epochs,
                                 validation_data=val_data_gen,
                                 validation_steps=total_val,
-                                callbacks=callbacks)
+                                callbacks=callbacks,
+                                class_weight= class_weights)
           
     # Score trained model.
     scores = model.evaluate_generator(val_data_gen, verbose=1, steps=total_val)
+    model.save(os.path.join(RESULTS,model_name))
+    with open(os.path.join(RESULTS,model_name.replace('h5', 'history')), 'wb') as file_pi:
+            pickle.dump(history.history, file_pi)
     print('Test loss:', scores[0])
     print('Test accuracy:', scores[1])
 

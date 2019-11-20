@@ -38,6 +38,7 @@ class TiffImageDataGenerator(ImageDataGenerator):
         param: batch_size (int): Number of images to load at a time. Defaults to 64.
         param: validation (bool): Whether or not the generator is used for validation. If True, no transformations are applied.
                                     Defaults to False.
+        param: bands (list of bool): Boolean mask of channels to use. Defaults to [True, True, True, True] (use all channels).
         yields: batch_x, batch_y
         """
         files = dataframe[x_col].values

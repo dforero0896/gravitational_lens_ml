@@ -6,7 +6,7 @@ import pickle
 if len(sys.argv) != 3:
         sys.exit('ERROR:\tPlease provide the path of the project directory.\nUSAGE:\t%s USE_GPU PROJECT_DIR\n'%sys.argv[0])
 if not bool(int(sys.argv[1])):
-    sys.stdout.write('Not using GPU.')
+    sys.stdout.write('Not using GPU.\n')
     os.environ["CUDA_VISIBLE_DEVICES"]="-1"
 import tensorflow as tf
 from data_generator_function import TiffImageDataGenerator
@@ -31,14 +31,17 @@ TEST_MULTIBAND = os.path.join(DATA, 'test_multiband')
 
 lens_df = pd.read_csv(os.path.join(RESULTS, 'lens_id_labels.csv'), index_col = 0)
 dataframe_for_generator = build_generator_dataframe(lens_df, TRAIN_MULTIBAND)
-# Append the extra non-lens images:
-nolens_extra = list(map(lambda f: os.path.realpath(os.path.join(TRAIN_MULTIBAND_AUGMENT, f)),os.listdir(TRAIN_MULTIBAND_AUGMENT)))
-nolens_extra_df = pd.DataFrame(dict(zip(['filenames', 'labels', 'ID'], [nolens_extra, np.zeros(len(nolens_extra), dtype=int), 9999*np.ones(len(nolens_extra), dtype=int)])))
-dataframe_for_generator = pd.concat([dataframe_for_generator, nolens_extra_df]).sample(frac=1)
+# Extract data proportions for loss weighting
+n_lens_clean = len(lens_df[lens_df['is_lens'] == True])
+n_nolens_clean = len(lens_df[lens_df['is_lens'] == False])
+equal_class_coeff = n_lens_clean/n_nolens_clean
+natural_class_coeff = 1e3*n_lens_clean/n_nolens_clean 
+
 batch_size = 1 
 epochs = 15
 IMG_HEIGHT = 200
 IMG_WIDTH = 200
+data_bias = 'none'
 
 train_df, val_df = train_test_split(dataframe_for_generator, test_size=0.1, random_state=42)
 total_train = len(train_df)
@@ -101,6 +104,18 @@ checkpoint_dir = os.path.dirname(checkpoint_path)
 cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path,
                                                  save_weights_only=True,
                                                  verbose=1)
+
+# Define class weights for unevenly distributed (biased) dataset.
+if data_bias == 'natural':
+    sys.stdout.write('Using natural data bias: 1000x more non lenses than lenses.\n')
+    nolens_class_coeff = natural_class_coeff
+elif data_bias == 'none':
+    sys.stdout.write('Using no data bias (simulate equal proportion among classes).\n')
+    nolens_class_coeff = equal_class_coeff
+else:
+    raise NotImplementedError('data_bias must be either natural or none.')
+class_weights = {0:nolens_class_coeff, 1:1}
+
 es_callback = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', min_delta=1, patience=2, verbose=0, mode='auto', baseline=None, restore_best_weights=True)
 history = model.fit_generator(
     train_data_gen,
@@ -108,32 +123,13 @@ history = model.fit_generator(
     epochs=epochs,
     validation_data=val_data_gen,
     validation_steps=5000,
-    callbacks = [cp_callback, es_callback]
+    callbacks = [cp_callback, es_callback],
+    class_weight = class_weights
 )
 
 model.save(os.path.join(RESULTS,'simple_cnn.h5'))
 with open(os.path.join(RESULTS,'simple_cnn_history'), 'wb') as file_pi:
         pickle.dump(history.history, file_pi)
 
-acc = history.history['accuracy']
-val_acc = history.history['val_accuracy']
 
-loss = history.history['loss']
-val_loss = history.history['val_loss']
-
-epochs_range = range(epochs)
-
-plt.figure(figsize=(8, 8))
-plt.subplot(1, 2, 1)
-plt.plot(epochs_range, acc, label='Training Accuracy')
-plt.plot(epochs_range, val_acc, label='Validation Accuracy')
-plt.legend(loc='lower right')
-plt.title('Training and Validation Accuracy')
-
-plt.subplot(1, 2, 2)
-plt.plot(epochs_range, loss, label='Training Loss')
-plt.plot(epochs_range, val_loss, label='Validation Loss')
-plt.legend(loc='upper right')
-plt.title('Training and Validation Loss')
-plt.savefig(os,path,join(RESULTS, 'plots/results.png'), dpi = 200)
 
