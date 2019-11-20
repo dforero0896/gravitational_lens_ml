@@ -38,7 +38,7 @@ n_nolens_clean = len(lens_df[lens_df['is_lens'] == False])
 equal_class_coeff = n_lens_clean/n_nolens_clean
 natural_class_coeff = 1e3*n_lens_clean/n_nolens_clean 
 
-batch_size = 1 
+batch_size = 100 
 epochs = 15
 IMG_HEIGHT = 200
 IMG_WIDTH = 200
@@ -79,6 +79,9 @@ val_data_gen = image_data_gen_val.image_generator_dataframe(train_df,
                                   directory=TRAIN_MULTIBAND,
                                   x_col='filenames',
                                  y_col='labels', batch_size = batch_size, validation=True)
+# Define correct bias to initialize
+output_bias = tf.keras.initializers.Constant(np.log(n_lens_clean/n_nolens_clean))
+
 # Define metrics for the model.
 metrics = [keras.metrics.TruePositives(name='tp'),
       keras.metrics.FalsePositives(name='fp'),
@@ -100,7 +103,8 @@ model = Sequential([
     Dropout(0.2),
     Flatten(),
     Dense(512, activation='relu'),
-    Dense(1, activation='sigmoid')
+    Dense(1, activation='sigmoid', 
+    bias_initializer = output_bias)
 ])
 
 model.compile(optimizer='adam',
