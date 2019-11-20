@@ -37,7 +37,7 @@ def main():
     TRAIN_MULTIBAND = os.path.join(DATA, 'train_multiband')
     #TEST_MULTIBAND = os.path.join(DATA, 'test_multiband')
 
-    image_catalog = pd.read_csv(os.path.join(DATA, 'datapack2.0train/image_catalog2.0train.csv'), comment='#', index_col=0)
+    image_catalog = pd.read_csv(os.path.join(DATA, 'catalog/image_catalog2.0train.csv'), comment='#', index_col=0)
     print(image_catalog.shape)
     
     # Training parameters
@@ -137,7 +137,7 @@ def main():
     else:
         model = myf.resnet_v1(input_shape=input_shape, depth=depth, num_classes=num_classes)
 
-    model.compile(loss='binary_crossentropy',
+    model.compile(loss='sparse_categorical_crossentropy',
                 optimizer=tf.keras.optimizers.Adam(learning_rate=myf.lr_schedule(0)),
                 metrics=['accuracy'])
     model.summary()
@@ -173,7 +173,7 @@ def main():
     else:
         raise NotImplementedError('data_bias must be either natural or none.')
     class_weights = {0:nolens_class_coeff, 1:1}
-    
+
     ###### Train the ResNet
     print('Train the ResNet using real-time data augmentation.')
         
