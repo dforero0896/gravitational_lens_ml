@@ -3,7 +3,8 @@ import sys
 import re
 import numpy as np
 import pandas as pd
-import pickle
+import configparser
+import io
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
 from tensorflow import keras
@@ -28,21 +29,42 @@ def build_generator_dataframe(id_label_df, directory):
     return df
 
 def main():
+    
+    config = configparser.ConfigParser()
+    config.read('config.ini')
+    #config.sections()
+    
+    print("\nConfiguration file:\n")
+    for section in config.sections():
+        print("Section: %s" % section)
+        for options in config.options(section):
+            print("  %s = %s" % (options,
+                                    config.get(section, options)))
+
+
+    if not bool(config['general'].getboolean('use_gpu')):
+        sys.stdout.write('\nNot using GPU.\n')
+        os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+        
     ###### Paths
-    WORKDIR = os.path.abspath(sys.argv[2])
+    WORKDIR = config['general']['workdir']    
+    #WORKDIR = os.path.abspath(sys.argv[2])
     sys.stdout.write('Project directory: %s\n'%WORKDIR)
     #SRC = os.path.join(WORKDIR, 'src')
     DATA = os.path.join(WORKDIR, 'data')
     RESULTS = os.path.join(WORKDIR, 'results')
-    TRAIN_MULTIBAND = os.path.join(DATA, 'train_multiband')
+    TRAIN_MULTIBAND = config['general']['train_multiband']
+    #TRAIN_MULTIBAND = os.path.join(DATA, 'train_multiband')
     #TEST_MULTIBAND = os.path.join(DATA, 'test_multiband')
 
-    image_catalog = pd.read_csv(os.path.join(DATA, 'catalog/image_catalog2.0train.csv'), comment='#', index_col=0)
-    print(image_catalog.shape)
-    
+    image_catalog = pd.read_csv(os.path.join(DATA, 'datapack2.0train/image_catalog2.0train.csv'), comment='#', index_col=0)
+    print('The shape of the image catalog: ' + str(image_catalog.shape) + "\n")  
+
+
+
     # Training parameters
-    batch_size = 32  # orig paper trained all networks with batch_size=128
-    epochs = 1
+    batch_size = config['trainparams'].getint('batch_size')  # orig paper trained all networks with batch_size=128
+    epochs = config['trainparams'].getint('epochs')
     num_classes = 2
     data_bias = 'none'
     # Model parameter
@@ -59,10 +81,10 @@ def main():
     # ResNet164 |27(18)| -----     | 94.07     | -----     | 94.54     | ---(---)
     # ResNet1001| (111)| -----     | 92.39     | -----     | 95.08+-.14| ---(---)
     # --------------------------------------------------------------------------- 
-    n = 3
+    n = config['trainparams'].getint('n')
     # Model version
     # Orig paper: version = 1 (ResNet v1), Improved ResNet: version = 2 (ResNet v2)
-    version = 1
+    version = config['trainparams'].getint('restnetversion')
     # Computed depth from supplied model parameter n
     if version == 1:
         depth = n * 6 + 2
@@ -82,7 +104,7 @@ def main():
     natural_class_coeff = np.array([1000 * n_lens_clean/n_nolens_clean,1])
     
     ###### Split the TRAIN_MULTIBAND set into train and validation sets. Set test_size below!
-    train_df, val_df = train_test_split(dataframe_for_generator, test_size=0.1, random_state=42)
+    train_df, val_df = train_test_split(local_test_df, test_size=config['trainparams'].getfloat('test_fraction'), random_state=42)
     total_train = len(train_df)
     total_val = len(val_df)
     
@@ -126,7 +148,7 @@ def main():
     temp_data_gen = image_data_gen_train.image_generator_dataframe(train_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
-                                y_col='labels', batch_size=1, validation=False)
+                                y_col='labels', batch_size=batch_size, validation=False)
 
     image, _ = next(temp_data_gen)
     input_shape = image[0].shape
@@ -210,11 +232,4 @@ def main():
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 3:
-        print('ERROR:\tPlease provide:\n1. GPU (yes = 1 / no = 0);\n2. the path of the project directory.\nUSAGE:\t%s USE_GPU PROJECT_DIR\n'%sys.argv[0])
-        sys.exit(2)
-    if not bool(int(sys.argv[1])):
-        sys.stdout.write('Not using GPU.')
-        os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
     main()
-    
