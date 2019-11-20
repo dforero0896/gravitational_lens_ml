@@ -1,5 +1,5 @@
 import tensorflow as tf
-from keras.regularizers import l2
+from tensorflow.compat.v2.keras.regularizers import l2
 
 def lr_schedule(epoch):
     """Learning Rate Schedule
@@ -135,7 +135,7 @@ def resnet_v1(input_shape, depth, num_classes=2):
     x = tf.keras.layers.AveragePooling2D(pool_size=8)(x)
     y = tf.keras.layers.Flatten()(x)
     outputs = tf.keras.layers.Dense(num_classes,
-                    activation='softmax',
+                    activation='sigmoid',
                     kernel_initializer='he_normal')(y)
 
     # Instantiate model.
