@@ -35,8 +35,8 @@ dataframe_for_generator = build_generator_dataframe(lens_df, TRAIN_MULTIBAND)
 # Extract data proportions for loss weighting
 n_lens_clean = len(lens_df[lens_df['is_lens'] == True])
 n_nolens_clean = len(lens_df[lens_df['is_lens'] == False])
-equal_class_coeff = [n_nolens_clean/(n_nolens_clean + n_lens_clean), n_lens_clean/(n_lens_clean + n_nolens_clean)]
-natural_class_coeff = [1000 * n_nolens_clean/(n_nolens_clean + n_lens_clean), n_lens_clean/(n_lens_clean + n_nolens_clean)]
+equal_class_coeff = np.array([n_lens_clean/n_nolens_clean,1])
+natural_class_coeff = np.array([1000 * n_lens_clean/n_nolens_clean,1])
 
 batch_size = 100 
 epochs = 15
