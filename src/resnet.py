@@ -64,7 +64,7 @@ def main():
     #TRAIN_MULTIBAND = os.path.join(DATA, 'train_multiband')
     #TEST_MULTIBAND = os.path.join(DATA, 'test_multiband')
 
-    image_catalog = pd.read_csv(os.path.join(DATA, 'datapack2.0train/image_catalog2.0train.csv'), comment='#', index_col=0)
+    image_catalog = pd.read_csv(os.path.join(DATA, 'catalog/image_catalog2.0train.csv'), comment='#', index_col=0)
     print('The shape of the image catalog: ' + str(image_catalog.shape) + "\n")  
 
 
@@ -91,7 +91,7 @@ def main():
     n = config['trainparams'].getint('n')
     # Model version
     # Orig paper: version = 1 (ResNet v1), Improved ResNet: version = 2 (ResNet v2)
-    version = config['trainparams'].getint('restnetversion')
+    version = config['trainparams'].getint('resnetversion')
     # Computed depth from supplied model parameter n
     if version == 1:
         depth = n * 6 + 2
@@ -101,7 +101,7 @@ def main():
     # Model name, depth and version
     model_type = 'ResNet%dv%d' % (depth, version)
     ###### Create the dataframe containing filenames and labels.    
-    # This is ok if we use weighted losses. #TODO: Weighted loss
+    # This is ok if we use weighted losses.
     lens_df = pd.read_csv(os.path.join(RESULTS, 'lens_id_labels.csv'), index_col=0)
     dataframe_for_generator = build_generator_dataframe(lens_df, TRAIN_MULTIBAND)
     # Extract data proportions for loss weighting
@@ -111,7 +111,7 @@ def main():
     natural_class_coeff = np.array([1000 * n_lens_clean/n_nolens_clean,1])
     
     ###### Split the TRAIN_MULTIBAND set into train and validation sets. Set test_size below!
-    train_df, val_df = train_test_split(local_test_df, test_size=config['trainparams'].getfloat('test_fraction'), random_state=42)
+    train_df, val_df = train_test_split(dataframe_for_generator, test_size=config['trainparams'].getfloat('test_fraction'), random_state=42)
     total_train = len(train_df)
     total_val = len(val_df)
     
