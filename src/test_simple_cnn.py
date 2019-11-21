@@ -38,7 +38,7 @@ n_nolens_clean = len(lens_df[lens_df['is_lens'] == False])
 equal_class_coeff = np.array([n_lens_clean/n_nolens_clean,1])
 natural_class_coeff = np.array([1000 * n_lens_clean/n_nolens_clean,1])
 
-batch_size = 100 
+batch_size = 32 
 epochs = 15
 IMG_HEIGHT = 200
 IMG_WIDTH = 200

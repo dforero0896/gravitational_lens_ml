@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 import configparser
 import io
+import pickle
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
 from tensorflow import keras
@@ -29,9 +30,14 @@ def build_generator_dataframe(id_label_df, directory):
     return df
 
 def main():
-    
+    if len(sys.argv) != 2:
+        config_file - 'config.ini'
+    else:
+        config_file = sys.argv[1]
+    if not os.path.isfile(config_file):
+        sys.exit('ERROR:\tThe config file %s was not found.'%config_file)
     config = configparser.ConfigParser()
-    config.read('config.ini')
+    config.read(config_file)
     #config.sections()
     
     print("\nConfiguration file:\n")
