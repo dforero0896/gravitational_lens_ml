@@ -32,7 +32,7 @@ def build_generator_dataframe(id_label_df, directory):
 
 def main():
     if len(sys.argv) != 2:
-        config_file - 'config.ini'
+        config_file = 'config.ini'
     else:
         config_file = sys.argv[1]
     if not os.path.isfile(config_file):
