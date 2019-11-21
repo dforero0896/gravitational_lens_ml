@@ -141,18 +141,18 @@ def main():
     image_data_gen_val = TiffImageDataGenerator(dtype='float32')
 
     ###### Create generators for Images and Labels
-    train_data_gen = image_data_gen_train.image_generator_dataframe(train_df,
+    train_data_gen = image_data_gen_train.prop_image_generator_dataframe(train_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
-                                y_col='labels', batch_size=batch_size, validation=False)
+                                y_col='labels', batch_size=batch_size, validation=False, ratio = 0.9)
     
-    val_data_gen = image_data_gen_val.image_generator_dataframe(train_df,
+    val_data_gen = image_data_gen_val.prop_image_generator_dataframe(val_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
-                                y_col='labels', batch_size=batch_size, validation=True)
+                                y_col='labels', batch_size=batch_size, validation=True, ratio = 0.9)
  
     ###### Obtain the shape of the input data (train images)
-    temp_data_gen = image_data_gen_train.image_generator_dataframe(train_df,
+    temp_data_gen = image_data_gen_train.image_generator_dataframe(val_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
                                 y_col='labels', batch_size=batch_size, validation=False)

@@ -71,14 +71,14 @@ image_data_gen_train = TiffImageDataGenerator(featurewise_center=False,
                                           dtype='float32')
 image_data_gen_val = TiffImageDataGenerator(dtype='float32')
 
-train_data_gen = image_data_gen_train.image_generator_dataframe(train_df,
+train_data_gen = image_data_gen_train.prop_image_generator_dataframe(train_df,
                                   directory=TRAIN_MULTIBAND,
                                   x_col='filenames',
-                                 y_col='labels', batch_size = batch_size, validation=False)
-val_data_gen = image_data_gen_val.image_generator_dataframe(train_df,
+                                 y_col='labels', batch_size = batch_size, validation=False, ratio = 0.9)
+val_data_gen = image_data_gen_val.prop_image_generator_dataframe(val_df,
                                   directory=TRAIN_MULTIBAND,
                                   x_col='filenames',
-                                 y_col='labels', batch_size = batch_size, validation=True)
+                                 y_col='labels', batch_size = batch_size, validation=True, ratio = 0.9)
 # Define correct bias to initialize
 output_bias = tf.keras.initializers.Constant(np.log(n_lens_clean/n_nolens_clean))
 
