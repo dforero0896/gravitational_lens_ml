@@ -220,12 +220,20 @@ def main():
 
     ###### Train the ResNet
     print('Train the ResNet using real-time data augmentation.')
-        
+    if config['trainparams']['train_steps_per_epoch'] == 'total':
+        train_steps_per_epoch = total_train
+        val_steps_per_epoch = total_val
+    else:
+        try:
+            train_steps_per_epoch = int(config['trainparams']['train_steps_per_epoch'])
+            val_steps_per_epoch = float(config['trainparams']['test_fraction'])*train_steps_per_epoch
+        except:
+            raise ValueError('train_steps_per_epoch should be \'total\' or int.')
     history = model.fit_generator(train_data_gen,
-                                steps_per_epoch=total_train,
+                                steps_per_epoch=train_steps_per_epoch ,
                                 epochs=epochs,
                                 validation_data=val_data_gen,
-                                validation_steps=total_val,
+                                validation_steps=val_steps_per_epoch,
                                 callbacks=callbacks,
                                 class_weight= class_weights)
           
