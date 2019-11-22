@@ -235,7 +235,9 @@ def main():
                                 validation_data=val_data_gen,
                                 validation_steps=val_steps_per_epoch,
                                 callbacks=callbacks,
-                                class_weight= class_weights)
+                                class_weight= class_weights,
+                                use_multiprocessing=True)
+
           
     # Score trained model.
     scores = model.evaluate_generator(val_data_gen, verbose=1, steps=total_val)
