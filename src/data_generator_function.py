@@ -60,7 +60,8 @@ class TiffImageDataGenerator(ImageDataGenerator):
                 batch_output += [output]
             # Return a tuple of (input,output) to feed the network
             batch_x = np.array(batch_input)
-            batch_y = np.array(batch_output)
+            #batch_y = tf.keras.utils.to_categorical(np.array(batch_output), num_classes=2, dtype='float32')
+            batch_y = (np.array(batch_output))
 
             yield (batch_x, batch_y)
     
@@ -95,11 +96,9 @@ class TiffImageDataGenerator(ImageDataGenerator):
             # Select files (paths/indices) for the batch
             batch_paths_lens = np.random.choice(a=lens_df[x_col].values,
                                                 size=lens_size)
-            batch_paths_nonlens = np.random.choice(
-                a=nonlens_df[x_col].values, size=nonlens_size)
-            batch_paths = np.concatenate(
-                (batch_paths_lens, batch_paths_nonlens)).reshape(
-                    (lens_size + nonlens_size))
+            batch_paths_nonlens = np.random.choice(a=nonlens_df[x_col].values, 
+                                                size=nonlens_size)
+            batch_paths = np.concatenate(batch_paths_lens, batch_paths_nonlens).reshape(lens_size + nonlens_size)
             batch_input = []
             batch_output = []
 
@@ -117,6 +116,7 @@ class TiffImageDataGenerator(ImageDataGenerator):
                 batch_output += [output]
             # Return a tuple of (input,output) to feed the network
             batch_x = np.array(batch_input)
+            #batch_y = tf.keras.utils.to_categorical(np.array(batch_output), num_classes=2, dtype='float32')
             batch_y = np.array(batch_output)
 
             yield (batch_x, batch_y)

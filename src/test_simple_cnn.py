@@ -39,7 +39,7 @@ equal_class_coeff = np.array([n_lens_clean/n_nolens_clean,1])
 natural_class_coeff = np.array([1000 * n_lens_clean/n_nolens_clean,1])
 
 batch_size = 32 
-epochs = 15
+epochs = 1
 IMG_HEIGHT = 200
 IMG_WIDTH = 200
 data_bias = 'none'
@@ -71,14 +71,14 @@ image_data_gen_train = TiffImageDataGenerator(featurewise_center=False,
                                           dtype='float32')
 image_data_gen_val = TiffImageDataGenerator(dtype='float32')
 
-train_data_gen = image_data_gen_train.prop_image_generator_dataframe(train_df,
+train_data_gen = image_data_gen_train.image_generator_dataframe(train_df,
                                   directory=TRAIN_MULTIBAND,
                                   x_col='filenames',
-                                 y_col='labels', batch_size = batch_size, validation=False, ratio = 0.9)
-val_data_gen = image_data_gen_val.prop_image_generator_dataframe(val_df,
+                                 y_col='labels', batch_size = batch_size, validation=False)
+val_data_gen = image_data_gen_val.image_generator_dataframe(val_df,
                                   directory=TRAIN_MULTIBAND,
                                   x_col='filenames',
-                                 y_col='labels', batch_size = batch_size, validation=True, ratio = 0.9)
+                                 y_col='labels', batch_size = batch_size, validation=True)
 # Define correct bias to initialize
 output_bias = tf.keras.initializers.Constant(np.log(n_lens_clean/n_nolens_clean))
 
@@ -108,7 +108,7 @@ model = Sequential([
 ])
 
 model.compile(optimizer='adam',
-              loss='binary_crossentropy',
+              loss='sparse_categorical_crossentropy',
               metrics=metrics)
 model.summary()
 
@@ -136,10 +136,10 @@ sys.stdout.write('Using weights: %s'%class_weights)
 es_callback = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', min_delta=1, patience=2, verbose=0, mode='auto', baseline=None, restore_best_weights=True)
 history = model.fit_generator(
     train_data_gen,
-    steps_per_epoch=5000,
+    steps_per_epoch=10,
     epochs=epochs,
     validation_data=val_data_gen,
-    validation_steps=5000,
+    validation_steps=5,
     callbacks = [cp_callback, es_callback],
     class_weight = class_weights
 )
