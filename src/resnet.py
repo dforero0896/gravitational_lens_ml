@@ -182,7 +182,7 @@ def main():
 
     # Prepare model model saving directory.
     save_dir = os.path.join(RESULTS, 'checkpoints/resnet/')
-    model_name = 'gravlens_%s_model.{epoch:03d}.h5' % model_type
+    model_name = 'gravlens_%s_model.epoch%.03d.h5' % (model_type, epochs)
     if not os.path.isdir(save_dir):
         os.makedirs(save_dir)
     filepath = os.path.join(save_dir, model_name)
