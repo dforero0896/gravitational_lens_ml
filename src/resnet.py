@@ -72,7 +72,7 @@ def main():
     # Training parameters
     batch_size = config['trainparams'].getint('batch_size')  # orig paper trained all networks with batch_size=128
     epochs = config['trainparams'].getint('epochs')
-    num_classes = 2
+    num_classes = 1
     data_bias = 'none'
     # Model parameter
     # ----------------------------------------------------------------------------
@@ -168,16 +168,16 @@ def main():
     else:
         model = myf.resnet_v1(input_shape=input_shape, depth=depth, num_classes=num_classes)
     # Define metrics for the model.
-    #metrics = [keras.metrics.TruePositives(name='tp'),
-    #  keras.metrics.FalsePositives(name='fp'),
-    #  keras.metrics.TrueNegatives(name='tn'),
-    #  keras.metrics.FalseNegatives(name='fn'), 
-    #  keras.metrics.BinaryAccuracy(name='accuracy'),
-    #  keras.metrics.AUC(name='auc')]
+    metrics = [keras.metrics.TruePositives(name='tp'),
+      keras.metrics.FalsePositives(name='fp'),
+      keras.metrics.TrueNegatives(name='tn'),
+      keras.metrics.FalseNegatives(name='fn'), 
+      keras.metrics.BinaryAccuracy(name='accuracy'),
+      keras.metrics.AUC(name='auc')]
 
-    model.compile(loss='sparse_categorical_crossentropy',
+    model.compile(loss='binary_crossentropy',
                 optimizer=tf.keras.optimizers.Adam(learning_rate=myf.lr_schedule(0)),
-                metrics=['accuracy'])
+                metrics=metrics)
     model.summary()
 
     # Prepare model model saving directory.
@@ -230,10 +230,10 @@ def main():
         except:
             raise ValueError('train_steps_per_epoch should be \'total\' or int.')
     history = model.fit_generator(train_data_gen,
-                                steps_per_epoch=train_steps_per_epoch ,
+                                steps_per_epoch=total_train//batch_size ,
                                 epochs=epochs,
                                 validation_data=val_data_gen,
-                                validation_steps=val_steps_per_epoch,
+                                validation_steps=total_val//batch_size,
                                 callbacks=callbacks,
                                 class_weight= class_weights,
                                 use_multiprocessing=True)
