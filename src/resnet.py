@@ -122,7 +122,7 @@ def main():
                                           samplewise_std_normalization=False,
                                           zca_whitening=False,
                                           zca_epsilon=1e-06,
-                                          rotation_range=10,
+                                          rotation_range=0,
                                           width_shift_range=0.0,
                                           height_shift_range=0.0,
                                           brightness_range=(0.8, 1.1),
