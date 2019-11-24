@@ -6,9 +6,9 @@ import pandas as pd
 import configparser
 import pickle
 import io
-import pickle
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import roc_curve
 from tensorflow import keras
 from data_generator_function import TiffImageDataGenerator
 import resnet_func as myf
@@ -37,9 +37,27 @@ def main():
         config_file = sys.argv[1]
     if not os.path.isfile(config_file):
         sys.exit('ERROR:\tThe config file %s was not found.'%config_file)
+
+    if len(tf.config.experimental.list_physical_devices('GPU')):
+        print('GPU found. Num GPUs Available: ', len(tf.config.experimental.list_physical_devices('GPU')))
+        print(tf.config.experimental.list_physical_devices('GPU'))
+        if(len(tf.config.experimental.list_logical_devices('GPU'))):
+            print('Logical GPU found. Num logical GPUs Available: ', len(tf.config.experimental.list_logical_devices('GPU')))
+            print(tf.config.experimental.list_logical_devices('GPU'))
+    else:
+        print("No GPU found")
+
+    if len(tf.config.experimental.list_physical_devices('CPU')):
+        print('Physical CPU found. Num Physical CPUs Available: ', len(tf.config.experimental.list_physical_devices('CPU')))
+        print(tf.config.experimental.list_physical_devices('CPU'))
+        if(len(tf.config.experimental.list_logical_devices('CPU'))):
+            print('Logical CPU found. Num logical CPUs Available: ', len(tf.config.experimental.list_logical_devices('CPU')))
+            print(tf.config.experimental.list_logical_devices('CPU'))
+    else:
+        print("No CPU found")
+
     config = configparser.ConfigParser()
     config.read(config_file)
-    #config.sections()
     
     print("\nConfiguration file:\n")
     for section in config.sections():
@@ -61,7 +79,6 @@ def main():
     DATA = os.path.join(WORKDIR, 'data')
     RESULTS = os.path.join(WORKDIR, 'results')
     TRAIN_MULTIBAND = config['general']['train_multiband']
-    #TRAIN_MULTIBAND = os.path.join(DATA, 'train_multiband')
     #TEST_MULTIBAND = os.path.join(DATA, 'test_multiband')
 
     image_catalog = pd.read_csv(os.path.join(DATA, 'catalog/image_catalog2.0train.csv'), comment='#', index_col=0)
@@ -107,8 +124,8 @@ def main():
     # Extract data proportions for loss weighting
     n_lens_clean = len(lens_df[lens_df['is_lens'] == True])
     n_nolens_clean = len(lens_df[lens_df['is_lens'] == False])
-    equal_class_coeff = np.array([n_lens_clean/n_nolens_clean,1])
-    natural_class_coeff = np.array([1000 * n_lens_clean/n_nolens_clean,1])
+    equal_class_coeff = np.array([n_lens_clean/n_nolens_clean, 1])
+    natural_class_coeff = np.array([1000 * n_lens_clean/n_nolens_clean, 1])
     
     ###### Split the TRAIN_MULTIBAND set into train and validation sets. Set test_size below!
     train_df, val_df = train_test_split(dataframe_for_generator, test_size=config['trainparams'].getfloat('test_fraction'), random_state=42)
@@ -141,16 +158,21 @@ def main():
     image_data_gen_val = TiffImageDataGenerator(dtype='float32')
 
     ###### Create generators for Images and Labels
-    train_data_gen = image_data_gen_train.image_generator_dataframe(train_df,
+    train_data_gen = image_data_gen_train.prop_image_generator_dataframe(train_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
-                                y_col='labels', batch_size=batch_size, validation=not augment_train_data, ratio = 0.9)
+                                y_col='labels', batch_size=batch_size, validation=not(augment_train_data), ratio=0.9)
     
-    val_data_gen = image_data_gen_val.image_generator_dataframe(val_df,
+    val_data_gen = image_data_gen_val.prop_image_generator_dataframe(val_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
-                                y_col='labels', batch_size=total_val, validation=True)
+                                y_col='labels', batch_size=total_val, validation=True, ratio=0.9)
  
+    roc_val_data_gen = image_data_gen_val.prop_image_generator_dataframe(val_df,
+                                directory=TRAIN_MULTIBAND,
+                                x_col='filenames',
+                                y_col='labels', batch_size=total_val, validation=True, ratio=0.9)
+    
     ###### Obtain the shape of the input data (train images)
     temp_data_gen = image_data_gen_train.image_generator_dataframe(train_df,
                                 directory=TRAIN_MULTIBAND,
@@ -229,7 +251,7 @@ def main():
             val_steps_per_epoch = float(config['trainparams']['test_fraction'])*train_steps_per_epoch
         except:
             raise ValueError('train_steps_per_epoch should be \'total\' or int.')
-    total_val=1
+    
     history = model.fit_generator(train_data_gen,
                                 steps_per_epoch=total_train//batch_size ,
                                 epochs=epochs,
@@ -243,16 +265,16 @@ def main():
     # Score trained model.
     scores = model.evaluate_generator(val_data_gen, verbose=2, steps=total_val)
     
-    scores1 = model.evaluate_generator(val_data_gen, verbose=2, steps=total_val)
-    
-    scores2 = model.evaluate_generator(val_data_gen, verbose=2, steps=total_val)
+    images_val, labels_true = next(roc_val_data_gen)
+    labels_score = model.predict(images_val, batch_size=total_val, verbose=2)
+    fpr, tpr, thresholds = roc_curve(np.ravel(labels_true), np.ravel(labels_score))
+    print(fpr)
+    print(tpr)
 
-    print(model.predict(val_data_gen, verbose=1, steps=total_val))
-    print(model.predict(val_data_gen, verbose=1, steps=total_val))
-    
     model.save(os.path.join(RESULTS,model_name))
     with open(os.path.join(RESULTS,model_name.replace('h5', 'history')), 'wb') as file_pi:
             pickle.dump(history.history, file_pi)
+    
     print('Test loss:', scores[0])
     print('Test accuracy:', scores[1])
    
