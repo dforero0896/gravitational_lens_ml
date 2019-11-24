@@ -114,7 +114,7 @@ def main():
     train_df, val_df = train_test_split(dataframe_for_generator, test_size=config['trainparams'].getfloat('test_fraction'), random_state=42)
     total_train = len(train_df)
     total_val = len(val_df)
-    
+    augment_train_data = bool(int(config['trainparams']['augment_train_data']))
     ###### Create Tiff Image Data Generator objects for train and validation
     image_data_gen_train = TiffImageDataGenerator(featurewise_center=False,
                                           samplewise_center=False,
@@ -144,7 +144,7 @@ def main():
     train_data_gen = image_data_gen_train.prop_image_generator_dataframe(train_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
-                                y_col='labels', batch_size=batch_size, validation=False, ratio = 0.9)
+                                y_col='labels', batch_size=batch_size, validation=not augment_train_data, ratio = 0.9)
     
     val_data_gen = image_data_gen_val.prop_image_generator_dataframe(val_df,
                                 directory=TRAIN_MULTIBAND,
@@ -172,7 +172,7 @@ def main():
       keras.metrics.FalsePositives(name='fp'),
       keras.metrics.TrueNegatives(name='tn'),
       keras.metrics.FalseNegatives(name='fn'), 
-      keras.metrics.BinaryAccuracy(name='accuracy'),
+      keras.metrics.BinaryAccuracy(name='acc'),
       keras.metrics.AUC(name='auc')]
 
     model.compile(loss='binary_crossentropy',
