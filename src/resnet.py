@@ -72,7 +72,7 @@ def main():
     # Training parameters
     batch_size = config['trainparams'].getint('batch_size')  # orig paper trained all networks with batch_size=128
     epochs = config['trainparams'].getint('epochs')
-    num_classes = 2
+    num_classes = 1
     data_bias = 'none'
     # Model parameter
     # ----------------------------------------------------------------------------
@@ -114,7 +114,8 @@ def main():
     train_df, val_df = train_test_split(dataframe_for_generator, test_size=config['trainparams'].getfloat('test_fraction'), random_state=42)
     total_train = len(train_df)
     total_val = len(val_df)
-    
+    print("train: ",total_train)
+    print("val: ",total_val)
     ###### Create Tiff Image Data Generator objects for train and validation
     image_data_gen_train = TiffImageDataGenerator(featurewise_center=False,
                                           samplewise_center=False,
@@ -149,10 +150,10 @@ def main():
     val_data_gen = image_data_gen_val.image_generator_dataframe(val_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
-                                y_col='labels', batch_size=batch_size, validation=True)
+                                y_col='labels', batch_size=total_val, validation=True)
  
     ###### Obtain the shape of the input data (train images)
-    temp_data_gen = image_data_gen_train.image_generator_dataframe(val_df,
+    temp_data_gen = image_data_gen_train.image_generator_dataframe(train_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
                                 y_col='labels', batch_size=batch_size, validation=False)
@@ -175,7 +176,7 @@ def main():
     #  keras.metrics.BinaryAccuracy(name='accuracy'),
     #  keras.metrics.AUC(name='auc')]
 
-    model.compile(loss='sparse_categorical_crossentropy',
+    model.compile(loss='binary_crossentropy',
                 optimizer=tf.keras.optimizers.Adam(learning_rate=myf.lr_schedule(0)),
                 metrics=['accuracy'])
     model.summary()
@@ -229,22 +230,34 @@ def main():
             val_steps_per_epoch = float(config['trainparams']['test_fraction'])*train_steps_per_epoch
         except:
             raise ValueError('train_steps_per_epoch should be \'total\' or int.')
+    total_val=1
     history = model.fit_generator(train_data_gen,
-                                steps_per_epoch=train_steps_per_epoch ,
+                                steps_per_epoch=total_train ,
                                 epochs=epochs,
                                 validation_data=val_data_gen,
-                                validation_steps=val_steps_per_epoch,
-                                callbacks=callbacks,
-                                class_weight= class_weights)
+                                validation_steps=total_val,
+                                #callbacks=callbacks,
+                                class_weight= class_weights,
+                                verbose=2)
           
     # Score trained model.
-    scores = model.evaluate_generator(val_data_gen, verbose=1, steps=total_val)
+    scores = model.evaluate_generator(val_data_gen, verbose=2, steps=total_val)
+    
+    scores1 = model.evaluate_generator(val_data_gen, verbose=2, steps=total_val)
+    
+    scores2 = model.evaluate_generator(val_data_gen, verbose=2, steps=total_val)
+
+    print(model.predict(val_data_gen, verbose=1, steps=total_val))
+    print(model.predict(val_data_gen, verbose=1, steps=total_val))
+    
     model.save(os.path.join(RESULTS,model_name))
     with open(os.path.join(RESULTS,model_name.replace('h5', 'history')), 'wb') as file_pi:
             pickle.dump(history.history, file_pi)
     print('Test loss:', scores[0])
     print('Test accuracy:', scores[1])
-
+   
+    print("train: ",total_train)
+    print("val: ",total_val)
 
 if __name__ == '__main__':
     main()

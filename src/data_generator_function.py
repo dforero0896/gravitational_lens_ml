@@ -2,9 +2,9 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 #os.environ["CUDA_VISIBLE_DEVICES"]="-1"    
 import tensorflow as tf
-if __name__ == '__main__':
-	print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
-tf.debugging.set_log_device_placement(True)
+#if __name__ == '__main__':
+#	print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
+#tf.debugging.set_log_device_placement(True)
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import numpy as np
 import tifffile
@@ -60,8 +60,7 @@ class TiffImageDataGenerator(ImageDataGenerator):
                 batch_output += [output]
             # Return a tuple of (input,output) to feed the network
             batch_x = np.array(batch_input)
-            #batch_y = tf.keras.utils.to_categorical(np.array(batch_output), num_classes=2, dtype='float32')
-            batch_y = (np.array(batch_output))
+            batch_y = np.array(batch_output)
 
             yield (batch_x, batch_y)
     
@@ -116,7 +115,6 @@ class TiffImageDataGenerator(ImageDataGenerator):
                 batch_output += [output]
             # Return a tuple of (input,output) to feed the network
             batch_x = np.array(batch_input)
-            #batch_y = tf.keras.utils.to_categorical(np.array(batch_output), num_classes=2, dtype='float32')
             batch_y = np.array(batch_output)
 
             yield (batch_x, batch_y)

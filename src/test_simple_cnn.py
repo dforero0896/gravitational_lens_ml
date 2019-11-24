@@ -39,12 +39,12 @@ equal_class_coeff = np.array([n_lens_clean/n_nolens_clean,1])
 natural_class_coeff = np.array([1000 * n_lens_clean/n_nolens_clean,1])
 
 batch_size = 32 
-epochs = 1
+epochs = 3
 IMG_HEIGHT = 200
 IMG_WIDTH = 200
 data_bias = 'none'
 
-train_df, val_df = train_test_split(dataframe_for_generator, test_size=0.1, random_state=42)
+train_df, val_df = train_test_split(dataframe_for_generator, test_size=0.6, random_state=42)
 total_train = len(train_df)
 total_val = len(val_df)
 image_data_gen_train = TiffImageDataGenerator(featurewise_center=False,
@@ -108,7 +108,7 @@ model = Sequential([
 ])
 
 model.compile(optimizer='adam',
-              loss='sparse_categorical_crossentropy',
+              loss='binary_crossentropy',
               metrics=metrics)
 model.summary()
 
@@ -136,10 +136,10 @@ sys.stdout.write('Using weights: %s'%class_weights)
 es_callback = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', min_delta=1, patience=2, verbose=0, mode='auto', baseline=None, restore_best_weights=True)
 history = model.fit_generator(
     train_data_gen,
-    steps_per_epoch=10,
+    steps_per_epoch=len(train_df),
     epochs=epochs,
     validation_data=val_data_gen,
-    validation_steps=5,
+    validation_steps=len(val_df),
     callbacks = [cp_callback, es_callback],
     class_weight = class_weights
 )
