@@ -78,7 +78,9 @@ train_data_gen = image_data_gen_train.image_generator_dataframe(train_df,
 val_data_gen = image_data_gen_val.image_generator_dataframe(val_df,
                                   directory=TRAIN_MULTIBAND,
                                   x_col='filenames',
-                                 y_col='labels', batch_size = batch_size, validation=True)
+                                 y_col='labels', batch_size = batch_size, validation=True, ratio = 0.9)
+
+
 # Define correct bias to initialize
 output_bias = tf.keras.initializers.Constant(np.log(n_lens_clean/n_nolens_clean))
 
@@ -136,10 +138,10 @@ sys.stdout.write('Using weights: %s'%class_weights)
 es_callback = tf.keras.callbacks.EarlyStopping(monitor='val_accuracy', min_delta=1, patience=2, verbose=0, mode='auto', baseline=None, restore_best_weights=True)
 history = model.fit_generator(
     train_data_gen,
-    steps_per_epoch=len(train_df),
+    steps_per_epoch=total_train//batch_size,
     epochs=epochs,
     validation_data=val_data_gen,
-    validation_steps=len(val_df),
+    validation_steps=total_train//batch_size,
     callbacks = [cp_callback, es_callback],
     class_weight = class_weights
 )

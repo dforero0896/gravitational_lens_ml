@@ -114,8 +114,7 @@ def main():
     train_df, val_df = train_test_split(dataframe_for_generator, test_size=config['trainparams'].getfloat('test_fraction'), random_state=42)
     total_train = len(train_df)
     total_val = len(val_df)
-    print("train: ",total_train)
-    print("val: ",total_val)
+    augment_train_data = bool(int(config['trainparams']['augment_train_data']))
     ###### Create Tiff Image Data Generator objects for train and validation
     image_data_gen_train = TiffImageDataGenerator(featurewise_center=False,
                                           samplewise_center=False,
@@ -123,7 +122,7 @@ def main():
                                           samplewise_std_normalization=False,
                                           zca_whitening=False,
                                           zca_epsilon=1e-06,
-                                          rotation_range=10,
+                                          rotation_range=0,
                                           width_shift_range=0.0,
                                           height_shift_range=0.0,
                                           brightness_range=(0.8, 1.1),
@@ -145,7 +144,7 @@ def main():
     train_data_gen = image_data_gen_train.image_generator_dataframe(train_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
-                                y_col='labels', batch_size=batch_size, validation=False)
+                                y_col='labels', batch_size=batch_size, validation=not augment_train_data, ratio = 0.9)
     
     val_data_gen = image_data_gen_val.image_generator_dataframe(val_df,
                                 directory=TRAIN_MULTIBAND,
@@ -169,21 +168,21 @@ def main():
     else:
         model = myf.resnet_v1(input_shape=input_shape, depth=depth, num_classes=num_classes)
     # Define metrics for the model.
-    #metrics = [keras.metrics.TruePositives(name='tp'),
-    #  keras.metrics.FalsePositives(name='fp'),
-    #  keras.metrics.TrueNegatives(name='tn'),
-    #  keras.metrics.FalseNegatives(name='fn'), 
-    #  keras.metrics.BinaryAccuracy(name='accuracy'),
-    #  keras.metrics.AUC(name='auc')]
+    metrics = [keras.metrics.TruePositives(name='tp'),
+      keras.metrics.FalsePositives(name='fp'),
+      keras.metrics.TrueNegatives(name='tn'),
+      keras.metrics.FalseNegatives(name='fn'), 
+      keras.metrics.BinaryAccuracy(name='acc'),
+      keras.metrics.AUC(name='auc')]
 
     model.compile(loss='binary_crossentropy',
                 optimizer=tf.keras.optimizers.Adam(learning_rate=myf.lr_schedule(0)),
-                metrics=['accuracy'])
+                metrics=metrics)
     model.summary()
 
     # Prepare model model saving directory.
     save_dir = os.path.join(RESULTS, 'checkpoints/resnet/')
-    model_name = 'gravlens_%s_model.{epoch:03d}.h5' % model_type
+    model_name = 'gravlens_%s_model.epoch%.03d.h5' % (model_type, epochs)
     if not os.path.isdir(save_dir):
         os.makedirs(save_dir)
     filepath = os.path.join(save_dir, model_name)
@@ -232,13 +231,14 @@ def main():
             raise ValueError('train_steps_per_epoch should be \'total\' or int.')
     total_val=1
     history = model.fit_generator(train_data_gen,
-                                steps_per_epoch=total_train ,
+                                steps_per_epoch=total_train//batch_size ,
                                 epochs=epochs,
                                 validation_data=val_data_gen,
-                                validation_steps=total_val,
-                                #callbacks=callbacks,
+                                validation_steps=total_val//batch_size,
+                                callbacks=callbacks,
                                 class_weight= class_weights,
-                                verbose=2)
+                                use_multiprocessing=True)
+
           
     # Score trained model.
     scores = model.evaluate_generator(val_data_gen, verbose=2, steps=total_val)
