@@ -84,8 +84,6 @@ def main():
     image_catalog = pd.read_csv(os.path.join(DATA, 'catalog/image_catalog2.0train.csv'), comment='#', index_col=0)
     print('The shape of the image catalog: ' + str(image_catalog.shape) + "\n")  
 
-
-
     # Training parameters
     batch_size = config['trainparams'].getint('batch_size')  # orig paper trained all networks with batch_size=128
     epochs = config['trainparams'].getint('epochs')
@@ -131,6 +129,25 @@ def main():
     train_df, val_df = train_test_split(dataframe_for_generator, test_size=config['trainparams'].getfloat('test_fraction'), random_state=42)
     total_train = len(train_df)
     total_val = len(val_df)
+    print("The number of objects in the whole training sample is: ", total_train)
+    print("The number of objects in the whole validation sample is: ", total_val)
+    test_fraction = float(config["trainparams"]["test_fraction"])
+    print("The test fraction is: ", test_fraction)
+    if config['trainparams']['train_steps_per_epoch'] == 'total':
+        subsample_train = total_train
+        subsample_val = total_val
+    else:
+        try:
+            subsample_train = int(config['trainparams']['train_steps_per_epoch'])
+            subsample_val = subsample_train*test_fraction/(1.-test_fraction)
+        except:
+            raise ValueError('train_steps_per_epoch should be \'total\' or int.')
+    
+    print("The number of objects in the training subsample is: ", subsample_train)
+    print("The number of objects in the validation subsample is: ", subsample_val)
+    print("The number of training steps is: ", (subsample_train//batch_size))
+    print("The number of validation steps is: ", (subsample_val//batch_size))
+    
     augment_train_data = bool(int(config['trainparams']['augment_train_data']))
     ###### Create Tiff Image Data Generator objects for train and validation
     image_data_gen_train = TiffImageDataGenerator(featurewise_center=False,
@@ -166,12 +183,12 @@ def main():
     val_data_gen = image_data_gen_val.prop_image_generator_dataframe(val_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
-                                y_col='labels', batch_size=total_val, validation=True, ratio=0.9)
+                                y_col='labels', batch_size=batch_size, validation=True, ratio=0.9)
  
     roc_val_data_gen = image_data_gen_val.prop_image_generator_dataframe(val_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
-                                y_col='labels', batch_size=total_val, validation=True, ratio=0.9)
+                                y_col='labels', batch_size=subsample_val, validation=True, ratio=0.9)
     
     ###### Obtain the shape of the input data (train images)
     temp_data_gen = image_data_gen_train.image_generator_dataframe(train_df,
@@ -241,43 +258,26 @@ def main():
     sys.stdout.write('Using weights: %s\n'%class_weights)
 
     ###### Train the ResNet
-    print('Train the ResNet using real-time data augmentation.')
-    if config['trainparams']['train_steps_per_epoch'] == 'total':
-        train_steps_per_epoch = total_train
-        val_steps_per_epoch = total_val
-    else:
-        try:
-            train_steps_per_epoch = int(config['trainparams']['train_steps_per_epoch'])
-            val_steps_per_epoch = float(config['trainparams']['test_fraction'])*train_steps_per_epoch
-        except:
-            raise ValueError('train_steps_per_epoch should be \'total\' or int.')
-    
-    print("The number of objects in the training sample is: ", total_train)
-    print("The number of objects in the validation sample is: ", total_val)
-
-    subsample_fraction = float(config['trainparams']['subsample_fraction'])
-    print("The number of training steps is: ", int(total_train*subsample_fraction/batch_size))
-    print("The number of validation steps is: ", int(total_val*subsample_fraction/batch_size))
-       
+    print('Train the ResNet using real-time data augmentation.')      
     history = model.fit_generator(train_data_gen,
-                                steps_per_epoch=int(total_train*subsample_fraction/batch_size),
+                                steps_per_epoch=subsample_train//batch_size,
                                 epochs=epochs,
                                 validation_data=val_data_gen,
-                                validation_steps=int(total_val*subsample_fraction/batch_size),
+                                validation_steps=subsample_val//batch_size,
                                 callbacks=callbacks,
                                 class_weight= class_weights,
-                                use_multiprocessing=False,
+                                use_multiprocessing=True,
 				verbose=2)
 
           
     # Score trained model.
-    #scores = model.evaluate_generator(val_data_gen, verbose=2, steps=total_val)
+    scores = model.evaluate_generator(val_data_gen, verbose=2, steps=subsample_val//batch_size)
     
-    #images_val, labels_true = next(roc_val_data_gen)
-    #labels_score = model.predict(images_val, batch_size=total_val, verbose=2)
-    #fpr, tpr, thresholds = roc_curve(np.ravel(labels_true), np.ravel(labels_score))
-    #print(fpr)
-    #print(tpr)
+    images_val, labels_true = next(roc_val_data_gen)
+    labels_score = model.predict(images_val, batch_size=subsample_val, verbose=2)
+    fpr, tpr, thresholds = roc_curve(np.ravel(labels_true), np.ravel(labels_score))
+    print(fpr)
+    print(tpr)
 
     model.save(os.path.join(RESULTS,model_name))
     with open(os.path.join(RESULTS,model_name.replace('h5', 'history')), 'wb') as file_pi:
@@ -285,9 +285,6 @@ def main():
     
     print('Test loss:', scores[0])
     print('Test accuracy:', scores[1])
-   
-    print("train: ",total_train)
-    print("val: ",total_val)
 
 if __name__ == '__main__':
     main()
