@@ -133,20 +133,22 @@ def main():
     print("The number of objects in the whole validation sample is: ", total_val)
     test_fraction = float(config["trainparams"]["test_fraction"])
     print("The test fraction is: ", test_fraction)
-    if config['trainparams']['train_steps_per_epoch'] == 'total':
+    if config['trainparams']['subsample_train'] == 'total':
         subsample_train = total_train
         subsample_val = total_val
     else:
         try:
-            subsample_train = int(config['trainparams']['train_steps_per_epoch'])
-            subsample_val = subsample_train*test_fraction/(1.-test_fraction)
+            subsample_train = int(config['trainparams']['subsample_train'])
+            subsample_val = int(subsample_train*test_fraction/(1.-test_fraction))
         except:
-            raise ValueError('train_steps_per_epoch should be \'total\' or int.')
+            raise ValueError('subsample_train should be \'total\' or int.')
     
     print("The number of objects in the training subsample is: ", subsample_train)
     print("The number of objects in the validation subsample is: ", subsample_val)
-    print("The number of training steps is: ", (subsample_train//batch_size))
-    print("The number of validation steps is: ", (subsample_val//batch_size))
+    train_steps_per_epoch = int(subsample_train//batch_size)
+    val_steps_per_epoch = int(subsample_val//batch_size)
+    print("The number of training steps is: ", train_steps_per_epoch)
+    print("The number of validation steps is: ", val_steps_per_epoch)
     
     augment_train_data = bool(int(config['trainparams']['augment_train_data']))
     ###### Create Tiff Image Data Generator objects for train and validation
@@ -260,10 +262,10 @@ def main():
     ###### Train the ResNet
     print('Train the ResNet using real-time data augmentation.')      
     history = model.fit_generator(train_data_gen,
-                                steps_per_epoch=subsample_train//batch_size,
+                                steps_per_epoch=train_steps_per_epoch,
                                 epochs=epochs,
                                 validation_data=val_data_gen,
-                                validation_steps=subsample_val//batch_size,
+                                validation_steps=val_steps_per_epoch,
                                 callbacks=callbacks,
                                 class_weight= class_weights,
                                 use_multiprocessing=True,
@@ -271,7 +273,7 @@ def main():
 
           
     # Score trained model.
-    scores = model.evaluate_generator(val_data_gen, verbose=2, steps=subsample_val//batch_size)
+    scores = model.evaluate_generator(val_data_gen, verbose=2, steps=val_steps_per_epoch)
     
     images_val, labels_true = next(roc_val_data_gen)
     labels_score = model.predict(images_val, batch_size=subsample_val, verbose=2)
