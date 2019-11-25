@@ -70,7 +70,7 @@ def main():
     if not bool(config['general'].getboolean('use_gpu')):
         sys.stdout.write('\nNot using GPU.\n')
         os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
-        
+            
     ###### Paths
     WORKDIR = config['general']['workdir']    
     #WORKDIR = os.path.abspath(sys.argv[2])
@@ -252,24 +252,32 @@ def main():
         except:
             raise ValueError('train_steps_per_epoch should be \'total\' or int.')
     
+    print("The number of objects in the training sample is: ", total_train)
+    print("The number of objects in the validation sample is: ", total_val)
+
+    subsample_fraction = float(config['trainparams']['subsample_fraction'])
+    print("The number of training steps is: ", int(total_train*subsample_fraction/batch_size))
+    print("The number of validation steps is: ", int(total_val*subsample_fraction/batch_size))
+       
     history = model.fit_generator(train_data_gen,
-                                steps_per_epoch=total_train//batch_size ,
+                                steps_per_epoch=int(total_train*subsample_fraction/batch_size),
                                 epochs=epochs,
                                 validation_data=val_data_gen,
-                                validation_steps=total_val//batch_size,
+                                validation_steps=int(total_val*subsample_fraction/batch_size),
                                 callbacks=callbacks,
                                 class_weight= class_weights,
-                                use_multiprocessing=True)
+                                use_multiprocessing=False,
+				verbose=2)
 
           
     # Score trained model.
-    scores = model.evaluate_generator(val_data_gen, verbose=2, steps=total_val)
+    #scores = model.evaluate_generator(val_data_gen, verbose=2, steps=total_val)
     
-    images_val, labels_true = next(roc_val_data_gen)
-    labels_score = model.predict(images_val, batch_size=total_val, verbose=2)
-    fpr, tpr, thresholds = roc_curve(np.ravel(labels_true), np.ravel(labels_score))
-    print(fpr)
-    print(tpr)
+    #images_val, labels_true = next(roc_val_data_gen)
+    #labels_score = model.predict(images_val, batch_size=total_val, verbose=2)
+    #fpr, tpr, thresholds = roc_curve(np.ravel(labels_true), np.ravel(labels_score))
+    #print(fpr)
+    #print(tpr)
 
     model.save(os.path.join(RESULTS,model_name))
     with open(os.path.join(RESULTS,model_name.replace('h5', 'history')), 'wb') as file_pi:
