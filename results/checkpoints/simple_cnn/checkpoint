@@ -1,2 +1,0 @@
-model_checkpoint_path: "simple_cnn.ckpt"
-all_model_checkpoint_paths: "simple_cnn.ckpt"

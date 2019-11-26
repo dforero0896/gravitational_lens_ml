@@ -200,9 +200,6 @@ def main():
 
     image, _ = next(temp_data_gen)
     input_shape = image[0].shape
-
-    # Define correct bias to initialize
-    output_bias = tf.keras.initializers.Constant(np.log(n_lens_clean/n_nolens_clean))
     ###### Create model
     if version == 2:
         model = myf.resnet_v2(input_shape=input_shape, depth=depth, num_classes=num_classes)
@@ -258,7 +255,6 @@ def main():
         raise NotImplementedError('data_bias must be either natural or none.')
     class_weights = {0:class_coeff[0], 1:class_coeff[1]}
     sys.stdout.write('Using weights: %s\n'%class_weights)
-
     ###### Train the ResNet
     print('Train the ResNet using real-time data augmentation.')      
     history = model.fit_generator(train_data_gen,
@@ -269,7 +265,7 @@ def main():
                                 callbacks=callbacks,
                                 class_weight= class_weights,
                                 use_multiprocessing=True,
-				verbose=2)
+				                verbose=2)
 
           
     # Score trained model.
@@ -281,8 +277,8 @@ def main():
     print(fpr)
     print(tpr)
 
-    model.save(os.path.join(RESULTS,model_name))
-    with open(os.path.join(RESULTS,model_name.replace('h5', 'history')), 'wb') as file_pi:
+    model.save(os.path.join(RESULTS, model_name))
+    with open(os.path.join(RESULTS, model_name.replace('h5', 'history')), 'wb') as file_pi:
             pickle.dump(history.history, file_pi)
     
     print('Test loss:', scores[0])
