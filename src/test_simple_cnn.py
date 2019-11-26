@@ -39,12 +39,12 @@ equal_class_coeff = np.array([n_lens_clean/n_nolens_clean,1])
 natural_class_coeff = np.array([1000 * n_lens_clean/n_nolens_clean,1])
 
 batch_size = 32 
-epochs = 15
+epochs = 3
 IMG_HEIGHT = 200
 IMG_WIDTH = 200
 data_bias = 'none'
 
-train_df, val_df = train_test_split(dataframe_for_generator, test_size=0.1, random_state=42)
+train_df, val_df = train_test_split(dataframe_for_generator, test_size=0.6, random_state=42)
 total_train = len(train_df)
 total_val = len(val_df)
 image_data_gen_train = TiffImageDataGenerator(featurewise_center=False,
@@ -71,11 +71,11 @@ image_data_gen_train = TiffImageDataGenerator(featurewise_center=False,
                                           dtype='float32')
 image_data_gen_val = TiffImageDataGenerator(dtype='float32')
 
-train_data_gen = image_data_gen_train.prop_image_generator_dataframe(train_df,
+train_data_gen = image_data_gen_train.image_generator_dataframe(train_df,
                                   directory=TRAIN_MULTIBAND,
                                   x_col='filenames',
-                                 y_col='labels', batch_size = batch_size, validation=False, ratio = 0.9)
-val_data_gen = image_data_gen_val.prop_image_generator_dataframe(val_df,
+                                 y_col='labels', batch_size = batch_size, validation=False)
+val_data_gen = image_data_gen_val.image_generator_dataframe(val_df,
                                   directory=TRAIN_MULTIBAND,
                                   x_col='filenames',
                                  y_col='labels', batch_size = batch_size, validation=True, ratio = 0.9)

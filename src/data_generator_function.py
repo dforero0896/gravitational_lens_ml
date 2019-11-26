@@ -2,9 +2,9 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 #os.environ["CUDA_VISIBLE_DEVICES"]="-1"    
 import tensorflow as tf
-if __name__ == '__main__':
-	print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
-tf.debugging.set_log_device_placement(True)
+#if __name__ == '__main__':
+#	print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
+#tf.debugging.set_log_device_placement(True)
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import numpy as np
 import tifffile
@@ -44,7 +44,7 @@ class TiffImageDataGenerator(ImageDataGenerator):
         files = dataframe[x_col].values
         while True:
             # Select files (paths/indices) for the batch
-            batch_paths = np.random.choice(a=files, size=batch_size, replace = False)
+            batch_paths = np.random.choice(a=files, size=batch_size, replace=False)
             batch_input = []
             batch_output = []
 
