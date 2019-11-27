@@ -11,7 +11,7 @@ from sklearn.metrics import roc_curve
 from tensorflow import keras
 from data_generator_function import TiffImageDataGenerator
 import resnet_func as myf
-tf.debugging.set_log_device_placement(True)
+tf.debugging.set_log_device_placement(False)
 
 def get_file_id(filename, delimiters='_|\\.|-'):
     id_ = [int(s) for s in re.split(delimiters, filename) if s.isdigit()][0]
@@ -112,7 +112,7 @@ def main():
         depth = n * 9 + 2
 
     # Model name, depth and version
-    model_type = 'ResNet%dv%d' % (depth, version)
+    model_type = 'RN%dv%d' % (depth, version)
     ###### Create the dataframe containing filenames and labels.    
     # This is ok if we use weighted losses.
     lens_df = pd.read_csv(os.path.join(RESULTS, 'lens_id_labels.csv'), index_col=0)
@@ -227,7 +227,16 @@ def main():
 
     # Prepare model model saving directory.
     save_dir = os.path.join(RESULTS, 'checkpoints/resnet/')
-    model_name = 'gravlens_VIS0_%s_model.epoch%.03d.h5' % (model_type, epochs)
+    model_name = '%s_Tr%i_Te%i_bs%i_ep%.03d_aug%i_VIS%i_NIR%i%i%i.h5' % (model_type,
+                                                                        subsample_train,
+                                                                        subsample_val,
+                                                                        batch_size,
+                                                                        epochs,
+                                                                        int(augment_train_data),
+                                                                        config['bands'].getint('VIS0'), 
+                                                                        config['bands'].getint('NIR1'),
+                                                                        config['bands'].getint('NIR2'),
+                                                                        config['bands'].getint('NIR3'))
     if not os.path.isdir(save_dir):
         os.makedirs(save_dir)
     filepath = os.path.join(save_dir, model_name)

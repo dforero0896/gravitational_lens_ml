@@ -1,0 +1,27 @@
+2019-11-27 17:00:24.125889: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcuda.so.1'; dlerror: libcuda.so.1: cannot open shared object file: No such file or directory
+2019-11-27 17:00:24.125934: E tensorflow/stream_executor/cuda/cuda_driver.cc:318] failed call to cuInit: UNKNOWN ERROR (303)
+2019-11-27 17:00:24.125973: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (node211.cluster.astro.unige.ch): /proc/driver/nvidia/version does not exist
+2019-11-27 17:00:24.126393: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
+2019-11-27 17:00:24.134893: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2594175000 Hz
+2019-11-27 17:00:24.136327: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55f40fead220 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+2019-11-27 17:00:24.136349: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+WARNING:tensorflow:From /home/epfl/variu/.conda/envs/grav/lib/python3.7/site-packages/tensorflow_core/python/ops/init_ops.py:97: calling VarianceScaling.__init__ (from tensorflow.python.ops.init_ops) with dtype is deprecated and will be removed in a future version.
+Instructions for updating:
+Call initializer instance with the dtype argument instead of passing it to the constructor
+WARNING:tensorflow:From /home/epfl/variu/.conda/envs/grav/lib/python3.7/site-packages/tensorflow_core/python/ops/init_ops.py:97: calling Zeros.__init__ (from tensorflow.python.ops.init_ops) with dtype is deprecated and will be removed in a future version.
+Instructions for updating:
+Call initializer instance with the dtype argument instead of passing it to the constructor
+WARNING:tensorflow:From /home/epfl/variu/.conda/envs/grav/lib/python3.7/site-packages/tensorflow_core/python/ops/init_ops.py:97: calling Ones.__init__ (from tensorflow.python.ops.init_ops) with dtype is deprecated and will be removed in a future version.
+Instructions for updating:
+Call initializer instance with the dtype argument instead of passing it to the constructor
+WARNING:tensorflow:From /home/epfl/variu/.conda/envs/grav/lib/python3.7/site-packages/tensorflow_core/python/ops/resource_variable_ops.py:1630: calling BaseResourceVariable.__init__ (from tensorflow.python.ops.resource_variable_ops) with constraint is deprecated and will be removed in a future version.
+Instructions for updating:
+If using Keras pass *_constraint arguments to layers.
+WARNING:tensorflow:From /home/epfl/variu/.conda/envs/grav/lib/python3.7/site-packages/tensorflow_core/python/ops/nn_impl.py:183: where (from tensorflow.python.ops.array_ops) is deprecated and will be removed in a future version.
+Instructions for updating:
+Use tf.where in 2.0, which has the same broadcast rule as np.where
+2019-11-27 17:00:48.220906: W tensorflow/core/framework/cpu_allocator_impl.cc:81] Allocation of 1259520000 exceeds 10% of system memory.
+2019-11-27 17:00:48.848473: W tensorflow/core/framework/cpu_allocator_impl.cc:81] Allocation of 1259520000 exceeds 10% of system memory.
+2019-11-27 17:00:49.338953: W tensorflow/core/framework/cpu_allocator_impl.cc:81] Allocation of 1259520000 exceeds 10% of system memory.
+2019-11-27 17:00:50.110755: W tensorflow/core/framework/cpu_allocator_impl.cc:81] Allocation of 1259520000 exceeds 10% of system memory.
+2019-11-27 17:00:50.604129: W tensorflow/core/framework/cpu_allocator_impl.cc:81] Allocation of 1259520000 exceeds 10% of system memory.

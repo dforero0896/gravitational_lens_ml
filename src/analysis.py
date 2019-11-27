@@ -38,9 +38,8 @@ def main():
     if not os.path.isfile(config_file):
         sys.exit('ERROR:\tThe config file %s was not found.'%config_file)
     
-    if not bool(config['general'].getboolean('use_gpu')):
-        sys.stdout.write('\nNot using GPU.\n')
-        os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+    sys.stdout.write('\nNot using GPU.\n')
+    os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
     
 
     if len(tf.config.experimental.list_physical_devices('GPU')):
@@ -168,25 +167,33 @@ def main():
                                           dtype='float32')
 
     image_data_gen_val = TiffImageDataGenerator(dtype='float32')
-
+ 
+    bands = [config['bands'].getboolean('VIS0'), 
+        config['bands'].getboolean('NIR1'),
+        config['bands'].getboolean('NIR2'),
+        config['bands'].getboolean('NIR3')]
+    print("The bands are: ", bands)
     ###### Create generators for Images and Labels
     train_data_gen = image_data_gen_train.prop_image_generator_dataframe(train_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
-                                y_col='labels', batch_size=batch_size, validation=not(augment_train_data), ratio=0.9)
+                                y_col='labels', batch_size=batch_size, validation=not(augment_train_data), ratio=0.9,
+                                bands=bands)
     
     val_data_gen = image_data_gen_val.prop_image_generator_dataframe(val_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
-                                y_col='labels', batch_size=batch_size, validation=True, ratio=0.9)
+                                y_col='labels', batch_size=batch_size, validation=True, ratio=0.9,
+                                bands=bands)
  
     roc_val_data_gen = image_data_gen_val.prop_image_generator_dataframe(val_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
-                                y_col='labels', batch_size=subsample_val, validation=True, ratio=0.9)
+                                y_col='labels', batch_size=subsample_val, validation=True, ratio=0.9,
+                                bands=bands)
     
     ###### Obtain model from the saving directory
-    model_name = 'gravlens_%s_model.epoch%.03d.h5' % (model_type, epochs)   
+    model_name = 'gravlens_VIS0_%s_model.epoch%.03d.h5' % (model_type, epochs)   
     model = tf.keras.models.load_model(os.path.join(RESULTS, model_name))
     model.summary()
     history_path = os.path.join(RESULTS, model_name.replace('h5', 'history'))
@@ -256,12 +263,22 @@ def main():
     ##Score
     #scores = model.evaluate_generator(val_data_gen, verbose=2, steps=val_steps_per_epoch)
     ##Roc curve 
-    #images_val, labels_true = next(roc_val_data_gen)
-    #labels_score = model.predict(images_val, batch_size=subsample_val, verbose=2)
-    #fpr, tpr, thresholds = roc_curve(np.ravel(labels_true), np.ravel(labels_score))
-    #print(fpr)
-    #print(tpr)
+    images_val, labels_true = next(roc_val_data_gen)
+    labels_score = model.predict(images_val, batch_size=subsample_val, verbose=2)
+    fpr, tpr, thresholds = roc_curve(np.ravel(labels_true), np.ravel(labels_score))
+    print(fpr)
+    print(tpr)
 
+    plt.figure(3)
+    plt.plot(fpr, tpr, 'or', label='Validation')
+    plt.xlabel('FPR')
+    plt.ylabel('TPR')
+    plt.xlim(0, 1)
+    plt.ylim(0, 1)
+    plt.plot([0, 1], [0, 1])
+    plt.legend()
+    plt.savefig(os.path.join(RESULTS, 'plots/ROCsklearn_' + os.path.basename(history_path).replace('.history', '.png')),
+                dpi=200)
     
     #print('Test loss:', scores[0])
     #print('Test accuracy:', scores[1])
