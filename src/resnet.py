@@ -207,8 +207,6 @@ def main():
 
     image, _ = next(temp_data_gen)
     input_shape = image[0].shape
-    print("The shape of the input data is: ", input_shape)
-    image_tmp, _ = next(train_data_gen)
     ###### Create model
     if version == 2:
         model = myf.resnet_v2(input_shape=input_shape, depth=depth, num_classes=num_classes)
@@ -229,7 +227,7 @@ def main():
 
     # Prepare model model saving directory.
     save_dir = os.path.join(RESULTS, 'checkpoints/resnet/')
-    model_name = 'gravlens_%s_model.epoch%.03d.h5' % (model_type, epochs)
+    model_name = 'gravlens_VIS0_%s_model.epoch%.03d.h5' % (model_type, epochs)
     if not os.path.isdir(save_dir):
         os.makedirs(save_dir)
     filepath = os.path.join(save_dir, model_name)
@@ -265,7 +263,6 @@ def main():
     class_weights = {0:class_coeff[0], 1:class_coeff[1]}
     sys.stdout.write('Using weights: %s\n'%class_weights)
     ###### Train the ResNet
-    sys.exit()
     print('Train the ResNet using real-time data augmentation.')      
     history = model.fit_generator(train_data_gen,
                                 steps_per_epoch=train_steps_per_epoch,
