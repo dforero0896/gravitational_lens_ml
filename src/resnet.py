@@ -174,30 +174,41 @@ def main():
 
     image_data_gen_val = TiffImageDataGenerator(dtype='float32')
 
+    bands = [config['bands'].getboolean('VIS0'), 
+        config['bands'].getboolean('NIR1'),
+        config['bands'].getboolean('NIR2'),
+        config['bands'].getboolean('NIR3')]
+    print("The bands are: ", bands)
     ###### Create generators for Images and Labels
     train_data_gen = image_data_gen_train.prop_image_generator_dataframe(train_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
-                                y_col='labels', batch_size=batch_size, validation=not(augment_train_data), ratio=0.9)
+                                y_col='labels', batch_size=batch_size, validation=not(augment_train_data), ratio=0.9,
+                                bands=bands)
     
     val_data_gen = image_data_gen_val.prop_image_generator_dataframe(val_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
-                                y_col='labels', batch_size=batch_size, validation=True, ratio=0.9)
+                                y_col='labels', batch_size=batch_size, validation=True, ratio=0.9,
+                                bands=bands)
  
     roc_val_data_gen = image_data_gen_val.prop_image_generator_dataframe(val_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
-                                y_col='labels', batch_size=subsample_val, validation=True, ratio=0.9)
+                                y_col='labels', batch_size=subsample_val, validation=True, ratio=0.9,
+                                bands=bands)
     
     ###### Obtain the shape of the input data (train images)
     temp_data_gen = image_data_gen_train.image_generator_dataframe(train_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
-                                y_col='labels', batch_size=batch_size, validation=False)
+                                y_col='labels', batch_size=batch_size, validation=True,
+                                bands=bands)
 
     image, _ = next(temp_data_gen)
     input_shape = image[0].shape
+    print("The shape of the input data is: ", input_shape)
+    image_tmp, _ = next(train_data_gen)
     ###### Create model
     if version == 2:
         model = myf.resnet_v2(input_shape=input_shape, depth=depth, num_classes=num_classes)
@@ -254,7 +265,7 @@ def main():
     class_weights = {0:class_coeff[0], 1:class_coeff[1]}
     sys.stdout.write('Using weights: %s\n'%class_weights)
     ###### Train the ResNet
-    
+    sys.exit()
     print('Train the ResNet using real-time data augmentation.')      
     history = model.fit_generator(train_data_gen,
                                 steps_per_epoch=train_steps_per_epoch,
