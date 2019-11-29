@@ -111,7 +111,6 @@ def main():
     elif version == 2:
         depth = n * 9 + 2
     # Model name, depth and version
-    model_type = 'ResNet%dv%d' % (depth, version)
     
     # This is ok if we use weighted losses.
     lens_df = pd.read_csv(os.path.join(RESULTS, 'lens_id_labels.csv'), index_col=0)
@@ -193,7 +192,19 @@ def main():
                                 bands=bands)
     
     ###### Obtain model from the saving directory
-    model_name = 'gravlens_VIS0_%s_model.epoch%.03d.h5' % (model_type, epochs)   
+    model_type = 'RN%dv%d' % (depth, version)
+    
+    model_name = '%s_Tr%i_Te%i_bs%i_ep%.03d_aug%i_VIS%i_NIR%i%i%i_DB%s.h5' % (model_type,
+                                                                        subsample_train,
+                                                                        subsample_val,
+                                                                        batch_size,
+                                                                        epochs,
+                                                                        int(augment_train_data),
+                                                                        config['bands'].getint('VIS0'), 
+                                                                        config['bands'].getint('NIR1'),
+                                                                        config['bands'].getint('NIR2'),
+                                                                        config['bands'].getint('NIR3'),
+                                                                        config['trainparams']['data_bias'])
     model = tf.keras.models.load_model(os.path.join(RESULTS, model_name))
     model.summary()
     history_path = os.path.join(RESULTS, model_name.replace('h5', 'history'))
@@ -220,6 +231,7 @@ def main():
             label='Training loss',
             marker='o',
             c='r')
+    ax1.set_ylim([0,1])
     ax2.plot(range(len(history['loss'])),
             history['val_acc'],
             label='Validation accuracy',
@@ -259,7 +271,6 @@ def main():
     plt.savefig(os.path.join(RESULTS, 'plots/ROC_' + os.path.basename(history_path).replace('.history', '.png')),
                 dpi=200)
     print("history keys:\n", history.keys())
-
     ##Score
     #scores = model.evaluate_generator(val_data_gen, verbose=2, steps=val_steps_per_epoch)
     ##Roc curve 

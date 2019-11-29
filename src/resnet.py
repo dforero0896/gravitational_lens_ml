@@ -12,6 +12,7 @@ from tensorflow import keras
 from data_generator_function import TiffImageDataGenerator
 import resnet_func as myf
 tf.debugging.set_log_device_placement(False)
+tf.RunOptions(report_tensor_allocations_upon_oom=True)
 
 def get_file_id(filename, delimiters='_|\\.|-'):
     id_ = [int(s) for s in re.split(delimiters, filename) if s.isdigit()][0]
@@ -86,7 +87,7 @@ def main():
     batch_size = config['trainparams'].getint('batch_size')  # orig paper trained all networks with batch_size=128
     epochs = config['trainparams'].getint('epochs')
     num_classes = 1
-    data_bias = 'none'
+    data_bias = config['trainparams']['data_bias']
     # Model parameter
     # ----------------------------------------------------------------------------
     #           |      | 200-epoch | Orig Paper| 200-epoch | Orig Paper| sec/epoch
@@ -183,19 +184,19 @@ def main():
     train_data_gen = image_data_gen_train.prop_image_generator_dataframe(train_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
-                                y_col='labels', batch_size=batch_size, validation=not(augment_train_data), ratio=0.9,
+                                y_col='labels', batch_size=batch_size, validation=not(augment_train_data), ratio=0.5,
                                 bands=bands)
     
     val_data_gen = image_data_gen_val.prop_image_generator_dataframe(val_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
-                                y_col='labels', batch_size=batch_size, validation=True, ratio=0.9,
+                                y_col='labels', batch_size=batch_size, validation=True, ratio=0.5,
                                 bands=bands)
  
     roc_val_data_gen = image_data_gen_val.prop_image_generator_dataframe(val_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
-                                y_col='labels', batch_size=subsample_val, validation=True, ratio=0.9,
+                                y_col='labels', batch_size=subsample_val, validation=True, ratio=0.5,
                                 bands=bands)
     
     ###### Obtain the shape of the input data (train images)
@@ -227,7 +228,7 @@ def main():
 
     # Prepare model model saving directory.
     save_dir = os.path.join(RESULTS, 'checkpoints/resnet/')
-    model_name = '%s_Tr%i_Te%i_bs%i_ep%.03d_aug%i_VIS%i_NIR%i%i%i.h5' % (model_type,
+    model_name = '%s_Tr%i_Te%i_bs%i_ep%.03d_aug%i_VIS%i_NIR%i%i%i_DB%s.h5' % (model_type,
                                                                         subsample_train,
                                                                         subsample_val,
                                                                         batch_size,
@@ -236,7 +237,8 @@ def main():
                                                                         config['bands'].getint('VIS0'), 
                                                                         config['bands'].getint('NIR1'),
                                                                         config['bands'].getint('NIR2'),
-                                                                        config['bands'].getint('NIR3'))
+                                                                        config['bands'].getint('NIR3'),
+                                                                        config['trainparams']['data_bias'])
     if not os.path.isdir(save_dir):
         os.makedirs(save_dir)
     filepath = os.path.join(save_dir, model_name)
