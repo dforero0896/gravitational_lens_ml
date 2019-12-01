@@ -173,28 +173,29 @@ def main():
         config['bands'].getboolean('NIR3')]
     print("The bands are: ", bands)
     ###### Create generators for Images and Labels
+    ratio = 0.5
     train_data_gen = image_data_gen_train.prop_image_generator_dataframe(train_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
-                                y_col='labels', batch_size=batch_size, validation=not(augment_train_data), ratio=0.9,
+                                y_col='labels', batch_size=batch_size, validation=not(augment_train_data), ratio=ratio,
                                 bands=bands)
     
     val_data_gen = image_data_gen_val.prop_image_generator_dataframe(val_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
-                                y_col='labels', batch_size=batch_size, validation=True, ratio=0.9,
+                                y_col='labels', batch_size=batch_size, validation=True, ratio=ratio,
                                 bands=bands)
  
     roc_val_data_gen = image_data_gen_val.prop_image_generator_dataframe(val_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
-                                y_col='labels', batch_size=subsample_val, validation=True, ratio=0.9,
+                                y_col='labels', batch_size=subsample_val, validation=True, ratio=ratio,
                                 bands=bands)
     
     ###### Obtain model from the saving directory
     model_type = 'RN%dv%d' % (depth, version)
     
-    model_name = '%s_Tr%i_Te%i_bs%i_ep%.03d_aug%i_VIS%i_NIR%i%i%i_DB%s.h5' % (model_type,
+    model_name = '%s_Tr%i_Te%i_bs%i_ep%.03d_aug%i_VIS%i_NIR%i%i%i_DB%s_ratio%.01f.h5' % (model_type,
                                                                         subsample_train,
                                                                         subsample_val,
                                                                         batch_size,
@@ -204,7 +205,8 @@ def main():
                                                                         config['bands'].getint('NIR1'),
                                                                         config['bands'].getint('NIR2'),
                                                                         config['bands'].getint('NIR3'),
-                                                                        config['trainparams']['data_bias'])
+                                                                        config['trainparams']['data_bias'],
+                                                                        ratio)
     model = tf.keras.models.load_model(os.path.join(RESULTS, model_name))
     model.summary()
     history_path = os.path.join(RESULTS, model_name.replace('h5', 'history'))

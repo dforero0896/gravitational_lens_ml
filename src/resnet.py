@@ -160,9 +160,9 @@ def main():
                                           rotation_range=0,
                                           width_shift_range=0.0,
                                           height_shift_range=0.0,
-                                          brightness_range=(0.8, 1.1),
+                                          brightness_range=(0.99, 1.01),
                                           shear_range=0.0,
-                                          zoom_range=(0.9, 1.01),
+                                          zoom_range=(0.99, 1.01),
                                           channel_shift_range=0.0,
                                           fill_mode='wrap',
                                           cval=0.0,
@@ -181,22 +181,23 @@ def main():
         config['bands'].getboolean('NIR3')]
     print("The bands are: ", bands)
     ###### Create generators for Images and Labels
+    ratio = 0.5
     train_data_gen = image_data_gen_train.prop_image_generator_dataframe(train_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
-                                y_col='labels', batch_size=batch_size, validation=not(augment_train_data), ratio=0.5,
+                                y_col='labels', batch_size=batch_size, validation=not(augment_train_data), ratio=ratio,
                                 bands=bands)
     
     val_data_gen = image_data_gen_val.prop_image_generator_dataframe(val_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
-                                y_col='labels', batch_size=batch_size, validation=True, ratio=0.5,
+                                y_col='labels', batch_size=batch_size, validation=True, ratio=ratio,
                                 bands=bands)
  
     roc_val_data_gen = image_data_gen_val.prop_image_generator_dataframe(val_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
-                                y_col='labels', batch_size=subsample_val, validation=True, ratio=0.5,
+                                y_col='labels', batch_size=subsample_val, validation=True, ratio=ratio,
                                 bands=bands)
     
     ###### Obtain the shape of the input data (train images)
@@ -228,7 +229,7 @@ def main():
 
     # Prepare model model saving directory.
     save_dir = os.path.join(RESULTS, 'checkpoints/resnet/')
-    model_name = '%s_Tr%i_Te%i_bs%i_ep%.03d_aug%i_VIS%i_NIR%i%i%i_DB%s.h5' % (model_type,
+    model_name = '%s_Tr%i_Te%i_bs%i_ep%.03d_aug%i_VIS%i_NIR%i%i%i_DB%s_ratio%.01f.h5' % (model_type,
                                                                         subsample_train,
                                                                         subsample_val,
                                                                         batch_size,
@@ -238,11 +239,12 @@ def main():
                                                                         config['bands'].getint('NIR1'),
                                                                         config['bands'].getint('NIR2'),
                                                                         config['bands'].getint('NIR3'),
-                                                                        config['trainparams']['data_bias'])
+                                                                        config['trainparams']['data_bias'],
+                                                                        ratio)
     if not os.path.isdir(save_dir):
         os.makedirs(save_dir)
     filepath = os.path.join(save_dir, model_name)
-
+    print("The model name is: ", model_name)
     # Prepare callbacks for model saving and for learning rate adjustment.
     checkpoint = tf.keras.callbacks.ModelCheckpoint(filepath=filepath,
                                 monitor='val_acc',
@@ -274,6 +276,7 @@ def main():
     class_weights = {0:class_coeff[0], 1:class_coeff[1]}
     sys.stdout.write('Using weights: %s\n'%class_weights)
     ###### Train the ResNet
+
     print('Train the ResNet using real-time data augmentation.')      
     history = model.fit_generator(train_data_gen,
                                 steps_per_epoch=train_steps_per_epoch,
