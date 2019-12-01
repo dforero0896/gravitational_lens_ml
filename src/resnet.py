@@ -90,7 +90,7 @@ def main():
     batch_size = config['trainparams'].getint('batch_size')  # orig paper trained all networks with batch_size=128
     epochs = config['trainparams'].getint('epochs')
     num_classes = 1
-    data_bias = 'none'
+    data_bias = 'raw'
     # Model parameter
     # ----------------------------------------------------------------------------
     #           |      | 200-epoch | Orig Paper| 200-epoch | Orig Paper| sec/epoch
@@ -142,7 +142,7 @@ def main():
                                           rotation_range=0,
                                           width_shift_range=0.0,
                                           height_shift_range=0.0,
-                                          brightness_range=(0.8, 1.1),
+                                          brightness_range=(0.9, 1),
                                           shear_range=0.0,
                                           zoom_range=(0.9, 1.01),
                                           channel_shift_range=0.0,
@@ -161,17 +161,17 @@ def main():
     train_data_gen = image_data_gen_train.prop_image_generator_dataframe(train_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
-                                y_col='labels', batch_size=batch_size, validation=not(augment_train_data), ratio=0.9)
+                                y_col='labels', batch_size=batch_size, validation=not(augment_train_data), ratio=0.5)
     
     val_data_gen = image_data_gen_val.prop_image_generator_dataframe(val_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
-                                y_col='labels', batch_size=total_val, validation=True, ratio=0.9)
+                                y_col='labels', batch_size=total_val, validation=True, ratio=0.5)
  
     roc_val_data_gen = image_data_gen_val.prop_image_generator_dataframe(val_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
-                                y_col='labels', batch_size=total_val, validation=True, ratio=0.9)
+                                y_col='labels', batch_size=total_val, validation=True, ratio=0.5)
     
     ###### Obtain the shape of the input data (train images)
     temp_data_gen = image_data_gen_train.image_generator_dataframe(train_df,
