@@ -3,7 +3,7 @@
 #SBATCH -J resnet 	# Name of the job
 #SBATCH -p gpu		# Partition
 #SBATCH -N 1            # number of nodes
-#SBATCH --nodelist=node102
+#SBATCH --nodelist node102
 #SBATCH -o ./out_resnet.out
 #SBATCH -e ./err_resnet.err
 

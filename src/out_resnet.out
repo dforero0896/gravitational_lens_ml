@@ -208,13 +208,796 @@ Learning rate:  0.001
 Epoch 1/130
 Epoch 1/130
 
-Epoch 00001: val_acc improved from -inf to 0.51559, saving model to /home/epfl/variu/phd/gravitational_lens_ml/results/checkpoints/resnet/RN20v1_Tr6000_Te2955_bs10_ep130_aug0_VIS1_NIR000_DBraw_ratio0.5.h5
-600/600 - 500s - loss: 0.8949 - tp: 1519.0000 - fp: 1451.0000 - tn: 1549.0000 - fn: 1481.0000 - acc: 0.5113 - auc: 0.5158 - val_loss: 0.9023 - val_tp: 939.0000 - val_fp: 893.0000 - val_tn: 582.0000 - val_fn: 536.0000 - val_acc: 0.5156 - val_auc: 0.5073
+Epoch 00001: val_acc improved from -inf to 0.50136, saving model to /home/epfl/variu/phd/gravitational_lens_ml/results/checkpoints/resnet/RN20v1_Tr6000_Te2955_bs10_ep130_aug0_VIS1_NIR000_DBraw_ratio0.5.h5
+600/600 - 328s - loss: 0.8773 - tp: 1577.0000 - fp: 1451.0000 - tn: 1549.0000 - fn: 1423.0000 - acc: 0.5210 - auc: 0.5245 - val_loss: 0.8716 - val_tp: 634.0000 - val_fp: 630.0000 - val_tn: 845.0000 - val_fn: 841.0000 - val_acc: 0.5014 - val_auc: 0.4978
 Learning rate:  0.001
 Epoch 2/130
 Epoch 1/130
 
-Epoch 00002: val_acc improved from 0.51559 to 0.52508, saving model to /home/epfl/variu/phd/gravitational_lens_ml/results/checkpoints/resnet/RN20v1_Tr6000_Te2955_bs10_ep130_aug0_VIS1_NIR000_DBraw_ratio0.5.h5
-600/600 - 336s - loss: 0.8482 - tp: 1525.0000 - fp: 1367.0000 - tn: 1633.0000 - fn: 1475.0000 - acc: 0.5263 - auc: 0.5389 - val_loss: 0.8404 - val_tp: 711.0000 - val_fp: 637.0000 - val_tn: 838.0000 - val_fn: 764.0000 - val_acc: 0.5251 - val_auc: 0.5313
+Epoch 00002: val_acc did not improve from 0.50136
+600/600 - 252s - loss: 0.8524 - tp: 1574.0000 - fp: 1455.0000 - tn: 1545.0000 - fn: 1426.0000 - acc: 0.5198 - auc: 0.5346 - val_loss: 0.8611 - val_tp: 1170.0000 - val_fp: 1174.0000 - val_tn: 301.0000 - val_fn: 305.0000 - val_acc: 0.4986 - val_auc: 0.4872
 Learning rate:  0.001
 Epoch 3/130
+Epoch 1/130
+
+Epoch 00003: val_acc did not improve from 0.50136
+600/600 - 267s - loss: 0.8381 - tp: 1609.0000 - fp: 1382.0000 - tn: 1618.0000 - fn: 1391.0000 - acc: 0.5378 - auc: 0.5603 - val_loss: 0.8584 - val_tp: 235.0000 - val_fp: 232.0000 - val_tn: 1243.0000 - val_fn: 1240.0000 - val_acc: 0.5010 - val_auc: 0.4956
+Learning rate:  0.001
+Epoch 4/130
+Epoch 1/130
+
+Epoch 00004: val_acc did not improve from 0.50136
+600/600 - 263s - loss: 0.8264 - tp: 1660.0000 - fp: 1345.0000 - tn: 1655.0000 - fn: 1340.0000 - acc: 0.5525 - auc: 0.5723 - val_loss: 0.8415 - val_tp: 1122.0000 - val_fp: 1122.0000 - val_tn: 353.0000 - val_fn: 353.0000 - val_acc: 0.5000 - val_auc: 0.4972
+Learning rate:  0.001
+Epoch 5/130
+Epoch 1/130
+
+Epoch 00005: val_acc improved from 0.50136 to 0.50475, saving model to /home/epfl/variu/phd/gravitational_lens_ml/results/checkpoints/resnet/RN20v1_Tr6000_Te2955_bs10_ep130_aug0_VIS1_NIR000_DBraw_ratio0.5.h5
+600/600 - 242s - loss: 0.8159 - tp: 1659.0000 - fp: 1310.0000 - tn: 1690.0000 - fn: 1341.0000 - acc: 0.5582 - auc: 0.5846 - val_loss: 0.8445 - val_tp: 1046.0000 - val_fp: 1032.0000 - val_tn: 443.0000 - val_fn: 429.0000 - val_acc: 0.5047 - val_auc: 0.5007
+Learning rate:  0.001
+Epoch 6/130
+Epoch 1/130
+
+Epoch 00006: val_acc improved from 0.50475 to 0.52034, saving model to /home/epfl/variu/phd/gravitational_lens_ml/results/checkpoints/resnet/RN20v1_Tr6000_Te2955_bs10_ep130_aug0_VIS1_NIR000_DBraw_ratio0.5.h5
+600/600 - 273s - loss: 0.8015 - tp: 1667.0000 - fp: 1212.0000 - tn: 1788.0000 - fn: 1333.0000 - acc: 0.5758 - auc: 0.6058 - val_loss: 0.8402 - val_tp: 550.0000 - val_fp: 490.0000 - val_tn: 985.0000 - val_fn: 925.0000 - val_acc: 0.5203 - val_auc: 0.5315
+Learning rate:  0.001
+Epoch 7/130
+Epoch 1/130
+
+Epoch 00007: val_acc did not improve from 0.52034
+600/600 - 259s - loss: 0.7816 - tp: 1690.0000 - fp: 1115.0000 - tn: 1885.0000 - fn: 1310.0000 - acc: 0.5958 - auc: 0.6357 - val_loss: 0.8401 - val_tp: 1344.0000 - val_fp: 1347.0000 - val_tn: 128.0000 - val_fn: 131.0000 - val_acc: 0.4990 - val_auc: 0.5565
+Learning rate:  0.001
+Epoch 8/130
+Epoch 1/130
+
+Epoch 00008: val_acc improved from 0.52034 to 0.53458, saving model to /home/epfl/variu/phd/gravitational_lens_ml/results/checkpoints/resnet/RN20v1_Tr6000_Te2955_bs10_ep130_aug0_VIS1_NIR000_DBraw_ratio0.5.h5
+600/600 - 256s - loss: 0.7804 - tp: 1654.0000 - fp: 1180.0000 - tn: 1820.0000 - fn: 1346.0000 - acc: 0.5790 - auc: 0.6211 - val_loss: 0.8630 - val_tp: 158.0000 - val_fp: 56.0000 - val_tn: 1419.0000 - val_fn: 1317.0000 - val_acc: 0.5346 - val_auc: 0.5659
+Learning rate:  0.001
+Epoch 9/130
+Epoch 1/130
+
+Epoch 00009: val_acc did not improve from 0.53458
+600/600 - 257s - loss: 0.7597 - tp: 1726.0000 - fp: 1053.0000 - tn: 1947.0000 - fn: 1274.0000 - acc: 0.6122 - auc: 0.6574 - val_loss: 0.8303 - val_tp: 1364.0000 - val_fp: 1350.0000 - val_tn: 125.0000 - val_fn: 111.0000 - val_acc: 0.5047 - val_auc: 0.5597
+Learning rate:  0.001
+Epoch 10/130
+Epoch 1/130
+
+Epoch 00010: val_acc did not improve from 0.53458
+600/600 - 265s - loss: 0.7514 - tp: 1720.0000 - fp: 1014.0000 - tn: 1986.0000 - fn: 1280.0000 - acc: 0.6177 - auc: 0.6616 - val_loss: 0.8013 - val_tp: 861.0000 - val_fp: 826.0000 - val_tn: 649.0000 - val_fn: 614.0000 - val_acc: 0.5119 - val_auc: 0.5226
+Learning rate:  0.001
+Epoch 11/130
+Epoch 1/130
+
+Epoch 00011: val_acc improved from 0.53458 to 0.57119, saving model to /home/epfl/variu/phd/gravitational_lens_ml/results/checkpoints/resnet/RN20v1_Tr6000_Te2955_bs10_ep130_aug0_VIS1_NIR000_DBraw_ratio0.5.h5
+600/600 - 261s - loss: 0.7417 - tp: 1725.0000 - fp: 999.0000 - tn: 2001.0000 - fn: 1275.0000 - acc: 0.6210 - auc: 0.6790 - val_loss: 0.7789 - val_tp: 635.0000 - val_fp: 425.0000 - val_tn: 1050.0000 - val_fn: 840.0000 - val_acc: 0.5712 - val_auc: 0.5938
+Learning rate:  0.001
+Epoch 12/130
+Epoch 1/130
+
+Epoch 00012: val_acc did not improve from 0.57119
+600/600 - 257s - loss: 0.7325 - tp: 1730.0000 - fp: 965.0000 - tn: 2035.0000 - fn: 1270.0000 - acc: 0.6275 - auc: 0.6871 - val_loss: 0.8449 - val_tp: 1137.0000 - val_fp: 1000.0000 - val_tn: 475.0000 - val_fn: 338.0000 - val_acc: 0.5464 - val_auc: 0.5954
+Epoch 1/130
+Learning rate:  0.001
+Epoch 13/130
+Epoch 1/130
+
+Epoch 00013: val_acc did not improve from 0.57119
+600/600 - 274s - loss: 0.7278 - tp: 1770.0000 - fp: 929.0000 - tn: 2071.0000 - fn: 1230.0000 - acc: 0.6402 - auc: 0.6946 - val_loss: 0.8426 - val_tp: 354.0000 - val_fp: 224.0000 - val_tn: 1251.0000 - val_fn: 1121.0000 - val_acc: 0.5441 - val_auc: 0.5678
+Learning rate:  0.001
+Epoch 14/130
+Epoch 1/130
+
+Epoch 00014: val_acc did not improve from 0.57119
+600/600 - 262s - loss: 0.7097 - tp: 1775.0000 - fp: 887.0000 - tn: 2113.0000 - fn: 1225.0000 - acc: 0.6480 - auc: 0.7157 - val_loss: 0.7872 - val_tp: 623.0000 - val_fp: 425.0000 - val_tn: 1050.0000 - val_fn: 852.0000 - val_acc: 0.5671 - val_auc: 0.5876
+Learning rate:  0.001
+Epoch 15/130
+Epoch 1/130
+
+Epoch 00015: val_acc did not improve from 0.57119
+600/600 - 247s - loss: 0.7117 - tp: 1821.0000 - fp: 876.0000 - tn: 2124.0000 - fn: 1179.0000 - acc: 0.6575 - auc: 0.7219 - val_loss: 0.7708 - val_tp: 863.0000 - val_fp: 671.0000 - val_tn: 804.0000 - val_fn: 612.0000 - val_acc: 0.5651 - val_auc: 0.6118
+Learning rate:  0.001
+Epoch 16/130
+Epoch 1/130
+
+Epoch 00016: val_acc did not improve from 0.57119
+600/600 - 258s - loss: 0.7068 - tp: 1853.0000 - fp: 866.0000 - tn: 2134.0000 - fn: 1147.0000 - acc: 0.6645 - auc: 0.7285 - val_loss: 0.8170 - val_tp: 987.0000 - val_fp: 837.0000 - val_tn: 638.0000 - val_fn: 488.0000 - val_acc: 0.5508 - val_auc: 0.6047
+Epoch 1/130
+Learning rate:  0.001
+Epoch 17/130
+Epoch 1/130
+
+Epoch 00017: val_acc did not improve from 0.57119
+600/600 - 271s - loss: 0.6906 - tp: 1935.0000 - fp: 819.0000 - tn: 2181.0000 - fn: 1065.0000 - acc: 0.6860 - auc: 0.7525 - val_loss: 0.8965 - val_tp: 1233.0000 - val_fp: 1146.0000 - val_tn: 329.0000 - val_fn: 242.0000 - val_acc: 0.5295 - val_auc: 0.6171
+Learning rate:  0.001
+Epoch 18/130
+Epoch 1/130
+
+Epoch 00018: val_acc improved from 0.57119 to 0.57356, saving model to /home/epfl/variu/phd/gravitational_lens_ml/results/checkpoints/resnet/RN20v1_Tr6000_Te2955_bs10_ep130_aug0_VIS1_NIR000_DBraw_ratio0.5.h5
+600/600 - 272s - loss: 0.6802 - tp: 1998.0000 - fp: 786.0000 - tn: 2214.0000 - fn: 1002.0000 - acc: 0.7020 - auc: 0.7707 - val_loss: 0.8191 - val_tp: 637.0000 - val_fp: 420.0000 - val_tn: 1055.0000 - val_fn: 838.0000 - val_acc: 0.5736 - val_auc: 0.6004
+Learning rate:  0.001
+Epoch 19/130
+Epoch 1/130
+
+Epoch 00019: val_acc improved from 0.57356 to 0.59831, saving model to /home/epfl/variu/phd/gravitational_lens_ml/results/checkpoints/resnet/RN20v1_Tr6000_Te2955_bs10_ep130_aug0_VIS1_NIR000_DBraw_ratio0.5.h5
+600/600 - 255s - loss: 0.6795 - tp: 1981.0000 - fp: 795.0000 - tn: 2205.0000 - fn: 1019.0000 - acc: 0.6977 - auc: 0.7728 - val_loss: 0.8359 - val_tp: 591.0000 - val_fp: 301.0000 - val_tn: 1174.0000 - val_fn: 884.0000 - val_acc: 0.5983 - val_auc: 0.6452
+Learning rate:  0.001
+Epoch 20/130
+Epoch 1/130
+
+Epoch 00020: val_acc did not improve from 0.59831
+600/600 - 267s - loss: 0.6725 - tp: 2033.0000 - fp: 759.0000 - tn: 2241.0000 - fn: 967.0000 - acc: 0.7123 - auc: 0.7849 - val_loss: 0.8353 - val_tp: 815.0000 - val_fp: 672.0000 - val_tn: 803.0000 - val_fn: 660.0000 - val_acc: 0.5485 - val_auc: 0.5823
+Learning rate:  0.001
+Epoch 21/130
+Epoch 1/130
+
+Epoch 00021: val_acc did not improve from 0.59831
+600/600 - 257s - loss: 0.6593 - tp: 2073.0000 - fp: 735.0000 - tn: 2265.0000 - fn: 927.0000 - acc: 0.7230 - auc: 0.8026 - val_loss: 0.9055 - val_tp: 1288.0000 - val_fp: 1166.0000 - val_tn: 309.0000 - val_fn: 187.0000 - val_acc: 0.5414 - val_auc: 0.6311
+Learning rate:  0.001
+Epoch 22/130
+Epoch 1/130
+
+Epoch 00022: val_acc did not improve from 0.59831
+600/600 - 257s - loss: 0.6492 - tp: 2077.0000 - fp: 709.0000 - tn: 2291.0000 - fn: 923.0000 - acc: 0.7280 - auc: 0.8123 - val_loss: 1.6680 - val_tp: 1435.0000 - val_fp: 1397.0000 - val_tn: 78.0000 - val_fn: 40.0000 - val_acc: 0.5129 - val_auc: 0.6229
+Learning rate:  0.001
+Epoch 23/130
+Epoch 1/130
+
+Epoch 00023: val_acc did not improve from 0.59831
+600/600 - 272s - loss: 0.6506 - tp: 2109.0000 - fp: 717.0000 - tn: 2283.0000 - fn: 891.0000 - acc: 0.7320 - auc: 0.8120 - val_loss: 1.5970 - val_tp: 1444.0000 - val_fp: 1437.0000 - val_tn: 38.0000 - val_fn: 31.0000 - val_acc: 0.5024 - val_auc: 0.6418
+Learning rate:  0.001
+Epoch 24/130
+Epoch 1/130
+
+Epoch 00024: val_acc did not improve from 0.59831
+600/600 - 266s - loss: 0.6457 - tp: 2125.0000 - fp: 668.0000 - tn: 2332.0000 - fn: 875.0000 - acc: 0.7428 - auc: 0.8219 - val_loss: 1.0469 - val_tp: 1341.0000 - val_fp: 1269.0000 - val_tn: 206.0000 - val_fn: 134.0000 - val_acc: 0.5244 - val_auc: 0.6442
+Epoch 1/130
+Learning rate:  0.001
+Epoch 25/130
+Epoch 1/130
+
+Epoch 00025: val_acc did not improve from 0.59831
+600/600 - 248s - loss: 0.6235 - tp: 2185.0000 - fp: 598.0000 - tn: 2402.0000 - fn: 815.0000 - acc: 0.7645 - auc: 0.8424 - val_loss: 1.2759 - val_tp: 1309.0000 - val_fp: 1192.0000 - val_tn: 283.0000 - val_fn: 166.0000 - val_acc: 0.5397 - val_auc: 0.6284
+Learning rate:  0.001
+Epoch 26/130
+Epoch 1/130
+
+Epoch 00026: val_acc did not improve from 0.59831
+600/600 - 271s - loss: 0.6289 - tp: 2189.0000 - fp: 636.0000 - tn: 2364.0000 - fn: 811.0000 - acc: 0.7588 - auc: 0.8428 - val_loss: 2.0801 - val_tp: 1414.0000 - val_fp: 1357.0000 - val_tn: 118.0000 - val_fn: 61.0000 - val_acc: 0.5193 - val_auc: 0.6176
+Learning rate:  0.001
+Epoch 27/130
+Epoch 1/130
+
+Epoch 00027: val_acc did not improve from 0.59831
+600/600 - 260s - loss: 0.6254 - tp: 2233.0000 - fp: 617.0000 - tn: 2383.0000 - fn: 767.0000 - acc: 0.7693 - auc: 0.8487 - val_loss: 1.2890 - val_tp: 1373.0000 - val_fp: 1297.0000 - val_tn: 178.0000 - val_fn: 102.0000 - val_acc: 0.5258 - val_auc: 0.6614
+Learning rate:  0.001
+Epoch 28/130
+Epoch 1/130
+
+Epoch 00028: val_acc did not improve from 0.59831
+600/600 - 261s - loss: 0.6011 - tp: 2285.0000 - fp: 571.0000 - tn: 2429.0000 - fn: 715.0000 - acc: 0.7857 - auc: 0.8680 - val_loss: 1.1757 - val_tp: 1285.0000 - val_fp: 1164.0000 - val_tn: 311.0000 - val_fn: 190.0000 - val_acc: 0.5410 - val_auc: 0.6372
+Learning rate:  0.001
+Epoch 29/130
+Epoch 1/130
+
+Epoch 00029: val_acc did not improve from 0.59831
+600/600 - 253s - loss: 0.6039 - tp: 2276.0000 - fp: 587.0000 - tn: 2413.0000 - fn: 724.0000 - acc: 0.7815 - auc: 0.8677 - val_loss: 0.8818 - val_tp: 1039.0000 - val_fp: 798.0000 - val_tn: 677.0000 - val_fn: 436.0000 - val_acc: 0.5817 - val_auc: 0.6495
+Learning rate:  0.001
+Epoch 30/130
+Epoch 1/130
+
+Epoch 00030: val_acc did not improve from 0.59831
+600/600 - 267s - loss: 0.6029 - tp: 2290.0000 - fp: 588.0000 - tn: 2412.0000 - fn: 710.0000 - acc: 0.7837 - auc: 0.8718 - val_loss: 1.0336 - val_tp: 1234.0000 - val_fp: 1092.0000 - val_tn: 383.0000 - val_fn: 241.0000 - val_acc: 0.5481 - val_auc: 0.6302
+Learning rate:  0.001
+Epoch 31/130
+Epoch 1/130
+
+Epoch 00031: val_acc did not improve from 0.59831
+600/600 - 272s - loss: 0.5850 - tp: 2323.0000 - fp: 542.0000 - tn: 2458.0000 - fn: 677.0000 - acc: 0.7968 - auc: 0.8848 - val_loss: 0.9203 - val_tp: 962.0000 - val_fp: 719.0000 - val_tn: 756.0000 - val_fn: 513.0000 - val_acc: 0.5824 - val_auc: 0.6367
+Learning rate:  0.001
+Epoch 32/130
+Epoch 1/130
+
+Epoch 00032: val_acc did not improve from 0.59831
+600/600 - 253s - loss: 0.5800 - tp: 2356.0000 - fp: 535.0000 - tn: 2465.0000 - fn: 644.0000 - acc: 0.8035 - auc: 0.8900 - val_loss: 0.9792 - val_tp: 1168.0000 - val_fp: 964.0000 - val_tn: 511.0000 - val_fn: 307.0000 - val_acc: 0.5692 - val_auc: 0.6533
+Learning rate:  0.001
+Epoch 33/130
+Epoch 1/130
+
+Epoch 00033: val_acc did not improve from 0.59831
+600/600 - 252s - loss: 0.5738 - tp: 2378.0000 - fp: 495.0000 - tn: 2505.0000 - fn: 622.0000 - acc: 0.8138 - auc: 0.8958 - val_loss: 1.0057 - val_tp: 1014.0000 - val_fp: 779.0000 - val_tn: 696.0000 - val_fn: 461.0000 - val_acc: 0.5797 - val_auc: 0.6427
+Learning rate:  0.001
+Epoch 34/130
+Epoch 1/130
+
+Epoch 00034: val_acc did not improve from 0.59831
+600/600 - 265s - loss: 0.5674 - tp: 2396.0000 - fp: 491.0000 - tn: 2509.0000 - fn: 604.0000 - acc: 0.8175 - auc: 0.9013 - val_loss: 1.0139 - val_tp: 1022.0000 - val_fp: 839.0000 - val_tn: 636.0000 - val_fn: 453.0000 - val_acc: 0.5620 - val_auc: 0.6215
+Learning rate:  0.001
+Epoch 35/130
+Epoch 1/130
+
+Epoch 00035: val_acc did not improve from 0.59831
+600/600 - 278s - loss: 0.5546 - tp: 2434.0000 - fp: 470.0000 - tn: 2530.0000 - fn: 566.0000 - acc: 0.8273 - auc: 0.9091 - val_loss: 1.1467 - val_tp: 1252.0000 - val_fp: 1118.0000 - val_tn: 357.0000 - val_fn: 223.0000 - val_acc: 0.5454 - val_auc: 0.6546
+Learning rate:  0.001
+Epoch 36/130
+Epoch 1/130
+
+Epoch 00036: val_acc did not improve from 0.59831
+600/600 - 266s - loss: 0.5498 - tp: 2428.0000 - fp: 456.0000 - tn: 2544.0000 - fn: 572.0000 - acc: 0.8287 - auc: 0.9137 - val_loss: 1.0131 - val_tp: 1026.0000 - val_fp: 793.0000 - val_tn: 682.0000 - val_fn: 449.0000 - val_acc: 0.5790 - val_auc: 0.6398
+Learning rate:  0.001
+Epoch 37/130
+Epoch 1/130
+
+Epoch 00037: val_acc did not improve from 0.59831
+600/600 - 278s - loss: 0.5411 - tp: 2481.0000 - fp: 443.0000 - tn: 2557.0000 - fn: 519.0000 - acc: 0.8397 - auc: 0.9201 - val_loss: 1.0399 - val_tp: 1038.0000 - val_fp: 844.0000 - val_tn: 631.0000 - val_fn: 437.0000 - val_acc: 0.5658 - val_auc: 0.6293
+Learning rate:  0.001
+Epoch 38/130
+Epoch 1/130
+
+Epoch 00038: val_acc did not improve from 0.59831
+600/600 - 280s - loss: 0.5374 - tp: 2486.0000 - fp: 402.0000 - tn: 2598.0000 - fn: 514.0000 - acc: 0.8473 - auc: 0.9226 - val_loss: 1.1648 - val_tp: 1220.0000 - val_fp: 1076.0000 - val_tn: 399.0000 - val_fn: 255.0000 - val_acc: 0.5488 - val_auc: 0.6409
+Learning rate:  0.001
+Epoch 39/130
+Epoch 1/130
+
+Epoch 00039: val_acc did not improve from 0.59831
+600/600 - 261s - loss: 0.5277 - tp: 2506.0000 - fp: 375.0000 - tn: 2625.0000 - fn: 494.0000 - acc: 0.8552 - auc: 0.9281 - val_loss: 1.7667 - val_tp: 1403.0000 - val_fp: 1350.0000 - val_tn: 125.0000 - val_fn: 72.0000 - val_acc: 0.5180 - val_auc: 0.6262
+Learning rate:  0.001
+Epoch 40/130
+Epoch 1/130
+
+Epoch 00040: val_acc did not improve from 0.59831
+600/600 - 248s - loss: 0.5246 - tp: 2530.0000 - fp: 393.0000 - tn: 2607.0000 - fn: 470.0000 - acc: 0.8562 - auc: 0.9317 - val_loss: 1.0913 - val_tp: 1066.0000 - val_fp: 833.0000 - val_tn: 642.0000 - val_fn: 409.0000 - val_acc: 0.5790 - val_auc: 0.6418
+Learning rate:  0.001
+Epoch 41/130
+Epoch 1/130
+
+Epoch 00041: val_acc did not improve from 0.59831
+600/600 - 274s - loss: 0.5116 - tp: 2543.0000 - fp: 364.0000 - tn: 2636.0000 - fn: 457.0000 - acc: 0.8632 - auc: 0.9383 - val_loss: 1.1192 - val_tp: 1040.0000 - val_fp: 804.0000 - val_tn: 671.0000 - val_fn: 435.0000 - val_acc: 0.5800 - val_auc: 0.6411
+Epoch 1/130
+Learning rate:  0.001
+Epoch 42/130
+Epoch 1/130
+
+Epoch 00042: val_acc did not improve from 0.59831
+600/600 - 274s - loss: 0.5028 - tp: 2563.0000 - fp: 370.0000 - tn: 2630.0000 - fn: 437.0000 - acc: 0.8655 - auc: 0.9420 - val_loss: 1.5167 - val_tp: 1344.0000 - val_fp: 1262.0000 - val_tn: 213.0000 - val_fn: 131.0000 - val_acc: 0.5278 - val_auc: 0.6304
+Learning rate:  0.001
+Epoch 43/130
+Epoch 1/130
+
+Epoch 00043: val_acc did not improve from 0.59831
+600/600 - 250s - loss: 0.5271 - tp: 2552.0000 - fp: 373.0000 - tn: 2627.0000 - fn: 448.0000 - acc: 0.8632 - auc: 0.9340 - val_loss: 1.1042 - val_tp: 787.0000 - val_fp: 584.0000 - val_tn: 891.0000 - val_fn: 688.0000 - val_acc: 0.5688 - val_auc: 0.6000
+Learning rate:  0.001
+Epoch 44/130
+Epoch 1/130
+
+Epoch 00044: val_acc did not improve from 0.59831
+600/600 - 252s - loss: 0.5105 - tp: 2565.0000 - fp: 366.0000 - tn: 2634.0000 - fn: 435.0000 - acc: 0.8665 - auc: 0.9425 - val_loss: 1.0804 - val_tp: 883.0000 - val_fp: 744.0000 - val_tn: 731.0000 - val_fn: 592.0000 - val_acc: 0.5471 - val_auc: 0.6003
+Learning rate:  0.001
+Epoch 45/130
+Epoch 1/130
+
+Epoch 00045: val_acc did not improve from 0.59831
+600/600 - 291s - loss: 0.5043 - tp: 2584.0000 - fp: 365.0000 - tn: 2635.0000 - fn: 416.0000 - acc: 0.8698 - auc: 0.9456 - val_loss: 1.1391 - val_tp: 1088.0000 - val_fp: 903.0000 - val_tn: 572.0000 - val_fn: 387.0000 - val_acc: 0.5627 - val_auc: 0.6302
+Learning rate:  0.001
+Epoch 46/130
+Epoch 1/130
+
+Epoch 00046: val_acc did not improve from 0.59831
+600/600 - 249s - loss: 0.5191 - tp: 2550.0000 - fp: 374.0000 - tn: 2626.0000 - fn: 450.0000 - acc: 0.8627 - auc: 0.9410 - val_loss: 1.7996 - val_tp: 1383.0000 - val_fp: 1293.0000 - val_tn: 182.0000 - val_fn: 92.0000 - val_acc: 0.5305 - val_auc: 0.6453
+Learning rate:  0.001
+Epoch 47/130
+Epoch 1/130
+
+Epoch 00047: val_acc did not improve from 0.59831
+600/600 - 254s - loss: 0.5022 - tp: 2587.0000 - fp: 330.0000 - tn: 2670.0000 - fn: 413.0000 - acc: 0.8762 - auc: 0.9480 - val_loss: 1.3815 - val_tp: 1222.0000 - val_fp: 1044.0000 - val_tn: 431.0000 - val_fn: 253.0000 - val_acc: 0.5603 - val_auc: 0.6354
+Learning rate:  0.001
+Epoch 48/130
+Epoch 1/130
+
+Epoch 00048: val_acc did not improve from 0.59831
+600/600 - 263s - loss: 0.4918 - tp: 2595.0000 - fp: 308.0000 - tn: 2692.0000 - fn: 405.0000 - acc: 0.8812 - auc: 0.9527 - val_loss: 1.4302 - val_tp: 1216.0000 - val_fp: 1060.0000 - val_tn: 415.0000 - val_fn: 259.0000 - val_acc: 0.5529 - val_auc: 0.6355
+Learning rate:  0.001
+Epoch 49/130
+Epoch 1/130
+
+Epoch 00049: val_acc did not improve from 0.59831
+600/600 - 301s - loss: 0.4974 - tp: 2615.0000 - fp: 328.0000 - tn: 2672.0000 - fn: 385.0000 - acc: 0.8812 - auc: 0.9518 - val_loss: 3.2752 - val_tp: 1462.0000 - val_fp: 1450.0000 - val_tn: 25.0000 - val_fn: 13.0000 - val_acc: 0.5041 - val_auc: 0.5772
+Epoch 1/130
+Learning rate:  0.001
+Epoch 50/130
+Epoch 1/130
+
+Epoch 00050: val_acc did not improve from 0.59831
+600/600 - 271s - loss: 0.4880 - tp: 2631.0000 - fp: 317.0000 - tn: 2683.0000 - fn: 369.0000 - acc: 0.8857 - auc: 0.9558 - val_loss: 1.6609 - val_tp: 1331.0000 - val_fp: 1253.0000 - val_tn: 222.0000 - val_fn: 144.0000 - val_acc: 0.5264 - val_auc: 0.6326
+Learning rate:  0.001
+Epoch 51/130
+Epoch 1/130
+
+Epoch 00051: val_acc did not improve from 0.59831
+600/600 - 262s - loss: 0.4991 - tp: 2618.0000 - fp: 316.0000 - tn: 2684.0000 - fn: 382.0000 - acc: 0.8837 - auc: 0.9528 - val_loss: 1.3184 - val_tp: 1171.0000 - val_fp: 1057.0000 - val_tn: 418.0000 - val_fn: 304.0000 - val_acc: 0.5386 - val_auc: 0.6007
+Learning rate:  0.001
+Epoch 52/130
+Epoch 1/130
+
+Epoch 00052: val_acc did not improve from 0.59831
+600/600 - 297s - loss: 0.4818 - tp: 2644.0000 - fp: 287.0000 - tn: 2713.0000 - fn: 356.0000 - acc: 0.8928 - auc: 0.9596 - val_loss: 1.4535 - val_tp: 1253.0000 - val_fp: 1167.0000 - val_tn: 308.0000 - val_fn: 222.0000 - val_acc: 0.5292 - val_auc: 0.6113
+Learning rate:  0.001
+Epoch 53/130
+Epoch 1/130
+
+Epoch 00053: val_acc did not improve from 0.59831
+600/600 - 268s - loss: 0.4775 - tp: 2683.0000 - fp: 296.0000 - tn: 2704.0000 - fn: 317.0000 - acc: 0.8978 - auc: 0.9616 - val_loss: 1.6961 - val_tp: 1314.0000 - val_fp: 1231.0000 - val_tn: 244.0000 - val_fn: 161.0000 - val_acc: 0.5281 - val_auc: 0.6403
+Learning rate:  0.001
+Epoch 54/130
+Epoch 1/130
+
+Epoch 00054: val_acc did not improve from 0.59831
+600/600 - 264s - loss: 0.4853 - tp: 2647.0000 - fp: 286.0000 - tn: 2714.0000 - fn: 353.0000 - acc: 0.8935 - auc: 0.9595 - val_loss: 1.2818 - val_tp: 618.0000 - val_fp: 369.0000 - val_tn: 1106.0000 - val_fn: 857.0000 - val_acc: 0.5844 - val_auc: 0.6280
+Learning rate:  0.001
+Epoch 55/130
+Epoch 1/130
+
+Epoch 00055: val_acc did not improve from 0.59831
+600/600 - 290s - loss: 0.4821 - tp: 2642.0000 - fp: 291.0000 - tn: 2709.0000 - fn: 358.0000 - acc: 0.8918 - auc: 0.9614 - val_loss: 1.9331 - val_tp: 1369.0000 - val_fp: 1295.0000 - val_tn: 180.0000 - val_fn: 106.0000 - val_acc: 0.5251 - val_auc: 0.6270
+Learning rate:  0.001
+Epoch 56/130
+Epoch 1/130
+
+Epoch 00056: val_acc did not improve from 0.59831
+600/600 - 261s - loss: 0.4742 - tp: 2677.0000 - fp: 270.0000 - tn: 2730.0000 - fn: 323.0000 - acc: 0.9012 - auc: 0.9643 - val_loss: 1.5166 - val_tp: 1243.0000 - val_fp: 1122.0000 - val_tn: 353.0000 - val_fn: 232.0000 - val_acc: 0.5410 - val_auc: 0.6099
+Learning rate:  0.001
+Epoch 57/130
+Epoch 1/130
+
+Epoch 00057: val_acc did not improve from 0.59831
+600/600 - 274s - loss: 0.4855 - tp: 2671.0000 - fp: 269.0000 - tn: 2731.0000 - fn: 329.0000 - acc: 0.9003 - auc: 0.9615 - val_loss: 1.5833 - val_tp: 1233.0000 - val_fp: 1093.0000 - val_tn: 382.0000 - val_fn: 242.0000 - val_acc: 0.5475 - val_auc: 0.6105
+Learning rate:  0.001
+Epoch 58/130
+Epoch 1/130
+
+Epoch 00058: val_acc did not improve from 0.59831
+600/600 - 265s - loss: 0.4897 - tp: 2656.0000 - fp: 298.0000 - tn: 2702.0000 - fn: 344.0000 - acc: 0.8930 - auc: 0.9610 - val_loss: 1.3534 - val_tp: 991.0000 - val_fp: 809.0000 - val_tn: 666.0000 - val_fn: 484.0000 - val_acc: 0.5617 - val_auc: 0.6170
+Learning rate:  0.001
+Epoch 59/130
+Epoch 1/130
+
+Epoch 00059: val_acc did not improve from 0.59831
+600/600 - 299s - loss: 0.4519 - tp: 2724.0000 - fp: 232.0000 - tn: 2768.0000 - fn: 276.0000 - acc: 0.9153 - auc: 0.9726 - val_loss: 1.6439 - val_tp: 1282.0000 - val_fp: 1156.0000 - val_tn: 319.0000 - val_fn: 193.0000 - val_acc: 0.5427 - val_auc: 0.6088
+Learning rate:  0.001
+Epoch 60/130
+Epoch 1/130
+
+Epoch 00060: val_acc did not improve from 0.59831
+600/600 - 264s - loss: 0.4749 - tp: 2681.0000 - fp: 261.0000 - tn: 2739.0000 - fn: 319.0000 - acc: 0.9033 - auc: 0.9661 - val_loss: 1.6169 - val_tp: 1252.0000 - val_fp: 1121.0000 - val_tn: 354.0000 - val_fn: 223.0000 - val_acc: 0.5444 - val_auc: 0.6311
+Learning rate:  0.001
+Epoch 61/130
+Epoch 1/130
+
+Epoch 00061: val_acc did not improve from 0.59831
+600/600 - 261s - loss: 0.4698 - tp: 2701.0000 - fp: 264.0000 - tn: 2736.0000 - fn: 299.0000 - acc: 0.9062 - auc: 0.9684 - val_loss: 1.9850 - val_tp: 1381.0000 - val_fp: 1276.0000 - val_tn: 199.0000 - val_fn: 94.0000 - val_acc: 0.5356 - val_auc: 0.6244
+Learning rate:  0.001
+Epoch 62/130
+Epoch 1/130
+
+Epoch 00062: val_acc did not improve from 0.59831
+600/600 - 297s - loss: 0.4768 - tp: 2685.0000 - fp: 266.0000 - tn: 2734.0000 - fn: 315.0000 - acc: 0.9032 - auc: 0.9670 - val_loss: 1.9404 - val_tp: 1346.0000 - val_fp: 1254.0000 - val_tn: 221.0000 - val_fn: 129.0000 - val_acc: 0.5312 - val_auc: 0.6207
+Learning rate:  0.001
+Epoch 63/130
+Epoch 1/130
+
+Epoch 00063: val_acc did not improve from 0.59831
+600/600 - 266s - loss: 0.4648 - tp: 2710.0000 - fp: 237.0000 - tn: 2763.0000 - fn: 290.0000 - acc: 0.9122 - auc: 0.9710 - val_loss: 1.4797 - val_tp: 1231.0000 - val_fp: 1040.0000 - val_tn: 435.0000 - val_fn: 244.0000 - val_acc: 0.5647 - val_auc: 0.6496
+Learning rate:  0.001
+Epoch 64/130
+Epoch 1/130
+
+Epoch 00064: val_acc did not improve from 0.59831
+600/600 - 262s - loss: 0.4575 - tp: 2731.0000 - fp: 227.0000 - tn: 2773.0000 - fn: 269.0000 - acc: 0.9173 - auc: 0.9732 - val_loss: 1.3863 - val_tp: 1027.0000 - val_fp: 901.0000 - val_tn: 574.0000 - val_fn: 448.0000 - val_acc: 0.5427 - val_auc: 0.5702
+Epoch 1/130
+Learning rate:  0.001
+Epoch 65/130
+Epoch 1/130
+
+Epoch 00065: val_acc did not improve from 0.59831
+600/600 - 291s - loss: 0.4671 - tp: 2710.0000 - fp: 259.0000 - tn: 2741.0000 - fn: 290.0000 - acc: 0.9085 - auc: 0.9712 - val_loss: 1.7924 - val_tp: 1302.0000 - val_fp: 1240.0000 - val_tn: 235.0000 - val_fn: 173.0000 - val_acc: 0.5210 - val_auc: 0.6072
+Learning rate:  0.001
+Epoch 66/130
+Epoch 1/130
+
+Epoch 00066: val_acc did not improve from 0.59831
+600/600 - 257s - loss: 0.4680 - tp: 2718.0000 - fp: 239.0000 - tn: 2761.0000 - fn: 282.0000 - acc: 0.9132 - auc: 0.9716 - val_loss: 1.9528 - val_tp: 1313.0000 - val_fp: 1229.0000 - val_tn: 246.0000 - val_fn: 162.0000 - val_acc: 0.5285 - val_auc: 0.6065
+Learning rate:  0.001
+Epoch 67/130
+Epoch 1/130
+
+Epoch 00067: val_acc did not improve from 0.59831
+600/600 - 260s - loss: 0.4677 - tp: 2708.0000 - fp: 240.0000 - tn: 2760.0000 - fn: 292.0000 - acc: 0.9113 - auc: 0.9718 - val_loss: 1.4835 - val_tp: 1178.0000 - val_fp: 964.0000 - val_tn: 511.0000 - val_fn: 297.0000 - val_acc: 0.5725 - val_auc: 0.6263
+Learning rate:  0.001
+Epoch 68/130
+Epoch 1/130
+
+Epoch 00068: val_acc did not improve from 0.59831
+600/600 - 282s - loss: 0.4681 - tp: 2732.0000 - fp: 240.0000 - tn: 2760.0000 - fn: 268.0000 - acc: 0.9153 - auc: 0.9722 - val_loss: 1.6871 - val_tp: 1268.0000 - val_fp: 1119.0000 - val_tn: 356.0000 - val_fn: 207.0000 - val_acc: 0.5505 - val_auc: 0.6306
+Learning rate:  0.001
+Epoch 69/130
+Epoch 1/130
+
+Epoch 00069: val_acc did not improve from 0.59831
+600/600 - 287s - loss: 0.4708 - tp: 2712.0000 - fp: 218.0000 - tn: 2782.0000 - fn: 288.0000 - acc: 0.9157 - auc: 0.9719 - val_loss: 1.6130 - val_tp: 1212.0000 - val_fp: 1089.0000 - val_tn: 386.0000 - val_fn: 263.0000 - val_acc: 0.5417 - val_auc: 0.6043
+Learning rate:  0.001
+Epoch 70/130
+Epoch 1/130
+
+Epoch 00070: val_acc did not improve from 0.59831
+600/600 - 273s - loss: 0.4539 - tp: 2735.0000 - fp: 189.0000 - tn: 2811.0000 - fn: 265.0000 - acc: 0.9243 - auc: 0.9762 - val_loss: 2.2844 - val_tp: 1363.0000 - val_fp: 1271.0000 - val_tn: 204.0000 - val_fn: 112.0000 - val_acc: 0.5312 - val_auc: 0.6212
+Learning rate:  0.001
+Epoch 71/130
+Epoch 1/130
+
+Epoch 00071: val_acc did not improve from 0.59831
+600/600 - 274s - loss: 0.4626 - tp: 2716.0000 - fp: 229.0000 - tn: 2771.0000 - fn: 284.0000 - acc: 0.9145 - auc: 0.9748 - val_loss: 2.1955 - val_tp: 1364.0000 - val_fp: 1256.0000 - val_tn: 219.0000 - val_fn: 111.0000 - val_acc: 0.5366 - val_auc: 0.6286
+Learning rate:  0.001
+Epoch 72/130
+Epoch 1/130
+
+Epoch 00072: val_acc did not improve from 0.59831
+600/600 - 311s - loss: 0.4726 - tp: 2713.0000 - fp: 234.0000 - tn: 2766.0000 - fn: 287.0000 - acc: 0.9132 - auc: 0.9724 - val_loss: 2.0727 - val_tp: 1353.0000 - val_fp: 1267.0000 - val_tn: 208.0000 - val_fn: 122.0000 - val_acc: 0.5292 - val_auc: 0.6084
+Learning rate:  0.001
+Epoch 73/130
+Epoch 1/130
+
+Epoch 00073: val_acc did not improve from 0.59831
+600/600 - 267s - loss: 0.4621 - tp: 2726.0000 - fp: 192.0000 - tn: 2808.0000 - fn: 274.0000 - acc: 0.9223 - auc: 0.9753 - val_loss: 1.4675 - val_tp: 1078.0000 - val_fp: 910.0000 - val_tn: 565.0000 - val_fn: 397.0000 - val_acc: 0.5569 - val_auc: 0.6113
+Learning rate:  0.001
+Epoch 74/130
+Epoch 1/130
+
+Epoch 00074: val_acc did not improve from 0.59831
+600/600 - 299s - loss: 0.4541 - tp: 2747.0000 - fp: 194.0000 - tn: 2806.0000 - fn: 253.0000 - acc: 0.9255 - auc: 0.9776 - val_loss: 1.7425 - val_tp: 1255.0000 - val_fp: 1116.0000 - val_tn: 359.0000 - val_fn: 220.0000 - val_acc: 0.5471 - val_auc: 0.6347
+Epoch 1/130
+Learning rate:  0.001
+Epoch 75/130
+Epoch 1/130
+
+Epoch 00075: val_acc did not improve from 0.59831
+600/600 - 305s - loss: 0.4611 - tp: 2745.0000 - fp: 217.0000 - tn: 2783.0000 - fn: 255.0000 - acc: 0.9213 - auc: 0.9757 - val_loss: 1.4293 - val_tp: 1062.0000 - val_fp: 873.0000 - val_tn: 602.0000 - val_fn: 413.0000 - val_acc: 0.5641 - val_auc: 0.6029
+Learning rate:  0.001
+Epoch 76/130
+Epoch 1/130
+
+Epoch 00076: val_acc did not improve from 0.59831
+600/600 - 275s - loss: 0.4624 - tp: 2745.0000 - fp: 208.0000 - tn: 2792.0000 - fn: 255.0000 - acc: 0.9228 - auc: 0.9754 - val_loss: 2.0537 - val_tp: 1302.0000 - val_fp: 1182.0000 - val_tn: 293.0000 - val_fn: 173.0000 - val_acc: 0.5407 - val_auc: 0.5972
+Epoch 1/130
+Learning rate:  0.001
+Epoch 77/130
+Epoch 1/130
+
+Epoch 00077: val_acc did not improve from 0.59831
+600/600 - 284s - loss: 0.4662 - tp: 2737.0000 - fp: 224.0000 - tn: 2776.0000 - fn: 263.0000 - acc: 0.9188 - auc: 0.9756 - val_loss: 2.1452 - val_tp: 1369.0000 - val_fp: 1299.0000 - val_tn: 176.0000 - val_fn: 106.0000 - val_acc: 0.5237 - val_auc: 0.6089
+Learning rate:  0.001
+Epoch 78/130
+Epoch 1/130
+
+Epoch 00078: val_acc did not improve from 0.59831
+600/600 - 302s - loss: 0.4691 - tp: 2736.0000 - fp: 220.0000 - tn: 2780.0000 - fn: 264.0000 - acc: 0.9193 - auc: 0.9749 - val_loss: 1.8983 - val_tp: 1331.0000 - val_fp: 1231.0000 - val_tn: 244.0000 - val_fn: 144.0000 - val_acc: 0.5339 - val_auc: 0.6297
+Learning rate:  0.001
+Epoch 79/130
+Epoch 1/130
+
+Epoch 00079: val_acc did not improve from 0.59831
+600/600 - 276s - loss: 0.4539 - tp: 2756.0000 - fp: 208.0000 - tn: 2792.0000 - fn: 244.0000 - acc: 0.9247 - auc: 0.9792 - val_loss: 4.8589 - val_tp: 1468.0000 - val_fp: 1460.0000 - val_tn: 15.0000 - val_fn: 7.0000 - val_acc: 0.5027 - val_auc: 0.5382
+Learning rate:  0.001
+Epoch 80/130
+Epoch 1/130
+
+Epoch 00080: val_acc did not improve from 0.59831
+600/600 - 279s - loss: 0.4668 - tp: 2750.0000 - fp: 222.0000 - tn: 2778.0000 - fn: 250.0000 - acc: 0.9213 - auc: 0.9762 - val_loss: 1.9019 - val_tp: 1296.0000 - val_fp: 1210.0000 - val_tn: 265.0000 - val_fn: 179.0000 - val_acc: 0.5292 - val_auc: 0.6019
+Learning rate:  0.001
+Epoch 81/130
+Epoch 1/130
+
+Epoch 00081: val_acc did not improve from 0.59831
+600/600 - 297s - loss: 0.4567 - tp: 2746.0000 - fp: 192.0000 - tn: 2808.0000 - fn: 254.0000 - acc: 0.9257 - auc: 0.9785 - val_loss: 1.8435 - val_tp: 1251.0000 - val_fp: 1128.0000 - val_tn: 347.0000 - val_fn: 224.0000 - val_acc: 0.5417 - val_auc: 0.6153
+Learning rate:  0.0001
+Epoch 82/130
+Epoch 1/130
+
+Epoch 00082: val_acc did not improve from 0.59831
+600/600 - 310s - loss: 0.4207 - tp: 2813.0000 - fp: 149.0000 - tn: 2851.0000 - fn: 187.0000 - acc: 0.9440 - auc: 0.9864 - val_loss: 2.0362 - val_tp: 1325.0000 - val_fp: 1236.0000 - val_tn: 239.0000 - val_fn: 150.0000 - val_acc: 0.5302 - val_auc: 0.6231
+Learning rate:  0.0001
+Epoch 83/130
+Epoch 1/130
+
+Epoch 00083: val_acc did not improve from 0.59831
+600/600 - 276s - loss: 0.3909 - tp: 2851.0000 - fp: 96.0000 - tn: 2904.0000 - fn: 149.0000 - acc: 0.9592 - auc: 0.9916 - val_loss: 1.8818 - val_tp: 1280.0000 - val_fp: 1164.0000 - val_tn: 311.0000 - val_fn: 195.0000 - val_acc: 0.5393 - val_auc: 0.6214
+Epoch 1/130
+Learning rate:  0.0001
+Epoch 84/130
+Epoch 1/130
+
+Epoch 00084: val_acc did not improve from 0.59831
+600/600 - 293s - loss: 0.3730 - tp: 2866.0000 - fp: 61.0000 - tn: 2939.0000 - fn: 134.0000 - acc: 0.9675 - auc: 0.9936 - val_loss: 2.1321 - val_tp: 1346.0000 - val_fp: 1255.0000 - val_tn: 220.0000 - val_fn: 129.0000 - val_acc: 0.5308 - val_auc: 0.6204
+Epoch 1/130
+Learning rate:  0.0001
+Epoch 85/130
+Epoch 1/130
+
+Epoch 00085: val_acc did not improve from 0.59831
+600/600 - 320s - loss: 0.3581 - tp: 2894.0000 - fp: 61.0000 - tn: 2939.0000 - fn: 106.0000 - acc: 0.9722 - auc: 0.9953 - val_loss: 2.1290 - val_tp: 1338.0000 - val_fp: 1256.0000 - val_tn: 219.0000 - val_fn: 137.0000 - val_acc: 0.5278 - val_auc: 0.6169
+Learning rate:  0.0001
+Epoch 86/130
+Epoch 1/130
+
+Epoch 00086: val_acc did not improve from 0.59831
+600/600 - 275s - loss: 0.3426 - tp: 2906.0000 - fp: 38.0000 - tn: 2962.0000 - fn: 94.0000 - acc: 0.9780 - auc: 0.9974 - val_loss: 2.1073 - val_tp: 1331.0000 - val_fp: 1236.0000 - val_tn: 239.0000 - val_fn: 144.0000 - val_acc: 0.5322 - val_auc: 0.6215
+Learning rate:  0.0001
+Epoch 87/130
+Epoch 1/130
+
+Epoch 00087: val_acc did not improve from 0.59831
+600/600 - 297s - loss: 0.3340 - tp: 2905.0000 - fp: 23.0000 - tn: 2977.0000 - fn: 95.0000 - acc: 0.9803 - auc: 0.9974 - val_loss: 2.3235 - val_tp: 1367.0000 - val_fp: 1303.0000 - val_tn: 172.0000 - val_fn: 108.0000 - val_acc: 0.5217 - val_auc: 0.6165
+Epoch 1/130
+Learning rate:  0.0001
+Epoch 88/130
+Epoch 1/130
+
+Epoch 00088: val_acc did not improve from 0.59831
+600/600 - 324s - loss: 0.3299 - tp: 2917.0000 - fp: 24.0000 - tn: 2976.0000 - fn: 83.0000 - acc: 0.9822 - auc: 0.9969 - val_loss: 2.0739 - val_tp: 1296.0000 - val_fp: 1199.0000 - val_tn: 276.0000 - val_fn: 179.0000 - val_acc: 0.5329 - val_auc: 0.6125
+Learning rate:  0.0001
+Epoch 89/130
+Epoch 1/130
+
+Epoch 00089: val_acc did not improve from 0.59831
+600/600 - 282s - loss: 0.3210 - tp: 2922.0000 - fp: 19.0000 - tn: 2981.0000 - fn: 78.0000 - acc: 0.9838 - auc: 0.9981 - val_loss: 2.3947 - val_tp: 1366.0000 - val_fp: 1302.0000 - val_tn: 173.0000 - val_fn: 109.0000 - val_acc: 0.5217 - val_auc: 0.6081
+Learning rate:  0.0001
+Epoch 90/130
+Epoch 1/130
+
+Epoch 00090: val_acc did not improve from 0.59831
+600/600 - 298s - loss: 0.3137 - tp: 2933.0000 - fp: 16.0000 - tn: 2984.0000 - fn: 67.0000 - acc: 0.9862 - auc: 0.9983 - val_loss: 2.2529 - val_tp: 1321.0000 - val_fp: 1236.0000 - val_tn: 239.0000 - val_fn: 154.0000 - val_acc: 0.5288 - val_auc: 0.6116
+Learning rate:  0.0001
+Epoch 91/130
+Epoch 1/130
+
+Epoch 00091: val_acc did not improve from 0.59831
+600/600 - 318s - loss: 0.3119 - tp: 2941.0000 - fp: 13.0000 - tn: 2987.0000 - fn: 59.0000 - acc: 0.9880 - auc: 0.9973 - val_loss: 2.4610 - val_tp: 1348.0000 - val_fp: 1294.0000 - val_tn: 181.0000 - val_fn: 127.0000 - val_acc: 0.5183 - val_auc: 0.6057
+Learning rate:  0.0001
+Epoch 92/130
+Epoch 1/130
+
+Epoch 00092: val_acc did not improve from 0.59831
+600/600 - 292s - loss: 0.3000 - tp: 2951.0000 - fp: 7.0000 - tn: 2993.0000 - fn: 49.0000 - acc: 0.9907 - auc: 0.9986 - val_loss: 2.4274 - val_tp: 1334.0000 - val_fp: 1281.0000 - val_tn: 194.0000 - val_fn: 141.0000 - val_acc: 0.5180 - val_auc: 0.6056
+Learning rate:  0.0001
+Epoch 93/130
+Epoch 1/130
+
+Epoch 00093: val_acc did not improve from 0.59831
+600/600 - 285s - loss: 0.2894 - tp: 2961.0000 - fp: 4.0000 - tn: 2996.0000 - fn: 39.0000 - acc: 0.9928 - auc: 0.9996 - val_loss: 2.6154 - val_tp: 1356.0000 - val_fp: 1314.0000 - val_tn: 161.0000 - val_fn: 119.0000 - val_acc: 0.5142 - val_auc: 0.6022
+Learning rate:  0.0001
+Epoch 94/130
+Epoch 1/130
+
+Epoch 00094: val_acc did not improve from 0.59831
+600/600 - 327s - loss: 0.2882 - tp: 2962.0000 - fp: 6.0000 - tn: 2994.0000 - fn: 38.0000 - acc: 0.9927 - auc: 0.9988 - val_loss: 2.8113 - val_tp: 1373.0000 - val_fp: 1337.0000 - val_tn: 138.0000 - val_fn: 102.0000 - val_acc: 0.5122 - val_auc: 0.5979
+Epoch 1/130
+Learning rate:  0.0001
+Epoch 95/130
+Epoch 1/130
+
+Epoch 00095: val_acc did not improve from 0.59831
+600/600 - 292s - loss: 0.2810 - tp: 2965.0000 - fp: 6.0000 - tn: 2994.0000 - fn: 35.0000 - acc: 0.9932 - auc: 0.9995 - val_loss: 3.1814 - val_tp: 1418.0000 - val_fp: 1370.0000 - val_tn: 105.0000 - val_fn: 57.0000 - val_acc: 0.5163 - val_auc: 0.5943
+Learning rate:  0.0001
+Epoch 96/130
+Epoch 1/130
+
+Epoch 00096: val_acc did not improve from 0.59831
+600/600 - 299s - loss: 0.2808 - tp: 2964.0000 - fp: 3.0000 - tn: 2997.0000 - fn: 36.0000 - acc: 0.9935 - auc: 0.9987 - val_loss: 3.0902 - val_tp: 1402.0000 - val_fp: 1361.0000 - val_tn: 114.0000 - val_fn: 73.0000 - val_acc: 0.5139 - val_auc: 0.5925
+Learning rate:  0.0001
+Epoch 97/130
+Epoch 1/130
+
+Epoch 00097: val_acc did not improve from 0.59831
+600/600 - 338s - loss: 0.2749 - tp: 2964.0000 - fp: 5.0000 - tn: 2995.0000 - fn: 36.0000 - acc: 0.9932 - auc: 0.9994 - val_loss: 3.0662 - val_tp: 1395.0000 - val_fp: 1347.0000 - val_tn: 128.0000 - val_fn: 80.0000 - val_acc: 0.5163 - val_auc: 0.5917
+Learning rate:  0.0001
+Epoch 98/130
+Epoch 1/130
+
+Epoch 00098: val_acc did not improve from 0.59831
+600/600 - 298s - loss: 0.2679 - tp: 2974.0000 - fp: 2.0000 - tn: 2998.0000 - fn: 26.0000 - acc: 0.9953 - auc: 0.9996 - val_loss: 2.8823 - val_tp: 1354.0000 - val_fp: 1304.0000 - val_tn: 171.0000 - val_fn: 121.0000 - val_acc: 0.5169 - val_auc: 0.5964
+Learning rate:  0.0001
+Epoch 99/130
+Epoch 1/130
+
+Epoch 00099: val_acc did not improve from 0.59831
+600/600 - 299s - loss: 0.2646 - tp: 2969.0000 - fp: 1.0000 - tn: 2999.0000 - fn: 31.0000 - acc: 0.9947 - auc: 0.9998 - val_loss: 3.1147 - val_tp: 1381.0000 - val_fp: 1333.0000 - val_tn: 142.0000 - val_fn: 94.0000 - val_acc: 0.5163 - val_auc: 0.5934
+Learning rate:  0.0001
+Epoch 100/130
+Epoch 1/130
+
+Epoch 00100: val_acc did not improve from 0.59831
+600/600 - 345s - loss: 0.2618 - tp: 2978.0000 - fp: 2.0000 - tn: 2998.0000 - fn: 22.0000 - acc: 0.9960 - auc: 0.9995 - val_loss: 3.2700 - val_tp: 1393.0000 - val_fp: 1350.0000 - val_tn: 125.0000 - val_fn: 82.0000 - val_acc: 0.5146 - val_auc: 0.5846
+Learning rate:  0.0001
+Epoch 101/130
+Epoch 1/130
+
+Epoch 00101: val_acc did not improve from 0.59831
+600/600 - 303s - loss: 0.2628 - tp: 2971.0000 - fp: 0.0000e+00 - tn: 3000.0000 - fn: 29.0000 - acc: 0.9952 - auc: 0.9993 - val_loss: 3.1214 - val_tp: 1373.0000 - val_fp: 1320.0000 - val_tn: 155.0000 - val_fn: 102.0000 - val_acc: 0.5180 - val_auc: 0.5961
+Epoch 1/130
+Learning rate:  0.0001
+Epoch 102/130
+Epoch 1/130
+
+Epoch 00102: val_acc did not improve from 0.59831
+600/600 - 294s - loss: 0.2563 - tp: 2976.0000 - fp: 0.0000e+00 - tn: 3000.0000 - fn: 24.0000 - acc: 0.9960 - auc: 0.9995 - val_loss: 3.5674 - val_tp: 1404.0000 - val_fp: 1353.0000 - val_tn: 122.0000 - val_fn: 71.0000 - val_acc: 0.5173 - val_auc: 0.5823
+Learning rate:  0.0001
+Epoch 103/130
+Epoch 1/130
+
+Epoch 00103: val_acc did not improve from 0.59831
+600/600 - 341s - loss: 0.2516 - tp: 2980.0000 - fp: 0.0000e+00 - tn: 3000.0000 - fn: 20.0000 - acc: 0.9967 - auc: 0.9997 - val_loss: 3.4846 - val_tp: 1394.0000 - val_fp: 1346.0000 - val_tn: 129.0000 - val_fn: 81.0000 - val_acc: 0.5163 - val_auc: 0.5832
+Learning rate:  0.0001
+Epoch 104/130
+Epoch 1/130
+
+Epoch 00104: val_acc did not improve from 0.59831
+600/600 - 292s - loss: 0.2488 - tp: 2980.0000 - fp: 1.0000 - tn: 2999.0000 - fn: 20.0000 - acc: 0.9965 - auc: 0.9996 - val_loss: 3.5753 - val_tp: 1402.0000 - val_fp: 1368.0000 - val_tn: 107.0000 - val_fn: 73.0000 - val_acc: 0.5115 - val_auc: 0.5793
+Learning rate:  0.0001
+Epoch 105/130
+Epoch 1/130
+
+Epoch 00105: val_acc did not improve from 0.59831
+600/600 - 293s - loss: 0.2488 - tp: 2983.0000 - fp: 0.0000e+00 - tn: 3000.0000 - fn: 17.0000 - acc: 0.9972 - auc: 0.9991 - val_loss: 3.6973 - val_tp: 1401.0000 - val_fp: 1353.0000 - val_tn: 122.0000 - val_fn: 74.0000 - val_acc: 0.5163 - val_auc: 0.5763
+Learning rate:  0.0001
+Epoch 106/130
+Epoch 1/130
+
+Epoch 00106: val_acc did not improve from 0.59831
+600/600 - 335s - loss: 0.2426 - tp: 2985.0000 - fp: 2.0000 - tn: 2998.0000 - fn: 15.0000 - acc: 0.9972 - auc: 0.9999 - val_loss: 3.6635 - val_tp: 1394.0000 - val_fp: 1360.0000 - val_tn: 115.0000 - val_fn: 81.0000 - val_acc: 0.5115 - val_auc: 0.5779
+Learning rate:  0.0001
+Epoch 107/130
+Epoch 1/130
+
+Epoch 00107: val_acc did not improve from 0.59831
+600/600 - 294s - loss: 0.2405 - tp: 2978.0000 - fp: 1.0000 - tn: 2999.0000 - fn: 22.0000 - acc: 0.9962 - auc: 1.0000 - val_loss: 3.5306 - val_tp: 1388.0000 - val_fp: 1350.0000 - val_tn: 125.0000 - val_fn: 87.0000 - val_acc: 0.5129 - val_auc: 0.5738
+Learning rate:  0.0001
+Epoch 108/130
+Epoch 1/130
+
+Epoch 00108: val_acc did not improve from 0.59831
+600/600 - 294s - loss: 0.2360 - tp: 2986.0000 - fp: 0.0000e+00 - tn: 3000.0000 - fn: 14.0000 - acc: 0.9977 - auc: 1.0000 - val_loss: 3.6970 - val_tp: 1400.0000 - val_fp: 1368.0000 - val_tn: 107.0000 - val_fn: 75.0000 - val_acc: 0.5108 - val_auc: 0.5740
+Learning rate:  0.0001
+Epoch 109/130
+Epoch 1/130
+
+Epoch 00109: val_acc did not improve from 0.59831
+600/600 - 342s - loss: 0.2349 - tp: 2984.0000 - fp: 1.0000 - tn: 2999.0000 - fn: 16.0000 - acc: 0.9972 - auc: 0.9999 - val_loss: 3.3859 - val_tp: 1363.0000 - val_fp: 1307.0000 - val_tn: 168.0000 - val_fn: 112.0000 - val_acc: 0.5190 - val_auc: 0.5766
+Learning rate:  0.0001
+Epoch 110/130
+Epoch 1/130
+
+Epoch 00110: val_acc did not improve from 0.59831
+600/600 - 291s - loss: 0.2310 - tp: 2990.0000 - fp: 0.0000e+00 - tn: 3000.0000 - fn: 10.0000 - acc: 0.9983 - auc: 0.9999 - val_loss: 3.9639 - val_tp: 1407.0000 - val_fp: 1379.0000 - val_tn: 96.0000 - val_fn: 68.0000 - val_acc: 0.5095 - val_auc: 0.5693
+Learning rate:  0.0001
+Epoch 111/130
+Epoch 1/130
+
+Epoch 00111: val_acc did not improve from 0.59831
+600/600 - 298s - loss: 0.2282 - tp: 2986.0000 - fp: 0.0000e+00 - tn: 3000.0000 - fn: 14.0000 - acc: 0.9977 - auc: 0.9999 - val_loss: 4.2051 - val_tp: 1417.0000 - val_fp: 1387.0000 - val_tn: 88.0000 - val_fn: 58.0000 - val_acc: 0.5102 - val_auc: 0.5625
+Learning rate:  0.0001
+Epoch 112/130
+Epoch 1/130
+
+Epoch 00112: val_acc did not improve from 0.59831
+600/600 - 338s - loss: 0.2265 - tp: 2988.0000 - fp: 0.0000e+00 - tn: 3000.0000 - fn: 12.0000 - acc: 0.9980 - auc: 0.9999 - val_loss: 3.8947 - val_tp: 1395.0000 - val_fp: 1356.0000 - val_tn: 119.0000 - val_fn: 80.0000 - val_acc: 0.5132 - val_auc: 0.5719
+Learning rate:  0.0001
+Epoch 113/130
+Epoch 1/130
+
+Epoch 00113: val_acc did not improve from 0.59831
+600/600 - 290s - loss: 0.2239 - tp: 2985.0000 - fp: 0.0000e+00 - tn: 3000.0000 - fn: 15.0000 - acc: 0.9975 - auc: 0.9999 - val_loss: 3.8930 - val_tp: 1396.0000 - val_fp: 1369.0000 - val_tn: 106.0000 - val_fn: 79.0000 - val_acc: 0.5092 - val_auc: 0.5711
+Learning rate:  0.0001
+Epoch 114/130
+Epoch 1/130
+
+Epoch 00114: val_acc did not improve from 0.59831
+600/600 - 299s - loss: 0.2232 - tp: 2985.0000 - fp: 0.0000e+00 - tn: 3000.0000 - fn: 15.0000 - acc: 0.9975 - auc: 0.9999 - val_loss: 4.2062 - val_tp: 1401.0000 - val_fp: 1373.0000 - val_tn: 102.0000 - val_fn: 74.0000 - val_acc: 0.5095 - val_auc: 0.5555
+Learning rate:  0.0001
+Epoch 115/130
+Epoch 1/130
+
+Epoch 00115: val_acc did not improve from 0.59831
+600/600 - 339s - loss: 0.2223 - tp: 2987.0000 - fp: 1.0000 - tn: 2999.0000 - fn: 13.0000 - acc: 0.9977 - auc: 0.9995 - val_loss: 4.1810 - val_tp: 1416.0000 - val_fp: 1362.0000 - val_tn: 113.0000 - val_fn: 59.0000 - val_acc: 0.5183 - val_auc: 0.5582
+Learning rate:  0.0001
+Epoch 116/130
+Epoch 1/130
+
+Epoch 00116: val_acc did not improve from 0.59831
+600/600 - 291s - loss: 0.2168 - tp: 2989.0000 - fp: 0.0000e+00 - tn: 3000.0000 - fn: 11.0000 - acc: 0.9982 - auc: 1.0000 - val_loss: 4.0081 - val_tp: 1394.0000 - val_fp: 1344.0000 - val_tn: 131.0000 - val_fn: 81.0000 - val_acc: 0.5169 - val_auc: 0.5708
+Learning rate:  0.0001
+Epoch 117/130
+Epoch 1/130
+
+Epoch 00117: val_acc did not improve from 0.59831
+600/600 - 317s - loss: 0.2158 - tp: 2992.0000 - fp: 1.0000 - tn: 2999.0000 - fn: 8.0000 - acc: 0.9985 - auc: 0.9998 - val_loss: 3.9509 - val_tp: 1387.0000 - val_fp: 1339.0000 - val_tn: 136.0000 - val_fn: 88.0000 - val_acc: 0.5163 - val_auc: 0.5710
+Learning rate:  0.0001
+Epoch 118/130
+Epoch 1/130
+
+Epoch 00118: val_acc did not improve from 0.59831
+600/600 - 349s - loss: 0.2129 - tp: 2991.0000 - fp: 1.0000 - tn: 2999.0000 - fn: 9.0000 - acc: 0.9983 - auc: 0.9998 - val_loss: 4.1630 - val_tp: 1410.0000 - val_fp: 1364.0000 - val_tn: 111.0000 - val_fn: 65.0000 - val_acc: 0.5156 - val_auc: 0.5600
+Learning rate:  0.0001
+Epoch 119/130
+Epoch 1/130
+
+Epoch 00119: val_acc did not improve from 0.59831
+600/600 - 312s - loss: 0.2079 - tp: 2993.0000 - fp: 0.0000e+00 - tn: 3000.0000 - fn: 7.0000 - acc: 0.9988 - auc: 1.0000 - val_loss: 4.4189 - val_tp: 1415.0000 - val_fp: 1375.0000 - val_tn: 100.0000 - val_fn: 60.0000 - val_acc: 0.5136 - val_auc: 0.5577
+Learning rate:  0.0001
+Epoch 120/130
+Epoch 1/130
+
+Epoch 00120: val_acc did not improve from 0.59831
+600/600 - 295s - loss: 0.2085 - tp: 2992.0000 - fp: 0.0000e+00 - tn: 3000.0000 - fn: 8.0000 - acc: 0.9987 - auc: 0.9996 - val_loss: 4.2804 - val_tp: 1404.0000 - val_fp: 1366.0000 - val_tn: 109.0000 - val_fn: 71.0000 - val_acc: 0.5129 - val_auc: 0.5629
+Learning rate:  0.0001
+Epoch 121/130
+Epoch 1/130
+
+Epoch 00121: val_acc did not improve from 0.59831
+600/600 - 336s - loss: 0.2031 - tp: 2995.0000 - fp: 0.0000e+00 - tn: 3000.0000 - fn: 5.0000 - acc: 0.9992 - auc: 1.0000 - val_loss: 4.7556 - val_tp: 1424.0000 - val_fp: 1386.0000 - val_tn: 89.0000 - val_fn: 51.0000 - val_acc: 0.5129 - val_auc: 0.5516
+Learning rate:  1e-05
+Epoch 122/130
+Epoch 1/130
+
+Epoch 00122: val_acc did not improve from 0.59831
+600/600 - 310s - loss: 0.2054 - tp: 2990.0000 - fp: 0.0000e+00 - tn: 3000.0000 - fn: 10.0000 - acc: 0.9983 - auc: 1.0000 - val_loss: 4.5383 - val_tp: 1413.0000 - val_fp: 1370.0000 - val_tn: 105.0000 - val_fn: 62.0000 - val_acc: 0.5146 - val_auc: 0.5562
+Learning rate:  1e-05
+Epoch 123/130
+Epoch 1/130
+
+Epoch 00123: val_acc did not improve from 0.59831
+600/600 - 306s - loss: 0.2032 - tp: 2995.0000 - fp: 0.0000e+00 - tn: 3000.0000 - fn: 5.0000 - acc: 0.9992 - auc: 0.9994 - val_loss: 4.4842 - val_tp: 1409.0000 - val_fp: 1364.0000 - val_tn: 111.0000 - val_fn: 66.0000 - val_acc: 0.5153 - val_auc: 0.5583
+Learning rate:  1e-05
+Epoch 124/130
+Epoch 1/130
+
+Epoch 00124: val_acc did not improve from 0.59831
+600/600 - 339s - loss: 0.2007 - tp: 2996.0000 - fp: 0.0000e+00 - tn: 3000.0000 - fn: 4.0000 - acc: 0.9993 - auc: 1.0000 - val_loss: 4.4626 - val_tp: 1406.0000 - val_fp: 1364.0000 - val_tn: 111.0000 - val_fn: 69.0000 - val_acc: 0.5142 - val_auc: 0.5628
+Learning rate:  1e-05
+Epoch 125/130
+Epoch 1/130
+
+Epoch 00125: val_acc did not improve from 0.59831
+600/600 - 314s - loss: 0.2009 - tp: 2996.0000 - fp: 0.0000e+00 - tn: 3000.0000 - fn: 4.0000 - acc: 0.9993 - auc: 1.0000 - val_loss: 4.5088 - val_tp: 1408.0000 - val_fp: 1370.0000 - val_tn: 105.0000 - val_fn: 67.0000 - val_acc: 0.5129 - val_auc: 0.5596
+Learning rate:  1e-05
+Epoch 126/130
+Epoch 1/130
+
+Epoch 00126: val_acc did not improve from 0.59831
+600/600 - 325s - loss: 0.2014 - tp: 2993.0000 - fp: 0.0000e+00 - tn: 3000.0000 - fn: 7.0000 - acc: 0.9988 - auc: 1.0000 - val_loss: 4.5793 - val_tp: 1411.0000 - val_fp: 1373.0000 - val_tn: 102.0000 - val_fn: 64.0000 - val_acc: 0.5129 - val_auc: 0.5572
+Learning rate:  1e-05
+Epoch 127/130
+Epoch 1/130
+
+Epoch 00127: val_acc did not improve from 0.59831
+600/600 - 350s - loss: 0.2003 - tp: 2995.0000 - fp: 0.0000e+00 - tn: 3000.0000 - fn: 5.0000 - acc: 0.9992 - auc: 1.0000 - val_loss: 4.5168 - val_tp: 1407.0000 - val_fp: 1365.0000 - val_tn: 110.0000 - val_fn: 68.0000 - val_acc: 0.5142 - val_auc: 0.5568
+Epoch 1/130
+Learning rate:  1e-05
+Epoch 128/130
+Epoch 1/130
+
+Epoch 00128: val_acc did not improve from 0.59831
+600/600 - 316s - loss: 0.1992 - tp: 2997.0000 - fp: 0.0000e+00 - tn: 3000.0000 - fn: 3.0000 - acc: 0.9995 - auc: 1.0000 - val_loss: 4.4783 - val_tp: 1405.0000 - val_fp: 1359.0000 - val_tn: 116.0000 - val_fn: 70.0000 - val_acc: 0.5156 - val_auc: 0.5584
+Learning rate:  1e-05
+Epoch 129/130
+Epoch 1/130
+
+Epoch 00129: val_acc did not improve from 0.59831
+600/600 - 308s - loss: 0.1989 - tp: 2997.0000 - fp: 0.0000e+00 - tn: 3000.0000 - fn: 3.0000 - acc: 0.9995 - auc: 1.0000 - val_loss: 4.5718 - val_tp: 1410.0000 - val_fp: 1368.0000 - val_tn: 107.0000 - val_fn: 65.0000 - val_acc: 0.5142 - val_auc: 0.5567
+Learning rate:  1e-05
+Epoch 130/130
+Epoch 1/130
+
+Epoch 00130: val_acc did not improve from 0.59831
+600/600 - 350s - loss: 0.1987 - tp: 2994.0000 - fp: 0.0000e+00 - tn: 3000.0000 - fn: 6.0000 - acc: 0.9990 - auc: 1.0000 - val_loss: 4.5302 - val_tp: 1407.0000 - val_fp: 1364.0000 - val_tn: 111.0000 - val_fn: 68.0000 - val_acc: 0.5146 - val_auc: 0.5570
+295/295 - 74s - loss: 4.5302 - tp: 1407.0000 - fp: 1364.0000 - tn: 111.0000 - fn: 68.0000 - acc: 0.5146 - auc: 0.5570
+Test loss: 4.530223479513395
+Test accuracy: 1407.0

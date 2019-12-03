@@ -245,6 +245,7 @@ def main():
         os.makedirs(save_dir)
     filepath = os.path.join(save_dir, model_name)
     print("The model name is: ", model_name)
+
     # Prepare callbacks for model saving and for learning rate adjustment.
     checkpoint = tf.keras.callbacks.ModelCheckpoint(filepath=filepath,
                                 monitor='val_acc',
