@@ -113,9 +113,11 @@ def resnet_v1(input_shape, depth, num_classes=2):
                 strides = 2  # downsample
             y = resnet_layer(inputs=x,
                              num_filters=num_filters,
+                             kernel_size=3,
                              strides=strides)
             y = resnet_layer(inputs=y,
                              num_filters=num_filters,
+                             kernel_size=3,
                              activation=None)
             if stack > 0 and res_block == 0:  # first layer but not first stack
                 # linear projection residual shortcut connection to match

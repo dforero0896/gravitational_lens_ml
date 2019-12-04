@@ -4,7 +4,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import tensorflow as tf
 #if __name__ == '__main__':
 #	print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
-#tf.debugging.set_log_device_placement(True)
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import numpy as np
 import tifffile
@@ -13,15 +12,24 @@ import os
 class TiffImageDataGenerator(ImageDataGenerator):
     def __init__(self, *args, **kwargs):
         super(TiffImageDataGenerator, self).__init__(*args, **kwargs)
+<<<<<<< HEAD
     def get_input(self, path, bin = False):
         """Get input data from disk.
+=======
+    def get_input(self, path, binary=False):
+        """Get imput data from disk.
+>>>>>>> andrei_lesta
         
         Define how input data is loaded from the disk. 
 		param: path (str): The path to the image file (tiff or npy, see bin.)
         param: bin (bool): If True, expects a `.npy` binary. If False, loads a `.tiff` file.
                 Defaults to False.
 		returns: img (ndarray): The image as a 3D array of size (HEIGHT, WIDTH, CHANNELS)"""
+<<<<<<< HEAD
         if bin:
+=======
+        if binary:
+>>>>>>> andrei_lesta
             img = np.load(path)
         else:
             img = tifffile.imread(path)
@@ -33,7 +41,11 @@ class TiffImageDataGenerator(ImageDataGenerator):
                               y_col='class',
                               batch_size=64,
                               validation=False, bands = [True, True, True, True],
+<<<<<<< HEAD
                               bin = False):
+=======
+                              binary = True):
+>>>>>>> andrei_lesta
         """Loads tiff image data by batches and automatically applies transformations.
 
         param: dataframe (pandas.DataFrame): Dataframe containing columns 'filename' and 'class'.
@@ -56,7 +68,11 @@ class TiffImageDataGenerator(ImageDataGenerator):
 
             # Read in each input, perform preprocessing and get labels
             for input_path in batch_paths:
+<<<<<<< HEAD
                 input = self.get_input(path = os.path.join(directory, input_path), bin=bin)[:,:,bands]
+=======
+                input = self.get_input(os.path.join(directory, input_path), binary=binary)[:,:,bands]
+>>>>>>> andrei_lesta
                 output = dataframe[dataframe[x_col] == input_path][y_col].values[0]
                 if self.preprocessing_function:
                     input = self.preprocessing_function(input)
@@ -78,7 +94,11 @@ class TiffImageDataGenerator(ImageDataGenerator):
                                        batch_size=64,
                                        validation=False,
                                        bands=[True, True, True, True],
+<<<<<<< HEAD
                                        bin=False,
+=======
+                                       binary=True,
+>>>>>>> andrei_lesta
                                        ratio=0.5):
         """Loads tiff image data by batches and automatically applies transformations. Forces the
         proportion of positive/negative to be ratio.
@@ -101,22 +121,23 @@ class TiffImageDataGenerator(ImageDataGenerator):
         nonlens_size = batch_size - lens_size
         while True:
             # Select files (paths/indices) for the batch
-            batch_paths_lens = np.random.choice(a=lens_df[x_col].values,
-                                                size=lens_size, replace=False)
-            batch_paths_nonlens = np.random.choice(
-                a=nonlens_df[x_col].values, size=nonlens_size)
-            batch_paths = np.concatenate(
-                (batch_paths_lens, batch_paths_nonlens)).reshape(
-                    (lens_size + nonlens_size))
+            batch_paths_lens = np.random.choice(a=lens_df[x_col].values, size=lens_size, replace=False)
+            batch_paths_nonlens = np.random.choice(a=nonlens_df[x_col].values, size=nonlens_size)
+            batch_paths = np.concatenate((batch_paths_lens, batch_paths_nonlens)).reshape((lens_size + nonlens_size))
             batch_input = []
             batch_output = []
 
             # Read in each input, perform preprocessing and get labels
             for input_path in batch_paths:
+<<<<<<< HEAD
                 input = self.get_input(path = os.path.join(
                     directory, input_path),bin = bin)[:, :, bands]
                 output = dataframe[dataframe[x_col] ==
                                    input_path][y_col].values[0]
+=======
+                input = self.get_input(os.path.join(directory, input_path), binary=binary)[:, :, bands]
+                output = dataframe[dataframe[x_col] == input_path][y_col].values[0]
+>>>>>>> andrei_lesta
                 if self.preprocessing_function:
                     input = self.preprocessing_function(input)
                 if not validation:
