@@ -47,8 +47,9 @@ def save_img_dataset(id_list, set_, outpath='.', clip = True, overwrite = False)
         if os.path.isfile(outname) and not overwrite:
             continue
         try:
-            image = build_image(id_, set_)
-            tifffile.imsave(outname, image)
+            image = build_image(id_, set_, clip = clip)
+            #tifffile.imsave(outname, image)
+            np.save(outname.replace('tiff', 'npy'), image) 
         except FileNotFoundError as fe:
             sys.stdout.write(str(fe)+'\nContinuing...\n')
         

@@ -16,12 +16,14 @@ class TiffImageDataGenerator(ImageDataGenerator):
         """Get imput data from disk.
         
         Define how input data is loaded from the disk. 
-		param: path (str): The path to the image file (tiff)
+		param: path (str): The path to the image file (tiff or npy, see bin.)
+        param: bin (bool): If True, expects a `.npy` binary. If False, loads a `.tiff` file.
+                Defaults to False.
 		returns: img (ndarray): The image as a 3D array of size (HEIGHT, WIDTH, CHANNELS)"""
         if binary:
             img = np.load(path)
-	    #else:
-		    #img = tifffile.imread(path)
+        else:
+            img = tifffile.imread(path)
         return img
 
     def image_generator_dataframe(self,dataframe,
@@ -29,7 +31,8 @@ class TiffImageDataGenerator(ImageDataGenerator):
                               x_col='filename',
                               y_col='class',
                               batch_size=64,
-                              validation=False, bands = [True, True, True, True]):
+                              validation=False, bands = [True, True, True, True],
+                              binary = True):
         """Loads tiff image data by batches and automatically applies transformations.
 
         param: dataframe (pandas.DataFrame): Dataframe containing columns 'filename' and 'class'.
@@ -40,6 +43,7 @@ class TiffImageDataGenerator(ImageDataGenerator):
         param: validation (bool): Whether or not the generator is used for validation. If True, no transformations are applied.
                                     Defaults to False.
         param: bands (list of bool): Boolean mask of channels to use. Defaults to [True, True, True, True] (use all channels).
+        param: bin (bool): If True, loads images from `.npy` binaries. Else, loads `.tiff` files. Defaults to False.
         yields: batch_x, batch_y
         """
         files = dataframe[x_col].values
@@ -51,7 +55,7 @@ class TiffImageDataGenerator(ImageDataGenerator):
 
             # Read in each input, perform preprocessing and get labels
             for input_path in batch_paths:
-                input = self.get_input(os.path.join(directory, input_path), binary=True)[:,:,bands]
+                input = self.get_input(os.path.join(directory, input_path), binary=binary)[:,:,bands]
                 output = dataframe[dataframe[x_col] == input_path][y_col].values[0]
                 if self.preprocessing_function:
                     input = self.preprocessing_function(input)
@@ -73,6 +77,7 @@ class TiffImageDataGenerator(ImageDataGenerator):
                                        batch_size=64,
                                        validation=False,
                                        bands=[True, True, True, True],
+                                       binary=True,
                                        ratio=0.5):
         """Loads tiff image data by batches and automatically applies transformations. Forces the
         proportion of positive/negative to be ratio.
@@ -85,6 +90,7 @@ class TiffImageDataGenerator(ImageDataGenerator):
         param: validation (bool): Whether or not the generator is used for validation. If True, no transformations are applied.
                                     Defaults to False.
         param: bands (list of bool): Boolean mask of channels to use. Defaults to [True, True, True, True] (use all channels).
+        param: bin (bool): If True, loads images from `.npy` binaries. Else, loads `.tiff` files. Defaults to False.
         param: ratio (float): Ratio positive/negative to force in each batch.
         yields: batch_x, batch_y
         """
@@ -102,7 +108,7 @@ class TiffImageDataGenerator(ImageDataGenerator):
 
             # Read in each input, perform preprocessing and get labels
             for input_path in batch_paths:
-                input = self.get_input(os.path.join(directory, input_path), binary=True)[:, :, bands]
+                input = self.get_input(os.path.join(directory, input_path), binary=binary)[:, :, bands]
                 output = dataframe[dataframe[x_col] == input_path][y_col].values[0]
                 if self.preprocessing_function:
                     input = self.preprocessing_function(input)
