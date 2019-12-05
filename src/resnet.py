@@ -87,11 +87,7 @@ def main():
     batch_size = config['trainparams'].getint('batch_size')  # orig paper trained all networks with batch_size=128
     epochs = config['trainparams'].getint('epochs')
     num_classes = 1
-<<<<<<< HEAD
-    data_bias = 'raw'
-=======
     data_bias = config['trainparams']['data_bias']
->>>>>>> andrei_lesta
     # Model parameter
     # ----------------------------------------------------------------------------
     #           |      | 200-epoch | Orig Paper| 200-epoch | Orig Paper| sec/epoch
@@ -164,11 +160,7 @@ def main():
                                           rotation_range=0,
                                           width_shift_range=0.0,
                                           height_shift_range=0.0,
-<<<<<<< HEAD
-                                          brightness_range=(0.9, 1),
-=======
                                           brightness_range=(0.99, 1.01),
->>>>>>> andrei_lesta
                                           shear_range=0.0,
                                           zoom_range=(0.99, 1.01),
                                           channel_shift_range=0.0,
@@ -193,32 +185,20 @@ def main():
     train_data_gen = image_data_gen_train.prop_image_generator_dataframe(train_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
-<<<<<<< HEAD
-                                y_col='labels', batch_size=batch_size, validation=not(augment_train_data), ratio=0.5)
-=======
                                 y_col='labels', batch_size=batch_size, validation=not(augment_train_data), ratio=ratio,
                                 bands=bands)
->>>>>>> andrei_lesta
     
     val_data_gen = image_data_gen_val.prop_image_generator_dataframe(val_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
-<<<<<<< HEAD
-                                y_col='labels', batch_size=total_val, validation=True, ratio=0.5)
-=======
                                 y_col='labels', batch_size=batch_size, validation=True, ratio=ratio,
                                 bands=bands)
->>>>>>> andrei_lesta
  
     roc_val_data_gen = image_data_gen_val.prop_image_generator_dataframe(val_df,
                                 directory=TRAIN_MULTIBAND,
                                 x_col='filenames',
-<<<<<<< HEAD
-                                y_col='labels', batch_size=total_val, validation=True, ratio=0.5)
-=======
                                 y_col='labels', batch_size=subsample_val, validation=True, ratio=ratio,
                                 bands=bands)
->>>>>>> andrei_lesta
     
     ###### Obtain the shape of the input data (train images)
     temp_data_gen = image_data_gen_train.image_generator_dataframe(train_df,
