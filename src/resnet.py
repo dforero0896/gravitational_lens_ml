@@ -125,7 +125,7 @@ def main():
     natural_class_coeff = np.array([1000 * n_lens_clean/n_nolens_clean, 1])
     
     ###### Split the TRAIN_MULTIBAND set into train and validation sets. Set test_size below!
-    train_df, val_df = train_test_split(dataframe_for_generator, test_size=config['trainparams'].getfloat('test_fraction'), random_state=42)
+    train_df, val_df = train_test_split(dataframe_for_generator, test_size=config['trainparams'].getfloat('test_fraction'), random_state=42) #before it was 42
     total_train = len(train_df)
     total_val = len(val_df)
     print("The number of objects in the whole training sample is: ", total_train)
@@ -226,10 +226,10 @@ def main():
                 optimizer=tf.keras.optimizers.Adam(learning_rate=myf.lr_schedule(0)),
                 metrics=metrics)
     model.summary()
-
+    model.get_config()
     # Prepare model model saving directory.
     save_dir = os.path.join(RESULTS, 'checkpoints/resnet/')
-    model_name = '%s_Tr%i_Te%i_bs%i_ep%.03d_aug%i_VIS%i_NIR%i%i%i_DB%s_ratio%.01f.h5' % (model_type,
+    model_name = '%s_Tr%i_Te%i_bs%i_ep%.03d_aug%i_VIS%i_NIR%i%i%i_DB%s_ratio%.01f_dropout.h5' % (model_type,
                                                                         subsample_train,
                                                                         subsample_val,
                                                                         batch_size,
@@ -245,7 +245,6 @@ def main():
         os.makedirs(save_dir)
     filepath = os.path.join(save_dir, model_name)
     print("The model name is: ", model_name)
-
     # Prepare callbacks for model saving and for learning rate adjustment.
     checkpoint = tf.keras.callbacks.ModelCheckpoint(filepath=filepath,
                                 monitor='val_acc',
@@ -277,7 +276,6 @@ def main():
     class_weights = {0:class_coeff[0], 1:class_coeff[1]}
     sys.stdout.write('Using weights: %s\n'%class_weights)
     ###### Train the ResNet
-
     print('Train the ResNet using real-time data augmentation.')      
     history = model.fit_generator(train_data_gen,
                                 steps_per_epoch=train_steps_per_epoch,
