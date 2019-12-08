@@ -4,7 +4,6 @@ import os
 import sys
 import pickle
 import configparser
-import tensorflow as tf
 from data_generator_function import TiffImageDataGenerator
 import numpy as np
 import matplotlib as mpl
@@ -12,12 +11,6 @@ mpl.use('Agg')
 import matplotlib.pyplot as plt
 import pandas as pd
 import re
-from sklearn.model_selection import train_test_split
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Conv2D, Flatten, Dropout, MaxPooling2D, BatchNormalization
-from sklearn.metrics import roc_curve 
-from tensorflow import keras
-from helpers import build_generator_dataframe, get_file_id
 
 if len(sys.argv) != 2:
     config_file = 'config.ini'
@@ -37,6 +30,13 @@ for section in config.sections():
 if not bool(config['general'].getboolean('use_gpu')):
     sys.stdout.write('\nNot using GPU.\n')
     os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
+import tensorflow as tf
+from sklearn.model_selection import train_test_split
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Conv2D, Flatten, Dropout, MaxPooling2D, BatchNormalization, SpatialDropout2D
+from sklearn.metrics import roc_curve 
+from tensorflow import keras
+from helpers import build_generator_dataframe, get_file_id
         
 ###### Paths
 WORKDIR = config['general']['workdir']    
@@ -62,7 +62,9 @@ IMG_WIDTH = 200
 data_bias = config['trainparams']['data_bias']
 test_fraction = config['trainparams'].getfloat('test_fraction')
 augment_train_data = bool(int(config['trainparams']['augment_train_data']))
-
+kernel_size_1 = 8
+kernel_size_2 = 6
+dropout_kind=Dropout
 train_df, val_df = train_test_split(dataframe_for_generator, test_size=test_fraction, random_state=42)
 total_train = len(train_df)
 total_val = len(val_df)
@@ -149,23 +151,23 @@ metrics = [keras.metrics.TruePositives(name='tp'),
 
 
 model = Sequential([
-    Conv2D(16, 4, padding='same', activation='relu', 
+    Conv2D(16, kernel_size_1, padding='same', activation='relu', 
            input_shape=input_shape),
-    Conv2D(16, 3, padding='same', activation='relu'),
+    Conv2D(16, kernel_size_2, padding='same', activation='relu'),
     MaxPooling2D(pool_size=(2,2)),
     BatchNormalization(axis=-1),
-    Conv2D(32, 3, padding='same', activation='relu'),
-    Conv2D(32, 3, padding='same', activation='relu'),
+    Conv2D(32, kernel_size_2, padding='same', activation='relu'),
+    Conv2D(32, kernel_size_2, padding='same', activation='relu'),
     MaxPooling2D(pool_size=(2,2)),
     BatchNormalization(axis=-1),
-    Conv2D(64, 3, padding='same', activation='relu'),
-    Conv2D(64, 3, padding='same', activation='relu'),
+    Conv2D(64, kernel_size_2, padding='same', activation='relu'),
+    Conv2D(64, kernel_size_2, padding='same', activation='relu'),
     MaxPooling2D(pool_size=(2,2)),
     BatchNormalization(axis=-1),
     Dropout(0.2),
-    Conv2D(128, 3, padding='same', activation='relu'),
+    Conv2D(128, kernel_size_2, padding='same', activation='relu'),
     Dropout(0.2),
-    Conv2D(128, 3, padding='same', activation='relu'),
+    Conv2D(128, kernel_size_2, padding='same', activation='relu'),
     BatchNormalization(axis=-1),
     Dropout(0.2),
     Flatten(),
@@ -185,7 +187,7 @@ model.summary()
 
 save_dir = os.path.join(RESULTS, 'checkpoints/lastro_cnn/')
 model_type = 'lastro_cnn'
-model_name = '%s_Tr%i_Te%i_bs%i_ep%.03d_aug%i_VIS%i_NIR%i%i%i_DB%s_ratio%.01f.h5' % (model_type,
+model_name = '%s_Tr%i_Te%i_bs%i_ep%.03d_aug%i_VIS%i_NIR%i%i%i_DB%s_ratio%.01f_ks%i%i_%s.h5' % (model_type,
                                                                         total_train,
                                                                         total_val,
                                                                         batch_size,
@@ -196,7 +198,10 @@ model_name = '%s_Tr%i_Te%i_bs%i_ep%.03d_aug%i_VIS%i_NIR%i%i%i_DB%s_ratio%.01f.h5
                                                                         bands[2],
                                                                         bands[3],
                                                                         data_bias,
-                                                                        ratio)
+                                                                        ratio,
+	kernel_size_1, 
+	kernel_size_2,
+	dropout_kind.__name__)
 if not os.path.isdir(save_dir):
     os.makedirs(save_dir)
 filepath = os.path.join(save_dir, model_name)
@@ -242,7 +247,7 @@ history = model.fit_generator(
     validation_steps=total_val//batch_size,
     callbacks = [cp_callback, es_callback, lr_reducer],
     class_weight = class_weights,
-    use_multiprocessing=True,
+#   use_multiprocessing=True,
     verbose=2
 )
 
@@ -252,7 +257,7 @@ with open(os.path.join(RESULTS,model_name.replace('h5', 'history')), 'wb') as fi
 # Score trained model.
 scores = model.evaluate_generator(val_data_gen, verbose=2, steps=total_val//batch_size)
 images_val, labels_true = next(roc_val_data_gen)
-labels_score = model.predict(images_val, batch_size=subsample_val, verbose=2)
+labels_score = model.predict(images_val, batch_size=batch_size, verbose=2)
 fpr, tpr, thresholds = roc_curve(np.ravel(labels_true), np.ravel(labels_score))
 print(fpr)
 print(tpr)
