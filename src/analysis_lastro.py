@@ -170,9 +170,6 @@ def main():
     model = tf.keras.models.load_model(model_name)
     model.summary()
     history_path =  model_name.replace('h5', 'history')
-    ## History
-    with open(history_path, 'rb') as file_pi:
-        history = pickle.load(file_pi)
 
     ## Checkpoints
     save_dir = os.path.join(RESULTS, 'checkpoints/lastro_cnn/')
@@ -181,45 +178,49 @@ def main():
     filepath = os.path.join(save_dir, model_name_base)
 
     ### Plots
-    fig, ax1 = plt.subplots(1, 1, figsize=(10, 5))
-    ax2 = ax1.twinx()
-    ax1.plot(range(len(history['loss'])),
-            history['val_loss'],
-            label='Validation loss',
-            marker='o',
-            c='b')
-    ax1.plot(range(len(history['loss'])),
-            history['loss'],
-            label='Training loss',
-            marker='o',
-            c='r')
-    ax1.set_ylim([0,1])
-    ax2.plot(range(len(history['loss'])),
-            history['val_acc'],
-            label='Validation accuracy',
-            marker='o',
-            c='b',
-            ls='--',
-            fillstyle='none')
-    ax2.plot(range(len(history['loss'])),
-            history['acc'],
-            label='Training accuracy',
-            marker='o',
-            c='r',
-            ls='--',
-            fillstyle='none')
-    ax1.set_xlabel('Epoch')
-    ax1.legend(loc=(-0.1, 1))
-    ax2.legend(loc=(0.9, 1))
-    ax1.set_ylabel('Loss')
-    ax2.set_ylabel('Accuracy')
-    plt.gcf()
-    plt.savefig(os.path.join(RESULTS, 'plots/' + os.path.basename(history_path).replace('.history', '.png')),
-                dpi=200)
-    
+    ## History
+    if os.path.isfile(history_path):
+        with open(history_path, 'rb') as file_pi:
+            history = pickle.load(file_pi)
+        fig, ax1 = plt.subplots(1, 1, figsize=(10, 5))
+        ax2 = ax1.twinx()
+        ax1.plot(range(len(history['loss'])),
+                history['val_loss'],
+                label='Validation loss',
+                marker='o',
+                c='b')
+        ax1.plot(range(len(history['loss'])),
+                history['loss'],
+                label='Training loss',
+                marker='o',
+                c='r')
+        ax1.set_ylim([0,1])
+        ax2.plot(range(len(history['loss'])),
+                history['val_acc'],
+                label='Validation accuracy',
+                marker='o',
+                c='b',
+                ls='--',
+                fillstyle='none')
+        ax2.plot(range(len(history['loss'])),
+                history['acc'],
+                label='Training accuracy',
+                marker='o',
+                c='r',
+                ls='--',
+                fillstyle='none')
+        ax1.set_xlabel('Epoch')
+        ax1.legend(loc=(-0.1, 1))
+        ax2.legend(loc=(0.9, 1))
+        ax1.set_ylabel('Loss')
+        ax2.set_ylabel('Accuracy')
+        plt.gcf()
+        plt.savefig(os.path.join(RESULTS, 'plots/' + os.path.basename(history_path).replace('.history', '.png')),
+                    dpi=200)
+        
     ##Roc curve 
     images_val, labels_true = next(roc_val_data_gen)
-    labels_score = model.predict(images_val, batch_size=batch_size, verbose=2)
+    labels_score = model.predict(images_val, batch_size=1, verbose=2)
     fpr, tpr, thresholds = roc_curve(np.ravel(labels_true), np.ravel(labels_score))
 
     plt.figure(2)
@@ -237,7 +238,7 @@ def main():
     plt.ylim(0, 1)
     plt.plot([0, 1], [0, 1])
     plt.legend()
-    plt.savefig(os.path.join(RESULTS, 'plots/ROCsklearn_' + os.path.basename(history_path).replace('.history', '.png')),
+    plt.savefig(os.path.join(RESULTS, 'plots/ROCsklearn_' + os.path.basename(model_name).replace('.h5', '.png')),
                 dpi=200)
     
 
