@@ -222,7 +222,7 @@ def main():
     images_val, labels_true = next(roc_val_data_gen)
     labels_score = model.predict(images_val, batch_size=1, verbose=2)
     fpr, tpr, thresholds = roc_curve(np.ravel(labels_true), np.ravel(labels_score))
-
+    np.savetxt(os.path.join(RESULTS, model_name_base.replace('h5', 'FPRvsTPR.dat')), np.array([fpr, tpr]).T)
     plt.figure(2)
     plt.xlabel('FPR')
     plt.ylabel('TPR')
@@ -231,12 +231,12 @@ def main():
     plt.plot([0, 1], [0, 1])
     plt.legend()
 
-    plt.plot(fpr, tpr, 'or', label='Validation')
+    plt.plot(fpr, tpr, label='Validation' ,lw =2)
     plt.xlabel('FPR')
     plt.ylabel('TPR')
     plt.xlim(0, 1)
     plt.ylim(0, 1)
-    plt.plot([0, 1], [0, 1])
+    plt.plot([0, 1], [0, 1], lw=2)
     plt.legend()
     plt.savefig(os.path.join(RESULTS, 'plots/ROCsklearn_' + os.path.basename(model_name).replace('.h5', '.png')),
                 dpi=200)
