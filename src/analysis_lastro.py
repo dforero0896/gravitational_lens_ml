@@ -220,6 +220,7 @@ def main():
         
     ##Roc curve 
     images_val, labels_true = next(roc_val_data_gen)
+    print(labels_true)
     labels_score = model.predict(images_val, batch_size=1, verbose=2)
     fpr, tpr, thresholds = roc_curve(np.ravel(labels_true), np.ravel(labels_score))
     np.savetxt(os.path.join(RESULTS, model_name_base.replace('h5', 'FPRvsTPR.dat')), np.array([fpr, tpr]).T)
@@ -236,7 +237,7 @@ def main():
     plt.ylabel('TPR')
     plt.xlim(0, 1)
     plt.ylim(0, 1)
-    plt.plot([0, 1], [0, 1], lw=2)
+    plt.plot([0, 1], [0, 1], lw=3)
     plt.legend()
     plt.savefig(os.path.join(RESULTS, 'plots/ROCsklearn_' + os.path.basename(model_name).replace('.h5', '.png')),
                 dpi=200)

@@ -240,17 +240,17 @@ cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=filepath,
 
 es_callback = tf.keras.callbacks.EarlyStopping(monitor='val_acc', 
 					       min_delta=1, 
-					       patience=130, 
+					       patience=300, 
 					       verbose=1, 
 				               mode='auto', 
 					       baseline=None, 
 					       restore_best_weights=True)
 lr_reducer = tf.keras.callbacks.ReduceLROnPlateau(factor=np.sqrt(0.1),
 		                                  cooldown=0,
-                  		                  patience=40,
+                  		                  patience=100,
 		                                  min_lr=0.5e-6,
 						  monitor='val_acc',
-						  verbose=1)
+						  verbose=1, mode = 'auto')
 # Define class weights for unevenly distributed (biased) dataset.
 if data_bias == 'natural':
     sys.stdout.write('Using natural data bias: 1000x more non lenses than lenses.\n')
