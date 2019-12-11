@@ -11,8 +11,8 @@ from sklearn.metrics import roc_curve
 from tensorflow import keras
 from data_generator_function import TiffImageDataGenerator
 import resnet_func as myf
-tf.debugging.set_log_device_placement(False)
-tf.RunOptions(report_tensor_allocations_upon_oom=True)
+tf.debugging.set_log_device_placement(True)
+#tf.RunOptions(report_tensor_allocations_upon_oom=True)
 
 def get_file_id(filename, delimiters='_|\\.|-'):
     id_ = [int(s) for s in re.split(delimiters, filename) if s.isdigit()][0]

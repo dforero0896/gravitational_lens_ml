@@ -1,4 +1,195 @@
-Traceback (most recent call last):
-  File "resnet.py", line 15, in <module>
-    tf.RunOptions(report_tensor_allocations_upon_oom=True)
-AttributeError: module 'tensorflow' has no attribute 'RunOptions'
+2019-12-09 19:31:11.811658: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcuda.so.1
+2019-12-09 19:31:11.819373: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1006] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2019-12-09 19:31:11.819980: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: GeForce GTX 1080 Ti major: 6 minor: 1 memoryClockRate(GHz): 1.582
+pciBusID: 0000:02:00.0
+2019-12-09 19:31:11.820097: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1006] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2019-12-09 19:31:11.820661: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 1 with properties: 
+name: GeForce GTX 1080 Ti major: 6 minor: 1 memoryClockRate(GHz): 1.582
+pciBusID: 0000:03:00.0
+2019-12-09 19:31:11.821656: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.0
+2019-12-09 19:31:11.824333: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10.0
+2019-12-09 19:31:11.826640: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10.0
+2019-12-09 19:31:11.827668: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10.0
+2019-12-09 19:31:11.830933: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10.0
+2019-12-09 19:31:11.833540: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10.0
+2019-12-09 19:31:11.839808: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2019-12-09 19:31:11.840013: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1006] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2019-12-09 19:31:11.840712: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1006] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2019-12-09 19:31:11.841376: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1006] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2019-12-09 19:31:11.842020: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1006] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2019-12-09 19:31:11.842574: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0, 1
+2019-12-09 19:31:11.843097: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2
+2019-12-09 19:31:11.853744: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2400295000 Hz
+2019-12-09 19:31:11.854352: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55cf9b3ccd60 executing computations on platform Host. Devices:
+2019-12-09 19:31:11.854382: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): Host, Default Version
+2019-12-09 19:31:12.128618: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1006] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2019-12-09 19:31:12.129264: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 0 with properties: 
+name: GeForce GTX 1080 Ti major: 6 minor: 1 memoryClockRate(GHz): 1.582
+pciBusID: 0000:02:00.0
+2019-12-09 19:31:12.129388: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1006] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2019-12-09 19:31:12.129947: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1618] Found device 1 with properties: 
+name: GeForce GTX 1080 Ti major: 6 minor: 1 memoryClockRate(GHz): 1.582
+pciBusID: 0000:03:00.0
+2019-12-09 19:31:12.130004: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.0
+2019-12-09 19:31:12.130041: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10.0
+2019-12-09 19:31:12.130076: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcufft.so.10.0
+2019-12-09 19:31:12.130111: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcurand.so.10.0
+2019-12-09 19:31:12.130146: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusolver.so.10.0
+2019-12-09 19:31:12.130181: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcusparse.so.10.0
+2019-12-09 19:31:12.130228: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2019-12-09 19:31:12.130339: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1006] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2019-12-09 19:31:12.130991: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1006] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2019-12-09 19:31:12.131746: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1006] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2019-12-09 19:31:12.132436: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1006] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2019-12-09 19:31:12.133044: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1746] Adding visible gpu devices: 0, 1
+2019-12-09 19:31:12.133102: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudart.so.10.0
+2019-12-09 19:31:12.135145: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1159] Device interconnect StreamExecutor with strength 1 edge matrix:
+2019-12-09 19:31:12.135170: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1165]      0 1 
+2019-12-09 19:31:12.135231: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 0:   N Y 
+2019-12-09 19:31:12.135245: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1178] 1:   Y N 
+2019-12-09 19:31:12.135451: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1006] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2019-12-09 19:31:12.136214: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1006] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2019-12-09 19:31:12.136881: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1006] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2019-12-09 19:31:12.137597: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1006] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2019-12-09 19:31:12.138203: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:0 with 4340 MB memory) -> physical GPU (device: 0, name: GeForce GTX 1080 Ti, pci bus id: 0000:02:00.0, compute capability: 6.1)
+2019-12-09 19:31:12.138737: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1006] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2019-12-09 19:31:12.139536: I tensorflow/stream_executor/cuda/cuda_gpu_executor.cc:1006] successful NUMA node read from SysFS had negative value (-1), but there must be at least one NUMA node, so returning NUMA node zero
+2019-12-09 19:31:12.140106: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1304] Created TensorFlow device (/job:localhost/replica:0/task:0/device:GPU:1 with 4201 MB memory) -> physical GPU (device: 1, name: GeForce GTX 1080 Ti, pci bus id: 0000:03:00.0, compute capability: 6.1)
+2019-12-09 19:31:12.142856: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x55cf9c289590 executing computations on platform CUDA. Devices:
+2019-12-09 19:31:12.142888: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (0): GeForce GTX 1080 Ti, Compute Capability 6.1
+2019-12-09 19:31:12.142902: I tensorflow/compiler/xla/service/service.cc:175]   StreamExecutor device (1): GeForce GTX 1080 Ti, Compute Capability 6.1
+2019-12-09 19:31:29.284761: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op TruncatedNormal in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:30.404408: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Mul in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:30.405202: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Add in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:30.405984: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:30.406140: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarIsInitializedOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:30.406303: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op LogicalNot in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:30.406720: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Assert in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:30.409649: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op AssignVariableOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:30.413920: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Fill in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:30.414580: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:30.512346: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:30.583866: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:30.663519: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:30.666716: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:30.757258: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:31.417731: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:31.481179: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:31.543168: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:31.545769: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:31.620218: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:32.058867: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:32.120432: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:32.182343: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:32.184883: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:32.260745: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:32.712368: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:32.718798: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Reshape in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:32.721439: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:32.794134: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:32.812676: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:33.669626: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op ReadVariableOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:34.040837: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Shape in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:34.042379: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op StridedSlice in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:34.064415: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Conv2D in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:34.066029: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcudnn.so.7
+2019-12-09 19:31:36.103958: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op BiasAdd in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:36.105356: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op LogicalAnd in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:36.107099: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op FusedBatchNormV3 in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:36.108814: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Sub in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:36.109913: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Mul in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:36.110207: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op AssignSubVariableOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:36.112068: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Relu in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:36.112980: I tensorflow/stream_executor/platform/default/dso_loader.cc:44] Successfully opened dynamic library libcublas.so.10.0
+2019-12-09 19:31:36.546010: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op AddV2 in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:36.598180: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Conv2D in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.059040: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op AvgPool in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.060468: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op MatMul in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.060927: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Sigmoid in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.063404: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Cast in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.065319: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Cast in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.067363: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Sub in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.070855: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Minimum in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.071168: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Maximum in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.075443: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Log in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.082716: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Neg in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.083018: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Mean in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.083626: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Sum in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.084091: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Cast in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.084983: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op DivNoNan in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.090302: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Square in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.236218: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op AddN in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.248135: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op BroadcastGradientArgs in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.413168: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Tile in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.430233: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Maximum in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.430448: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op FloorDiv in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.430894: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op RealDiv in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.431674: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Reciprocal in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.432677: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op AddN in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.432960: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op ZerosLike in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.433169: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op GreaterEqual in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.433560: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Select in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.433941: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op LessEqual in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.434265: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op SigmoidGrad in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.434577: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op BiasAddGrad in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.435001: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op MatMul in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.435194: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op MatMul in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.436884: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op AvgPoolGrad in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.437236: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op ReluGrad in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.438424: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op FusedBatchNormGradV3 in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.440234: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op ShapeN in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.440435: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Conv2DBackpropInput in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.440679: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Conv2DBackpropFilter in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.466133: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Conv2DBackpropInput in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.471022: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Conv2DBackpropFilter in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.653093: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.655797: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op AssignVariableOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.657162: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Fill in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.657411: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.657571: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op LogicalNot in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.657784: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Assert in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.659831: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.666379: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.676412: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.685296: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.687589: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.699675: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.757568: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.766754: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.775863: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.778148: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.789256: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.844131: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.853371: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.862679: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.865149: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.876096: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.940886: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.945184: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Reshape in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:37.945373: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op VarHandleOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:38.301933: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op ReadVariableOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:38.302349: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op AddV2 in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:38.302632: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Cast in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:38.303089: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Pow in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:38.303629: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Sqrt in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:38.303963: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op RealDiv in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:38.305898: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op ResourceApplyAdam in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:38.335774: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op AssignAddVariableOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:38.348300: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op All in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:38.349779: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Cast in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:38.350057: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Reshape in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:38.350325: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op ExpandDims in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:38.350730: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Pack in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:38.351146: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Greater in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:38.351400: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Tile in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:38.351692: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Cast in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:38.352002: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op AssignAddVariableOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:38.352561: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op StridedSlice in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:38.366332: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Equal in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:38.374126: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op StridedSlice in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:38.374465: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op StridedSlice in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:31:38.378035: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op Cast in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:37:24.363566: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op FusedBatchNormV3 in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-09 19:37:24.528336: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op NoOp in device /job:localhost/replica:0/task:0/device:GPU:0
+2019-12-10 11:04:57.488558: I tensorflow/core/common_runtime/eager/execute.cc:574] Executing op DestroyResourceOp in device /job:localhost/replica:0/task:0/device:GPU:0

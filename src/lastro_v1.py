@@ -13,7 +13,7 @@ import pandas as pd
 import re
 
 if len(sys.argv) != 2:
-    config_file = 'config.ini'
+    config_file = 'config_lesta_df.ini'
 else:
     config_file = sys.argv[1]
 if not os.path.isfile(config_file):
@@ -37,6 +37,7 @@ from tensorflow.keras.layers import Dense, Conv2D, Flatten, Dropout, MaxPooling2
 from sklearn.metrics import roc_curve 
 from tensorflow import keras
 from helpers import build_generator_dataframe, get_file_id
+#tf.debugging.set_log_device_placement(True)
         
 ###### Paths
 WORKDIR = config['general']['workdir']    
@@ -62,15 +63,37 @@ IMG_WIDTH = 200
 data_bias = config['trainparams']['data_bias']
 test_fraction = config['trainparams'].getfloat('test_fraction')
 augment_train_data = bool(int(config['trainparams']['augment_train_data']))
-kernel_size_1 = 8
-kernel_size_2 = 6
-dropout_kind=Dropout
+kernel_size_1 = int(config['trainparams']['kernel_size_1'])
+kernel_size_2 = int(config['trainparams']['kernel_size_2'])
+dropout_config = config['trainparams']['dropout_kind']
+if dropout_config == 'dropout':
+	dropout_kind=Dropout
+elif dropout_config == 'spatialdropout':
+	dropout_kind = SpatialDropout2D
+else:
+	raise NotImplementedError('dropout_kind must be \'dropout\' or \'spatialdropout\'\nPlease check config file.')
+pool_size = int(config['trainparams']['pool_size'])
 train_df, val_df = train_test_split(dataframe_for_generator, test_size=test_fraction, random_state=42)
 total_train = len(train_df)
 total_val = len(val_df)
 print("The number of objects in the whole training sample is: ", total_train)
 print("The number of objects in the whole validation sample is: ", total_val)
 print("The test fraction is: ", test_fraction)
+if config['trainparams']['subsample_train'] == 'total':
+    subsample_train = total_train
+    subsample_val = total_val
+else:
+    try:
+        subsample_train = int(config['trainparams']['subsample_train'])
+        subsample_val = int(subsample_train*test_fraction/(1.-test_fraction))
+    except:
+        raise ValueError('subsample_train should be \'total\' or int.')
+print("The number of objects in the training subsample is: ", subsample_train)
+print("The number of objects in the validation subsample is: ", subsample_val)
+train_steps_per_epoch = int(subsample_train//batch_size)
+val_steps_per_epoch = int(subsample_val//batch_size)
+print("The number of training steps is: ", train_steps_per_epoch)
+print("The number of validation steps is: ", val_steps_per_epoch)
 image_data_gen_train = TiffImageDataGenerator(featurewise_center=False,
                                           samplewise_center=False,
                                           featurewise_std_normalization=False,
@@ -99,6 +122,7 @@ bands = [config['bands'].getboolean('VIS0'),
     config['bands'].getboolean('NIR2'),
     config['bands'].getboolean('NIR3')]
 print("The bands are: ", bands)
+binary = bool(int(config['general']['binary']))
 
 ratio = float(config['trainparams']['lens_nolens_ratio'])
 train_data_gen = image_data_gen_train.prop_image_generator_dataframe(train_df,
@@ -108,7 +132,7 @@ train_data_gen = image_data_gen_train.prop_image_generator_dataframe(train_df,
 				  batch_size = batch_size, 
 				  validation=not(augment_train_data),
 				  ratio=ratio,
-				  bands = bands, binary = False)
+				  bands = bands, binary = binary)
 val_data_gen = image_data_gen_val.prop_image_generator_dataframe(val_df,
                                   directory=TRAIN_MULTIBAND,
                                   x_col='filenames',
@@ -116,16 +140,16 @@ val_data_gen = image_data_gen_val.prop_image_generator_dataframe(val_df,
 				  batch_size = batch_size, 
 				  validation=True, 
 				  ratio = ratio, bands = bands, 
-				  binary = False)
+				  binary = binary)
 roc_val_data_gen = image_data_gen_val.prop_image_generator_dataframe(val_df,
                                   directory=TRAIN_MULTIBAND,
                                   x_col='filenames',
                                   y_col='labels', 
-                                  batch_size=batch_size, 
+                                  batch_size=subsample_val, 
 				  validation=True, 
 				  ratio=ratio,
                                   bands=bands,
-				  binary=False)
+				  binary=binary)
 
 temp_data_gen = image_data_gen_train.image_generator_dataframe(train_df,
                                   directory=TRAIN_MULTIBAND,
@@ -134,7 +158,7 @@ temp_data_gen = image_data_gen_train.image_generator_dataframe(train_df,
 				  batch_size=batch_size, 
 				  validation=True,
                                   bands=bands,
-				  binary=False)
+				  binary=binary)
 
 image, _ = next(temp_data_gen)
 input_shape = image[0].shape
@@ -154,22 +178,22 @@ model = Sequential([
     Conv2D(16, kernel_size_1, padding='same', activation='relu', 
            input_shape=input_shape),
     Conv2D(16, kernel_size_2, padding='same', activation='relu'),
-    MaxPooling2D(pool_size=(2,2)),
+    MaxPooling2D(pool_size=(pool_size,pool_size)),
     BatchNormalization(axis=-1),
     Conv2D(32, kernel_size_2, padding='same', activation='relu'),
     Conv2D(32, kernel_size_2, padding='same', activation='relu'),
-    MaxPooling2D(pool_size=(2,2)),
+    MaxPooling2D(pool_size=(pool_size,pool_size)),
     BatchNormalization(axis=-1),
     Conv2D(64, kernel_size_2, padding='same', activation='relu'),
     Conv2D(64, kernel_size_2, padding='same', activation='relu'),
-    MaxPooling2D(pool_size=(2,2)),
+    MaxPooling2D(pool_size=(pool_size,pool_size)),
     BatchNormalization(axis=-1),
-    Dropout(0.2),
+    dropout_kind(0.2),
     Conv2D(128, kernel_size_2, padding='same', activation='relu'),
-    Dropout(0.2),
+    dropout_kind(0.2),
     Conv2D(128, kernel_size_2, padding='same', activation='relu'),
     BatchNormalization(axis=-1),
-    Dropout(0.2),
+    dropout_kind(0.2),
     Flatten(),
     Dense(1024, activation='relu'),
     Dropout(0.2),
@@ -187,9 +211,9 @@ model.summary()
 
 save_dir = os.path.join(RESULTS, 'checkpoints/lastro_cnn/')
 model_type = 'lastro_cnn'
-model_name = '%s_Tr%i_Te%i_bs%i_ep%.03d_aug%i_VIS%i_NIR%i%i%i_DB%s_ratio%.01f_ks%i%i_%s.h5' % (model_type,
-                                                                        total_train,
-                                                                        total_val,
+model_name = '%s_Tr%i_Te%i_bs%i_ep%.03d_aug%i_VIS%i_NIR%i%i%i_DB%s_ratio%.01f_ks%i%i_ps%i_%s_%s.h5' % (model_type,
+                                                                        subsample_train,
+                                                                        subsample_val,
                                                                         batch_size,
                                                                         epochs,
                                                                         int(augment_train_data),
@@ -201,7 +225,9 @@ model_name = '%s_Tr%i_Te%i_bs%i_ep%.03d_aug%i_VIS%i_NIR%i%i%i_DB%s_ratio%.01f_ks
                                                                         ratio,
 	kernel_size_1, 
 	kernel_size_2,
-	dropout_kind.__name__)
+	pool_size,
+	dropout_kind.__name__,
+	os.path.basename(TRAIN_MULTIBAND))
 if not os.path.isdir(save_dir):
     os.makedirs(save_dir)
 filepath = os.path.join(save_dir, model_name)
@@ -214,16 +240,17 @@ cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=filepath,
 
 es_callback = tf.keras.callbacks.EarlyStopping(monitor='val_acc', 
 					       min_delta=1, 
-					       patience=10, 
-					       verbose=0, 
+					       patience=130, 
+					       verbose=1, 
 				               mode='auto', 
 					       baseline=None, 
 					       restore_best_weights=True)
 lr_reducer = tf.keras.callbacks.ReduceLROnPlateau(factor=np.sqrt(0.1),
 		                                  cooldown=0,
-                  		                  patience=5,
+                  		                  patience=40,
 		                                  min_lr=0.5e-6,
-						  monitor='val_acc')
+						  monitor='val_acc',
+						  verbose=1)
 # Define class weights for unevenly distributed (biased) dataset.
 if data_bias == 'natural':
     sys.stdout.write('Using natural data bias: 1000x more non lenses than lenses.\n')
@@ -241,28 +268,28 @@ sys.stdout.write('Using weights: %s\n'%class_weights)
 
 history = model.fit_generator(
     train_data_gen,
-    steps_per_epoch=total_train//batch_size,
+    steps_per_epoch=train_steps_per_epoch,
     epochs=epochs,
     validation_data=val_data_gen,
-    validation_steps=total_val//batch_size,
+    validation_steps=val_steps_per_epoch,
     callbacks = [cp_callback, es_callback, lr_reducer],
     class_weight = class_weights,
 #   use_multiprocessing=True,
-    verbose=2
+    verbose=1
 )
 
 model.save(os.path.join(RESULTS,model_name))
 with open(os.path.join(RESULTS,model_name.replace('h5', 'history')), 'wb') as file_pi:
         pickle.dump(history.history, file_pi)
 # Score trained model.
-scores = model.evaluate_generator(val_data_gen, verbose=2, steps=total_val//batch_size)
+scores = model.evaluate_generator(val_data_gen, verbose=2, steps=val_steps_per_epoch)
 images_val, labels_true = next(roc_val_data_gen)
 labels_score = model.predict(images_val, batch_size=batch_size, verbose=2)
 fpr, tpr, thresholds = roc_curve(np.ravel(labels_true), np.ravel(labels_score))
-print(fpr)
-print(tpr)
+#print(fpr)
+#print(tpr)
+np.savetxt(os.path.join(RESULTS, model_name.replace('h5', 'FPRvsTPR.dat')), np.array([fpr, tpr]).T)
 
-
-print('Test loss:', scores[0])
-print('Test accuracy:', scores[1])
+#print('Test loss:', scores[0])
+#print('Test accuracy:', scores[1])
 
