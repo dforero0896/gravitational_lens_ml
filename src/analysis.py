@@ -195,7 +195,7 @@ def main():
     ###### Obtain model from the saving directory
     model_type = 'RN%dv%d' % (depth, version)
     
-    model_name = '%s_Tr%i_Te%i_bs%i_ep%.03d_aug%i_VIS%i_NIR%i%i%i_DB%s_ratio%.01f.h5' % (model_type,
+    model_name = '%s_Tr%i_Te%i_bs%i_ep%.03d_aug%i_VIS%i_NIR%i%i%i_DB%s_ratio%.01f_dropout.h5' % (model_type,
                                                                         subsample_train,
                                                                         subsample_val,
                                                                         batch_size,
@@ -258,19 +258,15 @@ def main():
                 dpi=200)
     
     plt.figure(2)
-    train_tpr = np.array(history['tp'])/(np.array(history['tp']) + np.array(history['fn']))
-    train_fpr = np.array(history['fp'])/(np.array(history['tn']) + np.array(history['fp']))
-    val_tpr = np.array(history['val_tp'])/(np.array(history['val_tp']) + np.array(history['val_fn']))
-    val_fpr = np.array(history['val_fp'])/(np.array(history['val_tn']) + np.array(history['val_fp']))
-    plt.plot(train_fpr, train_tpr, 'ob', label='Train')
-    plt.plot(val_fpr, val_tpr, 'or', label='Validation')
-    plt.xlabel('FPR')
-    plt.ylabel('TPR')
-    plt.xlim(0, 1)
+    train_auc = np.array(history['auc'])
+    val_auc = np.array(history['val_auc'])
+    plt.plot(np.arange(0, len(val_auc)), train_auc, 'ob', label='Train')
+    plt.plot(np.arange(0, len(val_auc)), val_auc, 'or', label='Validation')
+    plt.xlabel('Epochs')
+    plt.ylabel('AUC')
     plt.ylim(0, 1)
-    plt.plot([0, 1], [0, 1])
     plt.legend()
-    plt.savefig(os.path.join(RESULTS, 'plots/ROC_' + os.path.basename(history_path).replace('.history', '.png')),
+    plt.savefig(os.path.join(RESULTS, 'plots/AUC_' + os.path.basename(history_path).replace('.history', '.png')),
                 dpi=200)
     print("history keys:\n", history.keys())
     ##Score
