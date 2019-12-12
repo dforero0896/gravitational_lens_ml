@@ -223,6 +223,7 @@ def main():
     print(labels_true)
     labels_score = model.predict(images_val, batch_size=1, verbose=2)
     fpr, tpr, thresholds = roc_curve(np.ravel(labels_true), np.ravel(labels_score))
+    auc = np.trapz(tpr, fpr)
     np.savetxt(os.path.join(RESULTS, model_name_base.replace('h5', 'FPRvsTPR.dat')), np.array([fpr, tpr]).T)
     plt.figure(2)
     plt.xlabel('FPR')
@@ -232,7 +233,7 @@ def main():
     plt.plot([0, 1], [0, 1])
     plt.legend()
 
-    plt.plot(fpr, tpr, label='Validation' ,lw =3)
+    plt.plot(fpr, tpr, label='Validation\nAUC=%.3f'%auc ,lw =3)
     plt.xlabel('FPR')
     plt.ylabel('TPR')
     plt.xlim(0, 1)
