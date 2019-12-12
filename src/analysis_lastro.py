@@ -194,18 +194,18 @@ def main():
                 label='Training loss',
                 marker='o',
                 c='r')
-        ax1.set_ylim([0,1])
+        ax2.set_ylim([0.5,1])
         ax2.plot(range(len(history['loss'])),
                 history['val_acc'],
                 label='Validation accuracy',
-                marker='o',
+                marker='^',
                 c='b',
                 ls='--',
                 fillstyle='none')
         ax2.plot(range(len(history['loss'])),
                 history['acc'],
                 label='Training accuracy',
-                marker='o',
+                marker='^',
                 c='r',
                 ls='--',
                 fillstyle='none')
