@@ -188,12 +188,14 @@ def main():
                 history['val_loss'],
                 label='Validation loss',
  #               marker='o',
-                c='b')
+                c='b',
+		lw=3)
         ax1.plot(range(len(history['loss'])),
                 history['loss'],
                 label='Training loss',
  #               marker='o',
-                c='r')
+                c='r',
+		lw=3)
         ax2.set_ylim([0.5,1])
         ax2.plot(range(len(history['loss'])),
                 history['val_acc'],
@@ -201,14 +203,16 @@ def main():
  #               marker='^',
                 c='b',
                 ls='--',
-                fillstyle='none')
+                fillstyle='none',
+		lw=3)
         ax2.plot(range(len(history['loss'])),
                 history['acc'],
                 label='Training accuracy',
  #               marker='^',
                 c='r',
                 ls='--',
-                fillstyle='none')
+                fillstyle='none',
+		lw=3)
         ax1.set_xlabel('Epoch')
         ax1.legend(loc=(-0.1, 1))
         ax2.legend(loc=(0.9, 1))
