@@ -113,8 +113,13 @@ def main():
         plt.savefig(os.path.join(RESULTS, 'plots/' + os.path.basename(history_path).replace('.history', '.png')),
                     dpi=200)
         
-    ##Roc curve 
-    roc_results = np.loadtxt(os.path.join(RESULTS, model_name_base.replace('h5', 'FPRvsTPR.dat')))
+    ##Roc curve
+    roc_file = os.path.join(RESULTS, model_name_base.replace('h5', 'FPRvsTPR.dat'))
+    roc_results = np.loadtxt(roc_file)
+    with open(roc_file) as handler:
+        header = [next(handler) for x in range(2)]
+    saved_metrics = [s.split('+') for s in header]
+    print(header)
     fpr = roc_results[:,0]
     tpr = roc_results[:,1]
     auc = np.trapz(tpr, fpr)
