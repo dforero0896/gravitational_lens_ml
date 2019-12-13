@@ -1,10 +1,10 @@
-2019-12-03 11:20:29.980696: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcuda.so.1'; dlerror: libcuda.so.1: cannot open shared object file: No such file or directory
-2019-12-03 11:20:29.980773: E tensorflow/stream_executor/cuda/cuda_driver.cc:318] failed call to cuInit: UNKNOWN ERROR (303)
-2019-12-03 11:20:29.980851: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (node232.cluster.astro.unige.ch): /proc/driver/nvidia/version does not exist
-2019-12-03 11:20:29.981408: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
-2019-12-03 11:20:29.990722: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2594165000 Hz
-2019-12-03 11:20:29.992244: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x558e65856500 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
-2019-12-03 11:20:29.992271: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
+2019-12-12 13:36:02.959164: W tensorflow/stream_executor/platform/default/dso_loader.cc:55] Could not load dynamic library 'libcuda.so.1'; dlerror: libcuda.so.1: cannot open shared object file: No such file or directory
+2019-12-12 13:36:02.959253: E tensorflow/stream_executor/cuda/cuda_driver.cc:318] failed call to cuInit: UNKNOWN ERROR (303)
+2019-12-12 13:36:02.959325: I tensorflow/stream_executor/cuda/cuda_diagnostics.cc:156] kernel driver does not appear to be running on this host (node215.cluster.astro.unige.ch): /proc/driver/nvidia/version does not exist
+2019-12-12 13:36:02.960225: I tensorflow/core/platform/cpu_feature_guard.cc:142] Your CPU supports instructions that this TensorFlow binary was not compiled to use: SSE4.1 SSE4.2 AVX AVX2 FMA
+2019-12-12 13:36:02.977497: I tensorflow/core/platform/profile_utils/cpu_utils.cc:94] CPU Frequency: 2593930000 Hz
+2019-12-12 13:36:02.979791: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x561e89cc6430 initialized for platform Host (this does not guarantee that XLA will be used). Devices:
+2019-12-12 13:36:02.979839: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): Host, Default Version
 WARNING:tensorflow:From /home/epfl/variu/.conda/envs/grav/lib/python3.7/site-packages/tensorflow_core/python/ops/init_ops.py:97: calling VarianceScaling.__init__ (from tensorflow.python.ops.init_ops) with dtype is deprecated and will be removed in a future version.
 Instructions for updating:
 Call initializer instance with the dtype argument instead of passing it to the constructor

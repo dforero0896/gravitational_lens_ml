@@ -18,7 +18,7 @@ Section: trainparams
   test_fraction = 0.33
   batch_size = 10
   subsample_train = 6000
-  epochs = 130
+  epochs = 230
   n = 3
   resnetversion = 2
   augment_train_data = 1
