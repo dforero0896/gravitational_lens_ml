@@ -190,6 +190,10 @@ if not os.path.isdir(save_dir):
 filepath = os.path.join(save_dir, model_name)
 end_model_name = os.path.join(RESULTS,model_name)
 print("The model name is: ", model_name)
+history_path = os.path.join(RESULTS,model_name.replace('h5', 'history')) 
+
+
+# Callbacks
 checkpoint_dir = os.path.dirname(filepath)
 cp_callback = tf.keras.callbacks.ModelCheckpoint(filepath=filepath,
                                                  save_best_only=False,
@@ -214,18 +218,37 @@ lr_reducer = tf.keras.callbacks.ReduceLROnPlateau(factor=np.sqrt(0.1),
 		                                  min_lr=0.5e-6,
 						  monitor='val_acc',
 						  verbose=1, mode = 'auto')
-class HistoryCallback(tf.keras.callbacks.History):
+class ResumeHistory(tf.keras.callbacks.History):
+    def __init__(self, history_path):
+        self.history_path = history_path
+        self.use_history_file_flag = os.path.isfile(history_path) and (os.path.getsize(history_path)>0)
+        self.check_history_exists(history_path)
+        self.previous_epoch = len(list(self.history_old.values())[0])
+        if self.use_history_file_flag:
+            print('Successfully loaded the existing history.')
+            self.total_epoch = list(range(1, self.previous_epoch+1))
+            self.complete_history = self.history_old
+            print('Found %i total epochs saved.'%self.previous_epoch)
+        else:
+            self.total_epoch=[]
+            self.complete_history={}
+        super(ResumeHistory, self).__init__()
+    def check_history_exists(self, history_path):
+        if self.use_history_file_flag:  
+            with open(history_path, 'rb') as file_pi:
+                self.history_old = pickle.load(file_pi)
     def on_epoch_end(self, epoch, logs=None):
         logs = logs or {}
-        self.epoch.append(epoch)
+        if self.use_history_file_flag: total_epoch=epoch + self.previous_epoch
+        else: total_epoch=epoch
+        self.total_epoch.append(total_epoch)
         for k, v in logs.items():
-            self.history.setdefault(k, []).append(v)    
-        print(self.history)
-       # with open(os.path.join(RESULTS,model_name.replace('h5', 'history')), 'wb') as file_pi:
-       #     pickle.dump(history.history, file_pi)
-#logger_callback = tf.keras.callbacks.CSVLogger(filepath.replace('.h5', '.log'), separator=',', append=False)                                                                   
+            self.complete_history.setdefault(k, []).append(v)    
+        with open(self.history_path, 'wb') as file_pi:
+            pickle.dump(self.complete_history, file_pi)
+logger_callback = tf.keras.callbacks.CSVLogger(filepath.replace('.h5', '.log'), separator=',', append=True)                                                                
 
-history_callback = HistoryCallback()
+history_callback = ResumeHistory(history_path)
 # Define metrics for the model.
 metrics = [keras.metrics.TruePositives(name='tp'),
       keras.metrics.FalsePositives(name='fp'),
@@ -309,14 +332,14 @@ history = model.fit_generator(
     epochs=epochs,
     validation_data=val_data_gen,
     validation_steps=val_steps_per_epoch,
-    callbacks = [cp_callback, es_callback, lr_reducer, cp_best_callback, history_callback],
+    callbacks = [cp_callback, es_callback, lr_reducer, cp_best_callback, history_callback, logger_callback],
     class_weight = class_weights,
 #   use_multiprocessing=True,
     verbose=1
 )
 
 model.save(end_model_name)
-with open(os.path.join(RESULTS,model_name.replace('h5', 'history')), 'wb') as file_pi:
+with open(history_path, 'wb') as file_pi:
         pickle.dump(history.history, file_pi)
 # Score trained model.
 scores = model.evaluate_generator(val_data_gen, verbose=2, steps=val_steps_per_epoch)
