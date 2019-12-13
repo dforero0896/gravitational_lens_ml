@@ -214,7 +214,18 @@ lr_reducer = tf.keras.callbacks.ReduceLROnPlateau(factor=np.sqrt(0.1),
 		                                  min_lr=0.5e-6,
 						  monitor='val_acc',
 						  verbose=1, mode = 'auto')
+class HistoryCallback(tf.keras.callbacks.History):
+    def on_epoch_end(self, epoch, logs=None):
+        logs = logs or {}
+        self.epoch.append(epoch)
+        for k, v in logs.items():
+            self.history.setdefault(k, []).append(v)    
+        print(self.history)
+       # with open(os.path.join(RESULTS,model_name.replace('h5', 'history')), 'wb') as file_pi:
+       #     pickle.dump(history.history, file_pi)
+#logger_callback = tf.keras.callbacks.CSVLogger(filepath.replace('.h5', '.log'), separator=',', append=False)                                                                   
 
+history_callback = HistoryCallback()
 # Define metrics for the model.
 metrics = [keras.metrics.TruePositives(name='tp'),
       keras.metrics.FalsePositives(name='fp'),
@@ -230,6 +241,7 @@ def change_learning_rate(learning_rate='same'):
     except:
         if learning_rate=='same': pass
         else: raise NotImplementedError('learning_rate should be float or \'same\'')
+    
 if not os.path.isfile(filepath) and not os.path.isfile(end_model_name):
     model = Sequential([
         Conv2D(16, kernel_size_1, padding='same', activation='relu', 
@@ -266,13 +278,13 @@ if not os.path.isfile(filepath) and not os.path.isfile(end_model_name):
 elif not os.path.isfile(filepath) and os.path.isfile(end_model_name):
     print('Loading existing model from result.')
     model = tf.keras.models.load_model(end_model_name)
-    epochs*=2
+    epochs=int(config['trainparams']['new_epochs'])
     learning_rate = config['trainparams']['learning_rate']
     change_learning_rate(learning_rate)
 elif os.path.isfile(filepath):
     print('Loading existing model from checkpoint.')
     model = tf.keras.models.load_model(filepath)
-    epochs*=2
+    epochs=int(config['trainparams']['new_epochs'])
     learning_rate = config['trainparams']['learning_rate']
     change_learning_rate(learning_rate)
 model.summary()
@@ -297,7 +309,7 @@ history = model.fit_generator(
     epochs=epochs,
     validation_data=val_data_gen,
     validation_steps=val_steps_per_epoch,
-    callbacks = [cp_callback, es_callback, lr_reducer, cp_best_callback],
+    callbacks = [cp_callback, es_callback, lr_reducer, cp_best_callback, history_callback],
     class_weight = class_weights,
 #   use_multiprocessing=True,
     verbose=1
