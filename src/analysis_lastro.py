@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import os   
 import sys
 import re
@@ -13,22 +14,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import roc_curve
 from data_generator_function import TiffImageDataGenerator
 tf.debugging.set_log_device_placement(False)
+from helpers import build_generator_dataframe, get_file_id
 
-def get_file_id(filename, delimiters='_|\\.|-'):
-    id_ = [int(s) for s in re.split(delimiters, filename) if s.isdigit()][0]
-    return id_
-
-def build_generator_dataframe(id_label_df, directory):
-    files = os.listdir(directory)
-    ids = [
-        get_file_id(filename)
-        for filename in files
-    ]
-    df = pd.DataFrame()
-    df['filenames'] = files
-    df['labels'] = id_label_df.loc[ids, 'is_lens'].values.astype(int)
-    df['ID'] = ids
-    return df
 
 def main():
     if len(sys.argv) == 2:
@@ -43,11 +30,11 @@ def main():
         sys.exit('ERROR:\tThe config file %s was not found.'%config_file)
     if not os.path.isfile(model_name):
         sys.exit('ERROR:\tThe model file %s was not found.'%model_name)
-    
+    # Avoid using GPU to evaluate models.
     sys.stdout.write('\nNot using GPU.\n')
     os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
     
-
+    #Check GPUs and CPUs
     if len(tf.config.experimental.list_physical_devices('GPU')):
         print('GPU found. Num GPUs Available: ', len(tf.config.experimental.list_physical_devices('GPU')))
         print(tf.config.experimental.list_physical_devices('GPU'))
@@ -65,11 +52,16 @@ def main():
             print(tf.config.experimental.list_logical_devices('CPU'))
     else:
         print("No CPU found")
+
+    # Import configuration file
     config = configparser.ConfigParser()
     config.read(config_file)
+    # Extract parameters from model name
     if 'train_multiband_bin' in model_name: datadir = 'train_multiband_bin'
     elif 'train_multiband_noclip_bin' in model_name: datadir = 'train_multiband_noclip_bin'
     else: datadir = 'train_multiband_noclip_bin'
+
+    # Show configuration
     print("\nConfiguration file:\n")
     for section in config.sections():
         print("Section: %s" % section)
