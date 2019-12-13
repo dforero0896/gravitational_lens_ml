@@ -118,11 +118,12 @@ def main():
     roc_results = np.loadtxt(roc_file)
     with open(roc_file) as handler:
         header = [next(handler) for x in range(2)]
-    saved_metrics = [s.split('+') for s in header]
+    saved_metrics = [s.split('=')[-1] for s in header]
     print(header)
     fpr = roc_results[:,0]
     tpr = roc_results[:,1]
-    auc = np.trapz(tpr, fpr)
+    auc = saved_metrics[0]
+    acc = saved_metrics[1]
     plt.figure(2)
     plt.xlabel('FPR')
     plt.ylabel('TPR')
