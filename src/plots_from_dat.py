@@ -122,8 +122,8 @@ def main():
     print(header)
     fpr = roc_results[:,0]
     tpr = roc_results[:,1]
-    auc = saved_metrics[0]
-    acc = saved_metrics[1]
+    auc = float(saved_metrics[0])
+    acc = float(saved_metrics[1])
     plt.figure(2)
     plt.xlabel('FPR')
     plt.ylabel('TPR')
