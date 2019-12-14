@@ -376,9 +376,9 @@ history = model.fit_generator(
     callbacks=[cp_callback, es_callback, lr_reducer,
                cp_best_callback, history_callback, logger_callback],
     class_weight=class_weights,
-    use_multiprocessing=True,
+#    use_multiprocessing=True,
     verbose=1,
-    workers=16
+#    workers=16
 )
 # If thraining finishes normally (Is not stopped by user), save final model.
 # Save complete history if the training was resumed.
@@ -395,7 +395,7 @@ scores = model.evaluate_generator(
     val_data_gen, verbose=2, steps=val_steps_per_epoch)
 images_val, labels_true = next(roc_val_data_gen)
 labels_score = model.predict(images_val, batch_size=batch_size, verbose=2)
-fpr, tpr, thresholds = roc_curve(np.ravel(labels_true), np.ravel(labels_score), header='auc=%.3f\nacc=%.3f'%(history['auc'][-1], history['acc'][-1]))
+fpr, tpr, thresholds = roc_curve(np.ravel(labels_true), np.ravel(labels_score), header='auc=%.3f\nacc=%.3f'%(history['val_auc'][-1], history['val_acc'][-1]))
 auc = np.trapz(tpr, fpr)
 acc = scores[1]
 # Save TPR and FPR metrics to plot ROC.
