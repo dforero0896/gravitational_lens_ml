@@ -132,7 +132,7 @@ def main():
     plt.plot([0, 1], [0, 1])
     plt.legend()
 
-    plt.plot(fpr, tpr, label='Validation\nAUC=%.3f'%auc ,lw =3)
+    plt.plot(fpr, tpr, label='Validation\nAUC=%.3f\nACC=%.3f'%(auc, acc) ,lw =3)
     plt.xlabel('FPR')
     plt.ylabel('TPR')
     plt.xlim(0, 1)

@@ -346,7 +346,7 @@ elif os.path.isfile(filepath):
     epochs = int(config['trainparams']['new_epochs'])
     learning_rate = config['trainparams']['learning_rate']
     change_learning_rate(learning_rate)
-model.summary()
+#model.summary()
 # Define class weights for unevenly distributed (biased) dataset.
 if data_bias == 'natural':
     sys.stdout.write(
@@ -395,7 +395,7 @@ scores = model.evaluate_generator(
     val_data_gen, verbose=2, steps=val_steps_per_epoch)
 images_val, labels_true = next(roc_val_data_gen)
 labels_score = model.predict(images_val, batch_size=batch_size, verbose=2)
-fpr, tpr, thresholds = roc_curve(np.ravel(labels_true), np.ravel(labels_score))
+fpr, tpr, thresholds = roc_curve(np.ravel(labels_true), np.ravel(labels_score), header='auc=%.3f\nacc=%.3f'%(history['auc'][-1], history['acc'][-1]))
 auc = np.trapz(tpr, fpr)
 acc = scores[1]
 # Save TPR and FPR metrics to plot ROC.
