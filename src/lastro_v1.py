@@ -50,13 +50,14 @@ class ResumeHistory(tf.keras.callbacks.History):
         self.use_history_file_flag = os.path.isfile(
             history_path) and (os.path.getsize(history_path) > 0)
         self.check_history_exists(history_path)
-        self.previous_epoch = len(list(self.history_old.values())[0])
         if self.use_history_file_flag:
+            self.previous_epoch = len(list(self.history_old.values())[0])
             print('Successfully loaded the existing history.')
             self.total_epoch = list(range(1, self.previous_epoch+1))
             self.complete_history = self.history_old
             print('Found %i total epochs saved.' % self.previous_epoch)
         else:
+            self.previous_epoch =0 
             self.total_epoch = []
             self.complete_history = {}
         super(ResumeHistory, self).__init__()
@@ -65,7 +66,8 @@ class ResumeHistory(tf.keras.callbacks.History):
         if self.use_history_file_flag:
             with open(history_path, 'rb') as file_pi:
                 self.history_old = pickle.load(file_pi)
-
+        else:
+            self.history_old={}
     def on_epoch_end(self, epoch, logs=None):
         logs = logs or {}
         if self.use_history_file_flag:
@@ -346,7 +348,7 @@ elif os.path.isfile(filepath):
     epochs = int(config['trainparams']['new_epochs'])
     learning_rate = config['trainparams']['learning_rate']
     change_learning_rate(learning_rate)
-#model.summary()
+model.summary()
 # Define class weights for unevenly distributed (biased) dataset.
 if data_bias == 'natural':
     sys.stdout.write(
@@ -365,7 +367,7 @@ class_weights = {0: class_coeff[0], 1: class_coeff[1]}
 sys.stdout.write('Using weights: %s\n' % class_weights)
 
 # Fit the model and save the history callback.
-# Use multiprocessing True when using > 1 workers.
+# Use multiprocessing True when using > 1 workers. (Seems to cause problems)
 # Expect tf update to use threadsafe_iter class.
 history = model.fit_generator(
     train_data_gen,
@@ -380,7 +382,7 @@ history = model.fit_generator(
     verbose=1,
 #    workers=16
 )
-# If thraining finishes normally (Is not stopped by user), save final model.
+# If training finishes normally (Is not stopped by user), save final model.
 # Save complete history if the training was resumed.
 model.save(end_model_name)
 if history_callback.use_history_file_flag:
@@ -395,7 +397,7 @@ scores = model.evaluate_generator(
     val_data_gen, verbose=2, steps=val_steps_per_epoch)
 images_val, labels_true = next(roc_val_data_gen)
 labels_score = model.predict(images_val, batch_size=batch_size, verbose=2)
-fpr, tpr, thresholds = roc_curve(np.ravel(labels_true), np.ravel(labels_score), header='auc=%.3f\nacc=%.3f'%(history['val_auc'][-1], history['val_acc'][-1]))
+fpr, tpr, thresholds = roc_curve(np.ravel(labels_true), np.ravel(labels_score), header='auc=%.3f\nacc=%.3f'%(history.history['val_auc'][-1], history.history['val_acc'][-1]))
 auc = np.trapz(tpr, fpr)
 acc = scores[1]
 # Save TPR and FPR metrics to plot ROC.
