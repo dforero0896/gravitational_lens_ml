@@ -382,9 +382,9 @@ history = model.fit_generator(
     verbose=1,
 #    workers=16
 )
+model.save(end_model_name)
 # If training finishes normally (Is not stopped by user), save final model.
 # Save complete history if the training was resumed.
-model.save(end_model_name)
 if history_callback.use_history_file_flag:
     with open(history_path, 'wb') as file_pi:
         pickle.dump(history_callback.complete_history, file_pi)
