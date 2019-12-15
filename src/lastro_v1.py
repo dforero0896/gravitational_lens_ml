@@ -277,7 +277,7 @@ cp_best_callback = tf.keras.callbacks.ModelCheckpoint(filepath=filepath.replace(
 # Early stopping callback (currently using a very high patience to avoid it triggering)
 es_callback = tf.keras.callbacks.EarlyStopping(monitor='val_acc',
                                                #min_delta=0.1,
-                                               patience=20,
+                                               patience=30,
                                                verbose=1,
                                                mode='auto',
                                                baseline=None,
@@ -285,7 +285,7 @@ es_callback = tf.keras.callbacks.EarlyStopping(monitor='val_acc',
 # Learning rate reducer callback.
 lr_reducer = tf.keras.callbacks.ReduceLROnPlateau(factor=np.sqrt(0.1),
                                                   cooldown=0,
-                                                  patience=50,
+                                                  patience=20,
                                                   min_lr=0.5e-6,
                                                   monitor='val_acc',
                                                   verbose=1,
