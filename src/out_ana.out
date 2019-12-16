@@ -16,16 +16,16 @@ Section: trainparams
   test_fraction = 0.33
   batch_size = 10
   subsample_train = 6000
-  epochs = 230
+  epochs = 130
   n = 3
   resnetversion = 1
   augment_train_data = 1
   data_bias = raw
 Section: bands
   vis0 = 1
-  nir1 = 0
-  nir2 = 0
-  nir3 = 0
+  nir1 = 1
+  nir2 = 1
+  nir3 = 1
 Project directory: /home/epfl/variu/phd/gravitational_lens_ml
 The shape of the image catalog: (100009, 26)
 
@@ -36,14 +36,14 @@ The number of objects in the training subsample is:  6000
 The number of objects in the validation subsample is:  2955
 The number of training steps is:  600
 The number of validation steps is:  295
-The bands are:  [True, False, False, False]
+The bands are:  [True, True, True, True]
 Model: "model"
 __________________________________________________________________________________________________
 Layer (type)                    Output Shape         Param #     Connected to                     
 ==================================================================================================
-input_1 (InputLayer)            [(None, 200, 200, 1) 0                                            
+input_1 (InputLayer)            [(None, 200, 200, 4) 0                                            
 __________________________________________________________________________________________________
-conv2d (Conv2D)                 (None, 200, 200, 16) 160         input_1[0][0]                    
+conv2d (Conv2D)                 (None, 200, 200, 16) 592         input_1[0][0]                    
 __________________________________________________________________________________________________
 batch_normalization (BatchNorma (None, 200, 200, 16) 64          conv2d[0][0]                     
 __________________________________________________________________________________________________
@@ -196,12 +196,13 @@ flatten (Flatten)               (None, 2304)         0           dropout[0][0]
 __________________________________________________________________________________________________
 dense (Dense)                   (None, 1)            2305        flatten[0][0]                    
 ==================================================================================================
-Total params: 275,809
-Trainable params: 274,433
+Total params: 276,241
+Trainable params: 274,865
 Non-trainable params: 1,376
 __________________________________________________________________________________________________
 history keys:
  dict_keys(['loss', 'tp', 'fp', 'tn', 'fn', 'acc', 'auc', 'val_loss', 'val_tp', 'val_fp', 'val_tn', 'val_fn', 'val_acc', 'val_auc', 'lr'])
-2955/2955 - 79s
-[0.         0.         0.         ... 0.99797023 0.99932341 1.        ]
-[0.         0.06296547 0.06431957 ... 1.         1.         1.        ]
+2955/2955 - 51s
+[0.00000000e+00 6.76589986e-04 2.70635995e-03 ... 9.98646820e-01
+ 1.00000000e+00 1.00000000e+00]
+[0.        0.        0.        ... 0.9986459 0.9986459 1.       ]
