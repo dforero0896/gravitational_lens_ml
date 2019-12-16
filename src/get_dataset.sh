@@ -1,8 +1,20 @@
 #!/usr/bin/bash
 #get_dataset.sh
+if [[ $# -ne 1 ]]; then
+echo ERROR: Unexpected number of arguments.
+echo USAGE: $0 WORKDIR
+exit 1
+fi 
+WORKDIR=$1
 
-CWD=$(dirname $0)
-DATA=$CWD/../data/
+DATA=$WORKDIR/data/
+echo Downloading catalog into $DATA/catalog
+if [[ ! -e $DATA/catalog/image_catalog2.0train.csv ]];then
+if [[ ! -e $DATA/catalog ]]; then
+mkdir -v $DATA/catalog
+fi
+wget -P $DATA/catalog http://metcalf1.difa.unibo.it/DATA3/image_catalog2.0train.csv
+fi
 echo Getting train data into $DATA
 if [[ ! -e $DATA/datapack2.0train.tar.gz ]];then
 wget -P $DATA http://metcalf1.difa.unibo.it/DATA3/datapack2.0train.tar.gz

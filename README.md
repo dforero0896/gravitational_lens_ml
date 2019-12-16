@@ -1,39 +1,75 @@
 # gravitational_lens_ml
-Repository for the gravitational lens finding challenge v2. See [here](http://metcalf1.difa.unibo.it/blf-portal/gg_challenge.html).
-To set up, you can organize your data as 
+Repository for the gravitational lens finding challenge v2. See [here](http://metcalf1.difa.unibo.it/blf-portal/gg_challenge.html).\
+
+## Setup
+To set up, you can organize your data directory inside your working (`WORKDIR`) directory as 
 
 ```
 data
 	catalog 
 		image_catalog2.0train.csv
-	datapack2.0test
+	datapack2.0test # substructure from extracting
 		Public
 			EUC_H
 			EUC_J
 			EUC_VIS
 			EUC_Y
-	datapack2.0train  
+	datapack2.0train  # substructure from extracting
 		Public
 			EUC_H
 			EUC_J
 			EUC_VIS
 			EUC_Y
-	test_multiband  # created by build_dataset.py
-	train_multiband # created by build_dataset.py
 ```
 This is easily done if you just download the dataset into the `data` folder and extract there. The `.gitignore` will ignore every file in the directory but the `README.md`.
-Please find the training set [here](http://metcalf1.difa.unibo.it/DATA3/datapack2.0train.tar.gz) and the test set [here](http://metcalf1.difa.unibo.it/DATA3/datapack2.0test.tar.gz).
-Although, you can run `bash src/get_dataset.sh` and it should be done for you. Mind that it could take some time.
-Now you can run 
+Please find the training set [here](http://metcalf1.difa.unibo.it/DATA3/datapack2.0train.tar.gz) and the test set [here](http://metcalf1.difa.unibo.it/DATA3/datapack2.0test.tar.gz). The catalog is in the 
+Although, you can run `bash src/get_dataset.sh WORKDIR` and it should be done for you. Mind that it could take some time.\
+Our `src` directory contains all code necessary for this implementation.\
+In terms of prerequisites, everything that is needed by the project can be easily installed from our conda environment.
+```
+conda env create -f src/environment.yml #Assuming you are in WORKDIR
+```
+## Preprocessing
+Now you can run from your `WORKDIR`
 ```python
-python src/build_dataset.py ./
+python src/build_dataset.py ./ CLIP_PREPROCESS? OUT_DIR_NAME OVERWRITE? PARALLEL?
 ```
-to build the dataset as multiband images to be used by `keras`.\
-To do that, you need the `tifffile` library:
+to build the dataset as multiband images to be used by `keras`. 
++ `CLIP_PRERPOCESS=1,0` defines if the built dataset is or not clipped as described in the report. 
++  `OUT_DIR_NAME (str)` is the extension to the `train_` and `test_` directory names to save the dataset. So if for instance `OUT_DIR_NAME=multiband`, the dataset will be saved in two directories: `data/train_multiband` and `data/test_multiband`. 
++  `OVERWRITE=1,0` is the flag that tells the program to or not to overwrite the files aready in place in the output dir. Finally the 
++  `PARALLEL=1,0` flag states wether you want to preprocess various files at a time. It is MPI (embarassingly) parallelized so mind you run as 
+	```
+	mpiexec -n PROCESSES_YOU_CAN_AFFORD python build_dataset...
+	```
+Even processing multiple images at a time (we did 16) it can take some hours to do the whole dataset.
+
+## Training
+
+We provide two `config` files, each tuned to reproduce our best results with each architecture. Be sure to edit them to add the proper paths to you working directory `workdir` and your training set directory `train_multiband` in the config files.
+To create the catalog containing the labels, run
+```bash
+python create_labeled_catalog.py CONFIG_FILE
 ```
-conda install -c conda-forge tifffile
+Only the `WORKDIR` is extracted from the config file so any of them will do. The script will save the catalog used by the training scripts.\
+You should now be able to run
+```
+python src/lastro_vi.py config_lastro.ini
 ```
 or
 ```
-pip install tifffile
+python src/resnet.py config_resnet.ini
 ```
+to start training our best models.\
+While training, the best model (with the suffix `BEST`) will be saved in the `checkpoints` directory (which is created if necessary). At the end of every epoch, the model is also saved in order to be able to resume training from the latest possible stage if needed. Regarding the latter, the model training can be stopped at any moment and resumed just by re-running the scripts. If the code finds checkpoints (or final models, saved after training has finished), those will be loaded and training will continue. To avoid this you can just change the number of epochs.
+
+## Evaluating
+
+To evaluate the models you just trained, we provide an `analysis.py` script. It accepts a config file and a saved model. It predicts and plots/saves the ROC also evaluating the model in the same validation set we used while training. It will also plot histories (`.history`) files, which are pickled dictionaries containing the training history of the model.
+
+## Predicting
+To  take `subsample_val` (as defined in config file) images from the testing set, loading them at once and predicting their probabilities, you can run 
+```bash
+python src/predict CONFIG_FILE MODEL_BINARY
+```
+This will print the predictions on the screen.
