@@ -164,7 +164,7 @@ def main():
                                           #shear_range=0.0,
                                           #zoom_range=(0.99, 1.01),
                                           #channel_shift_range=0.0,
-                                          fill_mode='wrap',
+                                          #fill_mode='wrap',
                                           #cval=0.0,
                                           horizontal_flip=True,
                                           vertical_flip=True,

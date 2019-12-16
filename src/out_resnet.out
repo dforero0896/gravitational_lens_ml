@@ -17,7 +17,7 @@ Section: general
 Section: trainparams
   test_fraction = 0.33
   batch_size = 10
-  subsample_train = 6000
+  subsample_train = 12000
   epochs = 230
   n = 3
   resnetversion = 2
@@ -38,10 +38,10 @@ The shape of the image catalog: (100009, 26)
 The number of objects in the whole training sample is:  66993
 The number of objects in the whole validation sample is:  32998
 The test fraction is:  0.33
-The number of objects in the training subsample is:  6000
-The number of objects in the validation subsample is:  2955
-The number of training steps is:  600
-The number of validation steps is:  295
+The number of objects in the training subsample is:  12000
+The number of objects in the validation subsample is:  5910
+The number of training steps is:  1200
+The number of validation steps is:  591
 The bands are:  [True, False, False, False]
 Learning rate:  0.001
 Model: "model"
