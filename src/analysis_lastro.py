@@ -14,8 +14,6 @@ import re
 import configparser
 import pickle
 import numpy as np
-tf.debugging.set_log_device_placement(False)
-
 
 def main():
     if len(sys.argv) == 2:
@@ -34,30 +32,6 @@ def main():
     # Avoid using GPU to evaluate models.
     sys.stdout.write('\nNot using GPU.\n')
     os.environ["CUDA_VISIBLE_DEVICES"] = "-1"
-
-    # Check GPUs and CPUs
-    if len(tf.config.experimental.list_physical_devices('GPU')):
-        print('GPU found. Num GPUs Available: ', len(
-            tf.config.experimental.list_physical_devices('GPU')))
-        print(tf.config.experimental.list_physical_devices('GPU'))
-        if(len(tf.config.experimental.list_logical_devices('GPU'))):
-            print('Logical GPU found. Num logical GPUs Available: ', len(
-                tf.config.experimental.list_logical_devices('GPU')))
-            print(tf.config.experimental.list_logical_devices('GPU'))
-    else:
-        print("No GPU found")
-
-    if len(tf.config.experimental.list_physical_devices('CPU')):
-        print('Physical CPU found. Num Physical CPUs Available: ',
-              len(tf.config.experimental.list_physical_devices('CPU')))
-        print(tf.config.experimental.list_physical_devices('CPU'))
-        if(len(tf.config.experimental.list_logical_devices('CPU'))):
-            print('Logical CPU found. Num logical CPUs Available: ', len(
-                tf.config.experimental.list_logical_devices('CPU')))
-            print(tf.config.experimental.list_logical_devices('CPU'))
-    else:
-        print("No CPU found")
-
     # Import configuration file
     config = configparser.ConfigParser()
     config.read(config_file)
@@ -168,7 +142,6 @@ def main():
     bands = list(np.array(bands).reshape(-1))
     print("The bands are: ", bands)
     # Create generators for Images and Labels
-    ratio = 0.5
     roc_val_data_gen = image_data_gen_val.prop_image_generator_dataframe(val_df,
                                                                          directory=TRAIN_MULTIBAND,
                                                                          x_col='filenames',
@@ -181,7 +154,7 @@ def main():
     model.summary()
     history_path = model_name.replace('h5', 'history')
 
-    # Checkpoints
+    # Checkpoints dir
     save_dir = os.path.join(RESULTS, 'checkpoints/lastro_cnn/')
     if not os.path.isdir(save_dir):
         os.makedirs(save_dir)

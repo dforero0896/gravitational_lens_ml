@@ -29,48 +29,26 @@ def main():
     if 'train_multiband_bin' in model_name: datadir = 'train_multiband_bin'
     elif 'train_multiband_noclip_bin' in model_name: datadir = 'train_multiband_noclip_bin'
     else: datadir = 'train_multiband_bin'
-    print("\nConfiguration file:\n")
-    for section in config.sections():
-        print("Section: %s" % section)
-        for options in config.options(section):
-            print("  %s = %s" % (options, config.get(section, options)))
-            
     ###### Paths
     WORKDIR = config['general']['workdir']    
     #WORKDIR = os.path.abspath(sys.argv[2])
-    sys.stdout.write('Project directory: %s\n'%WORKDIR)
-    #SRC = os.path.join(WORKDIR, 'src')
-    DATA = os.path.join(WORKDIR, 'data')
     RESULTS = os.path.join(WORKDIR, 'results')
-    TRAIN_MULTIBAND = os.path.join(DATA, datadir)
-    #TEST_MULTIBAND = os.path.join(DATA, 'test_multiband')
 
-    image_catalog = pd.read_csv(os.path.join(DATA, 'catalog/image_catalog2.0train.csv'), comment='#', index_col=0)
-    print('The shape of the image catalog: ' + str(image_catalog.shape) + "\n")  
 
-    # Training parameters
-    batch_size = config['trainparams'].getint('batch_size')  # orig paper trained all networks with batch_size=128
-    epochs = config['trainparams'].getint('epochs')
-    num_classes = 1
-    data_bias = 'none'
-    # Model parameter
-   
+
     bands = []
     if 'VIS0' in model_name: bands.append(False)
     elif 'VIS1' in model_name: bands.append(True)
     if 'NIR000' in model_name: [bands.append(False) for i in range(3)]
     elif 'NIR111' in model_name: [bands.append(True) for i in range(3)]
-    print("The bands are: ", bands)
     ###### Obtain model from the saving directory
     model_name_base = os.path.basename(model_name)
     history_path =  model_name.replace('h5', 'history')
-    ## Checkpoints
-    save_dir = os.path.join(RESULTS, 'checkpoints/lastro_cnn/')
-    filepath = os.path.join(save_dir, model_name_base)
-
+    print("Plotting %s"%model_name_base)
     ### Plots
     ## History
     if os.path.isfile(history_path):
+        print("Found history file")
         with open(history_path, 'rb') as file_pi:
             history = pickle.load(file_pi)
         fig, ax1 = plt.subplots(1, 1, figsize=(10, 5))
@@ -109,8 +87,7 @@ def main():
         ax2.legend(loc=(0.9, 1))
         ax1.set_ylabel('Loss')
         ax2.set_ylabel('Accuracy')
-        plt.gcf()
-        plt.savefig(os.path.join(RESULTS, 'plots/' + os.path.basename(history_path).replace('.history', '.png')),
+        fig.savefig(os.path.join(RESULTS, 'plots/' + os.path.basename(history_path).replace('.history', '.png')),
                     dpi=200)
         
     ##Roc curve
@@ -119,7 +96,6 @@ def main():
     with open(roc_file) as handler:
         header = [next(handler) for x in range(2)]
     saved_metrics = [s.split('=')[-1] for s in header]
-    print(header)
     fpr = roc_results[:,0]
     tpr = roc_results[:,1]
     auc = float(saved_metrics[0])
