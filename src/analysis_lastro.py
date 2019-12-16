@@ -80,7 +80,6 @@ def main():
                           index_col=0)
     dataframe_for_generator = build_generator_dataframe(
         lens_df, TRAIN_MULTIBAND)
-    print(dataframe_for_generator['filenames'])
     # Split the TRAIN_MULTIBAND set into train and validation sets. Set test_size below!
     train_df, val_df = train_test_split(
         dataframe_for_generator,

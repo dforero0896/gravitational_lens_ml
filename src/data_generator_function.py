@@ -33,7 +33,9 @@ class TiffImageDataGenerator(ImageDataGenerator):
                                   batch_size=64,
                                   validation=False,
                                   bands=[True, True, True, True],
-                                  binary=True):
+                                  binary=True,
+                                  get_ids=False,
+                                  id_col='ID'):
         """Loads tiff image data by batches and automatically applies transformations.
 
         param: dataframe (pandas.DataFrame): Dataframe containing columns 'filename' and 'class'.
@@ -45,7 +47,9 @@ class TiffImageDataGenerator(ImageDataGenerator):
                                     Defaults to False.
         param: bands (list of bool): Boolean mask of channels to use. Defaults to [True, True, True, True] (use all channels).
         param: binary (bool): If True, loads images from `.npy` binaries. Else, loads `.tiff` files. Defaults to True.
-        yields: batch_x, batch_y
+        param: get_ids (bool): If True, the generator yields batch_x, batch_y, batch_ID (for testing purposes).
+        param: id_col (str): Column name of the ID column. Only used if get_ids=True.
+        yields: batch_x, batch_y [, batch_id]
         """
         files = dataframe[x_col].values
         while True:
@@ -55,7 +59,7 @@ class TiffImageDataGenerator(ImageDataGenerator):
                                            replace=False)
             batch_input = []
             batch_output = []
-
+            if get_ids: batch_id = []
             # Read in each input, perform preprocessing and get labels
             for input_path in batch_paths:
                 input = self.get_input(os.path.join(directory, input_path),
@@ -68,11 +72,16 @@ class TiffImageDataGenerator(ImageDataGenerator):
                     input = self.random_transform(input)
                 batch_input += [input]
                 batch_output += [output]
+                if get_ids: batch_id += [dataframe[dataframe[x_col] ==
+                                   input_path][id_col].values[0]]
             # Return a tuple of (input,output) to feed the network
             batch_x = np.array(batch_input)
             batch_y = np.array(batch_output)
-
-            yield (batch_x, batch_y)
+            if get_ids:
+                batch_id=np.array(batch_id)
+                yield (batch_x, batch_y, batch_id)
+            else:
+                yield (batch_x, batch_y)
 
     def prop_image_generator_dataframe(self,
                                        dataframe,
@@ -83,7 +92,9 @@ class TiffImageDataGenerator(ImageDataGenerator):
                                        validation=False,
                                        bands=[True, True, True, True],
                                        binary=True,
-                                       ratio=0.5):
+                                       ratio=0.5,
+                                       get_ids=False,
+                                       id_col='ID'):
         """Loads tiff image data by batches and automatically applies transformations. Forces the
         proportion of positive/negative to be ratio.
 
@@ -97,7 +108,9 @@ class TiffImageDataGenerator(ImageDataGenerator):
         param: bands (list of bool): Boolean mask of channels to use. Defaults to [True, True, True, True] (use all channels).
         param: bin (bool): If True, loads images from `.npy` binaries. Else, loads `.tiff` files. Defaults to False.
         param: ratio (float): Ratio positive/negative to force in each batch.
-        yields: batch_x, batch_y
+        param: get_ids (bool): If True, the generator yields batch_x, batch_y, batch_ID (for testing purposes).
+        param: id_col (str): Column name of the ID column. Only used if get_ids=True.
+        yields: batch_x, batch_y [, batch_id]
         """
         lens_df = dataframe[dataframe[y_col] == 1]
         nonlens_df = dataframe[dataframe[y_col] == 0]
@@ -109,13 +122,13 @@ class TiffImageDataGenerator(ImageDataGenerator):
                                                 size=lens_size,
                                                 replace=False)
             batch_paths_nonlens = np.random.choice(a=nonlens_df[x_col].values,
-                                                   size=nonlens_size)
+                                                   size=nonlens_size, replace=False)
             batch_paths = np.concatenate(
                 (batch_paths_lens, batch_paths_nonlens)).reshape(
                     (lens_size + nonlens_size))
             batch_input = []
             batch_output = []
-
+            if get_ids: batch_id = []
             # Read in each input, perform preprocessing and get labels
             for input_path in batch_paths:
                 input = self.get_input(os.path.join(directory, input_path),
@@ -128,8 +141,14 @@ class TiffImageDataGenerator(ImageDataGenerator):
                     input = self.random_transform(input)
                 batch_input += [input]
                 batch_output += [output]
+                if get_ids: batch_id += [dataframe[dataframe[x_col] ==
+                                   input_path][id_col].values[0]]
             # Return a tuple of (input,output) to feed the network
             batch_x = np.array(batch_input)
             batch_y = np.array(batch_output)
 
-            yield (batch_x, batch_y)
+            if get_ids:
+                batch_id=np.array(batch_id)
+                yield (batch_x, batch_y, batch_id)
+            else:
+                yield (batch_x, batch_y)
