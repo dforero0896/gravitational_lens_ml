@@ -97,4 +97,4 @@ for i, a in enumerate(ax.ravel()):
 
 plt.subplots_adjust(wspace=0, hspace=0)
 fig.savefig(os.path.join(WORKDIR, os.path.basename(
-    model_name).replace('.h5', 'FALSE_POSITIVES.png')), dpi=100)
+    model_name).replace('.h5', '_FALSE_POSITIVES.png')), dpi=100)
