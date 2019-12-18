@@ -72,4 +72,4 @@ To  take `subsample_val` (as defined in config file) images from the testing set
 ```bash
 python src/predict CONFIG_FILE MODEL_BINARY
 ```
-This will print the predictions on the screen.
+This will save a file called `MODEL_BINARYpredictions.dat` in the `results` directory.
