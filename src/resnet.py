@@ -164,6 +164,7 @@ def main():
     augment_train_data = bool(int(config['trainparams']['augment_train_data']))
     # Create Tiff Image Data Generator objects for train and validation
     image_data_gen_train = TiffImageDataGenerator(featurewise_center=False,
+<<<<<<< HEAD
                                                   samplewise_center=False,
                                                   featurewise_std_normalization=False,
                                                   samplewise_std_normalization=False,
@@ -184,6 +185,28 @@ def main():
                                                   preprocessing_function=None,
                                                   data_format='channels_last',
                                                   dtype='float32')
+=======
+                                          samplewise_center=False,
+                                          featurewise_std_normalization=False,
+                                          samplewise_std_normalization=False,
+                                          zca_whitening=False,
+                                          zca_epsilon=1e-06,
+                                          #rotation_range=0,
+                                          #width_shift_range=0.0,
+                                          #height_shift_range=0.0,
+                                          #brightness_range=(0.99, 1.01),
+                                          #shear_range=0.0,
+                                          #zoom_range=(0.99, 1.01),
+                                          #channel_shift_range=0.0,
+                                          #fill_mode='wrap',
+                                          #cval=0.0,
+                                          horizontal_flip=True,
+                                          vertical_flip=True,
+                                          rescale=None,
+                                          preprocessing_function=None,
+                                          data_format='channels_last',
+                                          dtype='float32')
+>>>>>>> 9fa90f3fc1feb8ccd9cb85c2282c0f45df7547f5
 
     image_data_gen_val = TiffImageDataGenerator(dtype='float32')
 
