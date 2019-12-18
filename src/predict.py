@@ -1,4 +1,11 @@
 #!/usr/bin/env python
+import numpy as np
+import pickle
+import configparser
+import re
+import sys
+import os
+import matplotlib.pyplot as plt
 from helpers import build_generator_dataframe, get_file_id
 from data_generator_function import TiffImageDataGenerator
 from sklearn.metrics import roc_curve
@@ -6,14 +13,6 @@ from sklearn.model_selection import train_test_split
 import tensorflow as tf
 import pandas as pd
 import matplotlib as mpl
-mpl.use('Agg')
-import matplotlib.pyplot as plt
-import os
-import sys
-import re
-import configparser
-import pickle
-import numpy as np
 
 
 def main():
@@ -31,7 +30,7 @@ def main():
         sys.exit('ERROR:\tThe config file %s was not found.' % config_file)
     if not os.path.isfile(model_name):
         sys.exit('ERROR:\tThe model file %s was not found.' % model_name)
-    
+
     # Import configuration file
     config = configparser.ConfigParser()
     config.read(config_file)
@@ -44,39 +43,26 @@ def main():
         datadir = 'train_multiband_noclip_bin'
 
     # Extract bands from filename
-    bands = []
-    if 'VIS0' in model_name:
-        bands.append(False)
-    elif 'VIS1' in model_name:
-        bands.append(True)
-    if 'NIR000' in model_name:
-        [bands.append(False) for i in range(3)]
-    elif 'NIR111' in model_name:
-        [bands.append(True) for i in range(3)]
-    bands = list(np.array(bands).reshape(-1))
+    bands = [bool(int(config['bands']['VIS0'])), bool(int(config['bands']['NIR1'])), bool(int(
+        config['bands']['NIR2'])), bool(int(config['bands']['NIR3']))]
     print("The bands are: ", bands)
-    # Extract split ratio from filename
-    for param in model_name.split('_'):
-        if 'ratio' in param:
-            ratio = float(param.replace('ratio', ''))
-
     # Paths
     WORKDIR = config['general']['workdir']
     sys.stdout.write('Project directory: %s\n' % WORKDIR)
     DATA = os.path.join(WORKDIR, 'data')
     RESULTS = os.path.join(WORKDIR, 'results')
-    TRAIN_MULTIBAND = os.path.join(DATA, datadir)
+    TRAIN_MULTIBAND = config['general']['train_multiband']
     TEST_MULTIBAND = TRAIN_MULTIBAND.replace('train', 'test')
     image_catalog = pd.read_csv(os.path.join(
         DATA, 'catalog/image_catalog2.0train.csv'),
-                                comment='#',
-                                index_col=0)
+        comment='#',
+        index_col=0)
     print('The shape of the image catalog: ' + str(image_catalog.shape) + "\n")
 
     lens_df = pd.read_csv(os.path.join(RESULTS, 'lens_id_labels.csv'),
                           index_col=0)
     dataframe_for_generator = build_generator_dataframe(
-        lens_df, TEST_MULTIBAND)
+        lens_df, TRAIN_MULTIBAND)
     print(dataframe_for_generator['filenames'])
     # Split the TRAIN_MULTIBAND set into train and validation sets. Set test_size below!
     train_df, val_df = train_test_split(
@@ -108,32 +94,33 @@ def main():
           subsample_val)
     # Create Tiff Image Data Generator objects for train and validation
     image_data_gen_val = TiffImageDataGenerator(dtype='float32')
-    
+
     # Create generators for Images and Labels
-    test_data_gen = image_data_gen_val.prop_image_generator_dataframe(
+    test_data_gen = image_data_gen_val.image_generator_dataframe(
         val_df,
-        directory=TRAIN_MULTIBAND,
+        directory='',
         x_col='filenames',
         y_col='labels',
-        batch_size=subsample_val,
+        batch_size=10,
         validation=True,
-        ratio=ratio,
         bands=bands,
-        binary=True)
+        binary=True,
+        get_ids=True)
 
     # Obtain model from the saving directory
     model_name_base = os.path.basename(model_name)
     model = tf.keras.models.load_model(model_name)
     model.summary()
-    history_path = model_name.replace('h5', 'history')
- 
-    images_val, labels_true = next(test_data_gen)
-    print(labels_true)
+
+    images_val, labels_true, ids = next(test_data_gen)
     predictions = model.predict(images_val,
-                                 batch_size=1,
-                                 verbose=2,
-                                 workers=16,
-                                 use_multiprocessing=True)
-    print(predictions)
+                                verbose=2,
+                                workers=16,
+                                use_multiprocessing=True)
+    
+    np.savetxt(os.path.join(RESULTS, model_name_base.replace(
+        '.h5', 'predictions.dat')), np.array([np.squeeze(ids), np.squeeze(predictions>0.5), np.squeeze(labels_true)], dtype=int).T)
+
+
 if __name__ == '__main__':
     main()
