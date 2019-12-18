@@ -1,5 +1,5 @@
 import tensorflow as tf
-from keras.regularizers import l2
+from tensorflow.compat.v2.keras.regularizers import l2
 
 def lr_schedule(epoch):
     """Learning Rate Schedule
@@ -113,9 +113,11 @@ def resnet_v1(input_shape, depth, num_classes=2):
                 strides = 2  # downsample
             y = resnet_layer(inputs=x,
                              num_filters=num_filters,
+                             kernel_size=3,
                              strides=strides)
             y = resnet_layer(inputs=y,
                              num_filters=num_filters,
+                             kernel_size=3,
                              activation=None)
             if stack > 0 and res_block == 0:  # first layer but not first stack
                 # linear projection residual shortcut connection to match
@@ -133,9 +135,11 @@ def resnet_v1(input_shape, depth, num_classes=2):
     # Add classifier on top.
     # v1 does not use BN after last shortcut connection-ReLU
     x = tf.keras.layers.AveragePooling2D(pool_size=8)(x)
+    x = tf.keras.layers.Dropout(0.2)(x)
     y = tf.keras.layers.Flatten()(x)
+    
     outputs = tf.keras.layers.Dense(num_classes,
-                    activation='softmax',
+                    activation='sigmoid',
                     kernel_initializer='he_normal')(y)
 
     # Instantiate model.
@@ -230,7 +234,7 @@ def resnet_v2(input_shape, depth, num_classes=2):
     x = tf.keras.layers.AveragePooling2D(pool_size=8)(x)
     y = tf.keras.layers.Flatten()(x)
     outputs = tf.keras.layers.Dense(num_classes,
-                    activation='softmax',
+                    activation='sigmoid',
                     kernel_initializer='he_normal')(y)
 
     # Instantiate model.

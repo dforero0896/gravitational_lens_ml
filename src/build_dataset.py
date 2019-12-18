@@ -38,7 +38,7 @@ def build_image(id_, set_, bands = ['EUC_VIS', 'EUC_H', 'EUC_J', 'EUC_Y'], img_s
     for t in tables:
         t.close()
     return data.astype(np.float32)
-def save_img_dataset(id_list, set_, outpath='.', clip = True, overwrite = False):
+def save_img_dataset(id_list, set_, outpath='.', clip = False, overwrite = False):
     sys.stdout.write('Saving into directory %s\n'%os.path.realpath(outpath))
     sys.stdout.write('clip = %s\noverwrite = %s\n'%(clip, overwrite))
     for id_ in id_list:
@@ -47,8 +47,9 @@ def save_img_dataset(id_list, set_, outpath='.', clip = True, overwrite = False)
         if os.path.isfile(outname) and not overwrite:
             continue
         try:
-            image = build_image(id_, set_)
-            tifffile.imsave(outname, image)
+            image = build_image(id_, set_, clip = clip)
+            #tifffile.imsave(outname, image)
+            np.save(outname.replace('tiff', 'npy'), image) 
         except FileNotFoundError as fe:
             sys.stdout.write(str(fe)+'\nContinuing...\n')
         
