@@ -26,16 +26,23 @@ missing_img = np.setdiff1d(image_catalog.ID.values,
                            file_id_train, assume_unique=False)
 # Add 'is_lens' flag to the catalog according to
 # http://metcalf1.difa.unibo.it/DATA3/evaluation.pdf
-image_catalog['is_lens'] = (image_catalog['mag_lens'] > 1.2) & (
-    image_catalog['n_sources'] != 0)
+#image_catalog['is_lens'] = (image_catalog['mag_lens'] > 1.2) & (
+#    image_catalog['n_sources'] != 0)
+image_catalog['nothing']=0
+image_catalog['nothing'][(image_catalog['mag_eff'] > 1.2) & (
+    image_catalog['mag_eff'] < 2)] = np.nan
+image_catalog = image_catalog.dropna(subset=['nothing', 'mag_eff'])
+image_catalog['is_lens'] = (image_catalog['mag_eff'] > 2)
+image_catalog['is_lens'][(image_catalog['mag_eff']<1.2) | (image_catalog['n_sources']==0)] = False
 # Add a flag to lines with no corresponding image
 image_catalog['img_exists'] = True
 image_catalog['img_exists'].loc[image_catalog['ID'].isin(missing_img)] = False
 # Remove duplicate IDs
 image_catalog = image_catalog.drop_duplicates('ID')
 print('Number of lenses: %i' % image_catalog['is_lens'].sum())
+print('Number of non lenses: %i' % (~image_catalog['is_lens']).sum())
 # Save a new catalog with just ID, is_lens.
 image_catalog[['ID',
-               'is_lens']][image_catalog['img_exists']].to_csv(os.path.join(
+               'is_lens']][image_catalog['img_exists']].astype(int).to_csv(os.path.join(
                    RESULTS, 'lens_id_labels.csv'),
     index=False)
