@@ -95,7 +95,7 @@ class TiffImageDataGenerator(ImageDataGenerator):
         while True:
             # Select files (paths/indices) for the batch
             batch_paths_lens = np.random.choice(a=lens_df[x_col].values, size=lens_size, replace=False)
-            batch_paths_nonlens = np.random.choice(a=nonlens_df[x_col].values, size=nonlens_size)
+            batch_paths_nonlens = np.random.choice(a=nonlens_df[x_col].values, size=nonlens_size, replace=False)
             batch_paths = np.concatenate((batch_paths_lens, batch_paths_nonlens)).reshape((lens_size + nonlens_size))
             batch_input = []
             batch_output = []

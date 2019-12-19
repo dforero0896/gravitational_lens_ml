@@ -18,7 +18,7 @@ def get_file_id(filename, delimiters='_|\\.|-'):
     id_ = [int(s) for s in re.split(delimiters, filename) if s.isdigit()][0]
     return id_
 
-def build_generator_dataframe(id_label_df, directory):
+def build_generator_dataframe_old(id_label_df, directory):
     files = os.listdir(directory)
     ids = [
         get_file_id(filename)
@@ -29,6 +29,23 @@ def build_generator_dataframe(id_label_df, directory):
     df['labels'] = id_label_df.loc[ids, 'is_lens'].values.astype(int)
     df['ID'] = ids
     return df
+
+def build_generator_dataframe(id_label_df, directory):
+    files = os.listdir(directory)
+    files_new = []
+    
+    ids = id_label_df["ID"][:]
+    extension = os.path.splitext(files[0])[1]
+    for id_ in ids:
+        pathfile = directory + "/image_" + str(id_) + "_multiband" + extension
+        files_new.append(pathfile)
+        
+    df = pd.DataFrame()
+    df['filenames'] = files_new
+    df['labels'] = id_label_df.loc[:, 'is_lens'].values.astype(int)
+    df['ID'] = ids
+    return df
+
 
 def main():
     if len(sys.argv) != 2:
@@ -116,13 +133,18 @@ def main():
     model_type = 'RN%dv%d' % (depth, version)
     ###### Create the dataframe containing filenames and labels.    
     # This is ok if we use weighted losses.
-    lens_df = pd.read_csv(os.path.join(RESULTS, 'lens_id_labels.csv'), index_col=0)
+    lens_df = pd.read_csv(os.path.join(RESULTS, 'lens_id_labels.csv'))
     dataframe_for_generator = build_generator_dataframe(lens_df, TRAIN_MULTIBAND)
     # Extract data proportions for loss weighting
     n_lens_clean = len(lens_df[lens_df['is_lens'] == True])
     n_nolens_clean = len(lens_df[lens_df['is_lens'] == False])
     equal_class_coeff = np.array([n_lens_clean/n_nolens_clean, 1])
     natural_class_coeff = np.array([1000 * n_lens_clean/n_nolens_clean, 1])
+    print("The number of lenses is ", len(lens_df[lens_df['is_lens'] == True]))
+    print("The number of lenses is ", len(dataframe_for_generator[dataframe_for_generator['labels'] == 1]))
+    
+    print("The number of lenses is ", len(lens_df[lens_df['is_lens'] == False]))
+    print("The number of lenses is ", len(dataframe_for_generator[dataframe_for_generator['labels'] == 0]))
     
     ###### Split the TRAIN_MULTIBAND set into train and validation sets. Set test_size below!
     train_df, val_df = train_test_split(dataframe_for_generator, test_size=config['trainparams'].getfloat('test_fraction'), random_state=42) #before it was 42
@@ -229,7 +251,7 @@ def main():
     model.get_config()
     # Prepare model model saving directory.
     save_dir = os.path.join(RESULTS, 'checkpoints/resnet/')
-    model_name = '%s_Tr%i_Te%i_bs%i_ep%.03d_aug%i_VIS%i_NIR%i%i%i_DB%s_ratio%.01f_dropout.h5' % (model_type,
+    model_name = '%s_Tr%i_Te%i_bs%i_ep%.03d_aug%i_VIS%i_NIR%i%i%i_DB%s_ratio%.01f_dropout_CORRECT.h5' % (model_type,
                                                                         subsample_train,
                                                                         subsample_val,
                                                                         batch_size,
