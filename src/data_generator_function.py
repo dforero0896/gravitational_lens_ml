@@ -35,6 +35,7 @@ class TiffImageDataGenerator(ImageDataGenerator):
                                   bands=[True, True, True, True],
                                   binary=True,
                                   get_ids=False,
+                                  seed = 42,
                                   id_col='ID'):
         """Loads tiff image data by batches and automatically applies transformations.
 
@@ -49,9 +50,11 @@ class TiffImageDataGenerator(ImageDataGenerator):
         param: binary (bool): If True, loads images from `.npy` binaries. Else, loads `.tiff` files. Defaults to True.
         param: get_ids (bool): If True, the generator yields batch_x, batch_y, batch_ID (for testing purposes).
         param: id_col (str): Column name of the ID column. Only used if get_ids=True.
+        param: seed (int): Set random state for generator.
         yields: batch_x, batch_y [, batch_id]
         """
         files = dataframe[x_col].values
+        np.random.seed(seed)
         while True:
             # Select files (paths/indices) for the batch
             batch_paths = np.random.choice(a=files,
@@ -94,6 +97,7 @@ class TiffImageDataGenerator(ImageDataGenerator):
                                        binary=True,
                                        ratio=0.5,
                                        get_ids=False,
+                                       seed = 42,
                                        id_col='ID'):
         """Loads tiff image data by batches and automatically applies transformations. Forces the
         proportion of positive/negative to be ratio.
@@ -110,12 +114,14 @@ class TiffImageDataGenerator(ImageDataGenerator):
         param: ratio (float): Ratio positive/negative to force in each batch.
         param: get_ids (bool): If True, the generator yields batch_x, batch_y, batch_ID (for testing purposes).
         param: id_col (str): Column name of the ID column. Only used if get_ids=True.
+        param: seed (int): Set random state for generator.
         yields: batch_x, batch_y [, batch_id]
         """
         lens_df = dataframe[dataframe[y_col] == 1]
         nonlens_df = dataframe[dataframe[y_col] == 0]
         lens_size = int(ratio * batch_size)
         nonlens_size = batch_size - lens_size
+        np.random.seed(seed)
         while True:
             # Select files (paths/indices) for the batch
             batch_paths_lens = np.random.choice(a=lens_df[x_col].values,

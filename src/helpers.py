@@ -12,12 +12,19 @@ def get_file_id(filename, delimiters = '_|\.|-'):
     return id_
 def build_generator_dataframe(id_label_df, directory):
     files = os.listdir(directory)
-    ids = [
-        get_file_id(filename)
-        for filename in files
-    ]
+    files_new = []
+    existing_id = []
+    ids = id_label_df.index
+    extension = os.path.splitext(files[0])[1]
+    for id_ in ids:
+        pathfile = directory + "/image_" + str(id_) + "_multiband" + extension
+        if not os.path.isfile(pathfile):
+            continue
+        files_new.append(pathfile)
+        existing_id.append(id_)
+        
     df = pd.DataFrame()
-    df['filenames'] = [os.path.realpath(os.path.join(directory, f)) for f in files]
-    df['labels'] = id_label_df.loc[ids, 'is_lens'].values.astype(int)
-    df['ID'] = ids
+    df['filenames'] = files_new
+    df['labels'] = id_label_df.loc[existing_id, 'is_lens'].values.astype(int)
+    df['ID'] = existing_id
     return df

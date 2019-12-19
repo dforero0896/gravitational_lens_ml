@@ -20,6 +20,19 @@ import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pyplot as plt
 from threadsafe_iter import threadsafe_iter #Tensorflow2.0 has a bug concerning this, fixed in the repo though.
+import datetime
+## Fix errors about not finding Conv
+from tensorflow.compat.v1 import ConfigProto
+from tensorflow.compat.v1 import InteractiveSession
+
+config = ConfigProto()
+config.gpu_options.allow_growth = True
+session = InteractiveSession(config=config)
+tf.config.experimental.list_physical_devices('GPU')
+tf.debugging.set_log_device_placement(True)
+print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
+
+
 # Helper classes and functions
 class ResumeHistory(tf.keras.callbacks.History):
     """Callback to read a pickled history dict and append new training progress to it.
@@ -110,12 +123,12 @@ def build_lastro_model(kernel_size_1, kernel_size_2, pool_size, input_shape, dro
             Conv2D(64, kernel_size_2, padding='same', activation='relu'),
             MaxPooling2D(pool_size=(pool_size, pool_size)),
             BatchNormalization(axis=-1),
-            dropout_kind(0.2),
+            dropout_kind(0.5),
             Conv2D(128, kernel_size_2, padding='same', activation='relu'),
-            dropout_kind(0.2),
+            dropout_kind(0.4),
             Conv2D(128, kernel_size_2, padding='same', activation='relu'),
             BatchNormalization(axis=-1),
-            dropout_kind(0.2),
+            dropout_kind(0.3),
             Flatten(),
             Dense(1024, activation='relu'),
             Dropout(0.2),
@@ -253,7 +266,7 @@ def main():
                                                                         directory=TRAIN_MULTIBAND,
                                                                         x_col='filenames',
                                                                         y_col='labels',
-                                                                        batch_size=subsample_val,
+                                                                        batch_size=batch_size,
                                                                         validation=True,
                                                                         ratio=ratio,
                                                                         bands=bands,
@@ -339,6 +352,12 @@ def main():
         checkpoint_filepath.replace('.h5', '.log'), separator=',', append=True)
     # Callback to resume history if history_path exists.
     history_callback = ResumeHistory(history_path)
+    # Callback to use Tensorboard
+    log_dir=os.path.join(RESULTS, "logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))
+    if not os.path.isdir(log_dir):
+        os.mkdir(log_dir)
+    tensorboard_callback = tf.keras.callbacks.TensorBoard(log_dir=log_dir, histogram_freq=1, profile_batch=0)
+
     # Define metrics for the model.
     metrics = [keras.metrics.TruePositives(name='tp'),
             keras.metrics.FalsePositives(name='fp'),
@@ -387,12 +406,12 @@ def main():
     # Expect tf update to use threadsafe_iter class.
     history = model.fit_generator(
         train_data_gen,
-        steps_per_epoch=train_steps_per_epoch,
+        steps_per_epoch=total_train//batch_size,
         epochs=epochs,
         validation_data=val_data_gen,
-        validation_steps=val_steps_per_epoch,
+        validation_steps=total_val//batch_size,
         callbacks=[cp_callback, es_callback, lr_reducer,
-                cp_best_callback, history_callback, logger_callback],
+                cp_best_callback, history_callback, logger_callback, tensorboard_callback],
         class_weight=class_weights,
     #    use_multiprocessing=True,
         verbose=1,

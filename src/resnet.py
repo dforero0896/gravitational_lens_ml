@@ -13,7 +13,16 @@ from data_generator_function import TiffImageDataGenerator
 import resnet_func as myf
 tf.debugging.set_log_device_placement(True)
 # tf.RunOptions(report_tensor_allocations_upon_oom=True)
+## Fix errors about not finding Conv
+from tensorflow.compat.v1 import ConfigProto
+from tensorflow.compat.v1 import InteractiveSession
 
+config = ConfigProto()
+config.gpu_options.allow_growth = True
+session = InteractiveSession(config=config)
+tf.config.experimental.list_physical_devices('GPU')
+tf.debugging.set_log_device_placement(True)
+print("Num GPUs Available: ", len(tf.config.experimental.list_physical_devices('GPU')))
 
 def get_file_id(filename, delimiters='_|\\.|-'):
     id_ = [int(s) for s in re.split(delimiters, filename) if s.isdigit()][0]
@@ -194,23 +203,24 @@ def main():
     print("The bands are: ", bands)
     # Create generators for Images and Labels
     ratio = float(config['trainparams']['lens_nolens_ratio'])
+    binary = bool(int(config['general']['binary']))
     train_data_gen = image_data_gen_train.prop_image_generator_dataframe(train_df,
                                                                          directory=TRAIN_MULTIBAND,
                                                                          x_col='filenames',
                                                                          y_col='labels', batch_size=batch_size, validation=not(augment_train_data), ratio=ratio,
-                                                                         bands=bands)
+                                                                         bands=bands, binary=binary)
 
     val_data_gen = image_data_gen_val.prop_image_generator_dataframe(val_df,
                                                                      directory=TRAIN_MULTIBAND,
                                                                      x_col='filenames',
                                                                      y_col='labels', batch_size=batch_size, validation=True, ratio=ratio,
-                                                                     bands=bands)
+                                                                     bands=bands, binary=binary)
 
     roc_val_data_gen = image_data_gen_val.prop_image_generator_dataframe(val_df,
                                                                          directory=TRAIN_MULTIBAND,
                                                                          x_col='filenames',
                                                                          y_col='labels', batch_size=subsample_val, validation=True, ratio=ratio,
-                                                                         bands=bands)
+                                                                         bands=bands, binary=binary)
 
     # Obtain the shape of the input data (train images)
     temp_data_gen = image_data_gen_train.image_generator_dataframe(train_df,

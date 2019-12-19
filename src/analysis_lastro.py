@@ -18,7 +18,7 @@ import numpy as np
 
 def main():
     if len(sys.argv) == 2:
-        config_file = 'config_lesta_df.ini'
+        config_file = 'config_lastro.ini'
         model_name = sys.argv[1]
     elif len(sys.argv) == 3:
         config_file = sys.argv[1]
@@ -43,6 +43,8 @@ def main():
         datadir = 'train_multiband_bin'
     elif 'train_multiband_noclip_bin' in model_name:
         datadir = 'train_multiband_noclip_bin'
+    elif 'train_multiband' in model_name:
+        datadir = 'train_multiband'
     else:
         datadir = 'train_multiband_noclip_bin'
 
@@ -69,7 +71,6 @@ def main():
     DATA = os.path.join(WORKDIR, 'data')
     RESULTS = os.path.join(WORKDIR, 'results')
     TRAIN_MULTIBAND = os.path.join(DATA, datadir)
-
     image_catalog = pd.read_csv(os.path.join(
         DATA, 'catalog/image_catalog2.0train.csv'),
                                 comment='#',
@@ -122,16 +123,15 @@ def main():
     image_data_gen_val = TiffImageDataGenerator(dtype='float32')
     
     # Create generators for Images and Labels
-    roc_val_data_gen = image_data_gen_val.prop_image_generator_dataframe(
+    roc_val_data_gen = image_data_gen_val.image_generator_dataframe(
         val_df,
         directory=TRAIN_MULTIBAND,
         x_col='filenames',
         y_col='labels',
-        batch_size=subsample_val,
+        batch_size=total_val,
         validation=True,
-        ratio=ratio,
         bands=bands,
-        binary=True)
+        binary=False)
 
     # Obtain model from the saving directory
     model_name_base = os.path.basename(model_name)
