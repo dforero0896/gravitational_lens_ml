@@ -1,7 +1,40 @@
 # gravitational_lens_ml
 Repository for the gravitational lens finding challenge v2. See [here](http://metcalf1.difa.unibo.it/blf-portal/gg_challenge.html).\
 
-## Setup
+## Working example Setup
+
+Do this if you don't have enough time to download and preprocess the data. You should be provided with a `data` directory containing 1000 or so examples for clipped and non clipped images (see report).\
+Be sure to put the `data` directory in your `WORKDIR`, along with the `src` and `results` folders:
+```
+WORKDIR=path/to/your/directory/of/preference
+	data
+		catalog
+		train_multiband_bin
+		train_multiband_noclip_bin
+	results
+	src
+```
+### *PLEASE DONT FORGET TO CHANGE  THE `workdir` AND `train_multiband` ARGUMENTS IN THE CONFIGURATION FILES SINCE OUR CODE HEAVILY RELIES ON THEM TO LOCATE IMPORTANT FILES*
+
+## Predicting on examples
+We chose to provide only labeled data to decrease the file size. The `src/predict.py` script accepts two arguments: a `config_NETWORK.ini` file and a `MODEL.h5` binary. It loads the data available (at once) and predicts on it. Predictions are saved in `results/best_NETWORKpredictions.dat`.
+```bash
+python src/predict.py src/config_lastro.py results/best_lastro.h5
+# or
+python src/predict.py src/config_resnet.py results/best_resnet.h5
+```
+## Training on examples
+For training on the provided examples, you can run either
+```bash
+python src/resnet.py src/config_resnet.ini
+# or
+python src/lastro_v1.py src/config_lastro.ini
+```
+from your `WORKDIR`
+
+In our testing, `lastro_v1.py` can run in a standard GPU, while `resnet.py` asks for more memory.
+
+## Full Setup
 To set up, you can organize your data directory inside your working (`WORKDIR`) directory as 
 
 ```
@@ -54,18 +87,14 @@ python create_labeled_catalog.py CONFIG_FILE
 Only the `WORKDIR` is extracted from the config file so any of them will do. The script will save the catalog used by the training scripts.\
 You should now be able to run
 ```
-python src/lastro_vi.py config_lastro.ini
+python src/lastro_v1.py src/config_lastro.ini
 ```
 or
 ```
-python src/resnet.py config_resnet.ini
+python src/resnet.py src/config_resnet.ini
 ```
 to start training our best models.\
 While training, the best model (with the suffix `BEST`) will be saved in the `checkpoints` directory (which is created if necessary). At the end of every epoch, the model is also saved in order to be able to resume training from the latest possible stage if needed. Regarding the latter, the model training can be stopped at any moment and resumed just by re-running the scripts. If the code finds checkpoints (or final models, saved after training has finished), those will be loaded and training will continue. To avoid this you can just change the number of epochs.
-
-## Evaluating
-
-To evaluate the models you just trained, we provide an `analysis.py` script. It accepts a config file and a saved model. It predicts and plots/saves the ROC also evaluating the model in the same validation set we used while training. It will also plot histories (`.history`) files, which are pickled dictionaries containing the training history of the model.
 
 ## Predicting
 To  take `subsample_val` (as defined in config file) images from the testing set, loading them at once and predicting their probabilities, you can run 
