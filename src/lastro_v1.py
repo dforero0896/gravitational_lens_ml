@@ -172,7 +172,7 @@ def main():
     RESULTS = os.path.join(WORKDIR, 'results')
     TRAIN_MULTIBAND = config['general']['train_multiband']
     TEST_MULTIBAND = os.path.join(DATA, 'test_multiband')
-    # Catalog (should be updated to last version)
+    # Catalog 
     lens_df = pd.read_csv(os.path.join(RESULTS, 'lens_id_labels.csv'), index_col=0)
     dataframe_for_generator = build_generator_dataframe(lens_df, TRAIN_MULTIBAND)
     # Extract data proportions for loss weighting
@@ -406,10 +406,10 @@ def main():
     # Expect tf update to use threadsafe_iter class.
     history = model.fit_generator(
         train_data_gen,
-        steps_per_epoch=total_train//batch_size,
+        steps_per_epoch=subsample_train//batch_size,
         epochs=epochs,
         validation_data=val_data_gen,
-        validation_steps=total_val//batch_size,
+        validation_steps=subsample_val//batch_size,
         callbacks=[cp_callback, es_callback, lr_reducer,
                 cp_best_callback, history_callback, logger_callback, tensorboard_callback],
         class_weight=class_weights,
