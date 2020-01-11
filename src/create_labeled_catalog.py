@@ -28,8 +28,8 @@ missing_img = np.setdiff1d(image_catalog.ID.values,
 # http://metcalf1.difa.unibo.it/DATA3/evaluation.pdf
 #image_catalog['is_lens'] = (image_catalog['mag_lens'] > 1.2) & (
 #    image_catalog['n_sources'] != 0)
-image_catalog['is_lens'] = (image_catalog['mag_eff'] > 2) # True for lenses
-image_catalog['is_non_lens'] = (image_catalog['mag_eff']<1.2) | (image_catalog['n_sources']==0) # True for nonlenses
+image_catalog['is_lens'] = (image_catalog['mag_eff'] > 1.6) & (image_catalog['n_source_im'] > 0) & (image_catalog['n_pix_source'] > 20) # True for lenses
+image_catalog['is_non_lens'] = (image_catalog['mag_eff']<1) | (image_catalog['n_sources']==0) # True for nonlenses
 image_catalog['not_none'] = image_catalog['is_lens'] | image_catalog['is_non_lens'] # True for lenses or nonlenses
 image_catalog = image_catalog[image_catalog['not_none']] # Remove lines which are neither
 # Add a flag to lines with no corresponding image
