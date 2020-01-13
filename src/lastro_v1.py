@@ -199,21 +199,6 @@ def main():
     pool_size = int(config['trainparams']['pool_size'])
 
     
-    if config['trainparams']['subsample_train'] == 'total': #Import subsample size and check values are as expected.
-        subsample_train = total_train
-        subsample_val = total_val
-    else:
-        try:
-            subsample_train = int(config['trainparams']['subsample_train'])
-            subsample_val = int(subsample_train*test_fraction/(1.-test_fraction))
-        except:
-            raise ValueError('subsample_train should be \'total\' or int.')
-    print("The number of objects in the training subsample is: ", subsample_train)
-    print("The number of objects in the validation subsample is: ", subsample_val)
-    train_steps_per_epoch = int(subsample_train//batch_size)
-    val_steps_per_epoch = int(subsample_val//batch_size)
-    print("The number of training steps is: ", train_steps_per_epoch)
-    print("The number of validation steps is: ", val_steps_per_epoch)
     bands = [config['bands'].getboolean('VIS0'),
             config['bands'].getboolean('NIR1'),
             config['bands'].getboolean('NIR2'),
@@ -229,6 +214,21 @@ def main():
     print("The number of objects in the whole training sample is: ", total_train)
     print("The number of objects in the whole validation sample is: ", total_val)
     print("The test fraction is: ", test_fraction)
+    if config['trainparams']['subsample_train'] == 'total': #Import subsample size and check values are as expected.
+        subsample_train = total_train
+        subsample_val = total_val
+    else:
+        try:
+            subsample_train = int(config['trainparams']['subsample_train'])
+            subsample_val = int(subsample_train*test_fraction/(1.-test_fraction))
+        except:
+            raise ValueError('subsample_train should be \'total\' or int.')
+    print("The number of objects in the training subsample is: ", subsample_train)
+    print("The number of objects in the validation subsample is: ", subsample_val)
+    train_steps_per_epoch = int(subsample_train//batch_size)
+    val_steps_per_epoch = int(subsample_val//batch_size)
+    print("The number of training steps is: ", train_steps_per_epoch)
+    print("The number of validation steps is: ", val_steps_per_epoch)
 
     # Create TiffImageDataGenerator objects to inherit random transformations from Keras' class.
     image_data_gen_train = TiffImageDataGenerator(featurewise_center=False,

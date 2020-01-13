@@ -158,3 +158,15 @@ class TiffImageDataGenerator(ImageDataGenerator):
                 yield (batch_x, batch_y, batch_id)
             else:
                 yield (batch_x, batch_y)
+
+    def generator_from_directory(self, directory, id_logger, bands = [True, True, True, True], batch_size = 10, binary = True):    
+        files = (f for f in os.listdir(directory))
+        while True:
+            batch_input = []
+            for i in range(batch_size):
+                fn = next(files)
+                input = self.get_input(os.path.join(directory,fn), binary=binary)[:,:,bands]
+                batch_input += [input]
+                id_logger += [fn]
+            batch_x = np.array(batch_input)
+            yield batch_x
