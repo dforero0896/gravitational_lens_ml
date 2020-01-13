@@ -120,7 +120,7 @@ def main():
                                 verbose=1, steps = len_gen)
     int_prediction_ids = np.array([get_file_id(fn) for fn in prediction_ids], dtype=int)
     np.savetxt(os.path.join(RESULTS, model_name_base.replace(
-        '.h5', 'predictions.dat')), np.array([np.squeeze(int_prediction_ids), np.squeeze(predictions)]).T)
+        '.h5', 'predictions.dat')), np.array([np.squeeze(int_prediction_ids).astype(int), np.squeeze(predictions)]).T, fmt='%i %.5f')
 
 
 if __name__ == '__main__':
