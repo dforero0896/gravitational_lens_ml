@@ -14,7 +14,13 @@ import re
 import configparser
 import pickle
 import numpy as np
-
+## Fix errors about not finding Conv                                                                                                                                                 
+from tensorflow.compat.v1 import ConfigProto                                                                                                                                         
+from tensorflow.compat.v1 import InteractiveSession                                                                                                                                  
+                                                                                                                                                                                
+config = ConfigProto()                                                                                                                                                               
+config.gpu_options.allow_growth = True                                                                                                                                               
+session = InteractiveSession(config=config)  
 
 def main():
     if len(sys.argv) == 2:
@@ -60,11 +66,13 @@ def main():
         [bands.append(True) for i in range(3)]
     bands = list(np.array(bands).reshape(-1))
     print("The bands are: ", bands)
-    # Extract split ratio from filename
+    # Extract split ratio from filename or binary
+    binary = False
     for param in model_name.split('_'):
         if 'ratio' in param:
             ratio = float(param.replace('ratio', ''))
-
+        if 'bin' in param:
+            binary = True
     # Paths
     WORKDIR = config['general']['workdir']
     sys.stdout.write('Project directory: %s\n' % WORKDIR)
@@ -131,7 +139,7 @@ def main():
         batch_size=total_val,
         validation=True,
         bands=bands,
-        binary=False)
+        binary=binary)
 
     # Obtain model from the saving directory
     model_name_base = os.path.basename(model_name)
