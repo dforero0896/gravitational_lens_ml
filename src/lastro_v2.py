@@ -4,7 +4,7 @@ from sklearn.metrics import roc_curve
 from helpers import build_generator_dataframe, get_file_id
 import tensorflow.keras.backend as K
 from tensorflow import keras
-from tensorflow.keras.layers import Dense, Conv2D, Flatten, Dropout, MaxPooling2D, BatchNormalization, SpatialDropout2D, ELU 
+from tensorflow.keras.layers import Dense, Conv2D, Flatten, Dropout, MaxPooling2D, BatchNormalization, SpatialDropout2D
 from tensorflow.keras.models import Sequential
 from sklearn.model_selection import train_test_split
 import tensorflow as tf
@@ -110,41 +110,34 @@ def build_lastro_model(kernel_size_1, kernel_size_2, pool_size, input_shape, dro
     returns: Keras' sequential model"""
 
     return Sequential([
-            Conv2D(16, kernel_size_1, padding='same',
+            Conv2D(16, kernel_size_1, padding='same', activation='relu',
                 input_shape=input_shape),
-            ELU(),
-            Conv2D(16, kernel_size_2, padding='same'),
-            ELU(),
+            Conv2D(16, kernel_size_2, padding='same', activation='relu'),
             MaxPooling2D(pool_size=(pool_size, pool_size)),
             BatchNormalization(axis=-1),
-            Conv2D(32, kernel_size_2, padding='same'),
-            ELU(),
-            Conv2D(32, kernel_size_2, padding='same'),
-            ELU(),
+            Conv2D(32, kernel_size_2, padding='same', activation='relu'),
+            Conv2D(32, kernel_size_2, padding='same', activation='relu'),
             MaxPooling2D(pool_size=(pool_size, pool_size)),
             BatchNormalization(axis=-1),
-            Conv2D(64, kernel_size_2, padding='same'),
-            ELU(),
-            Conv2D(64, kernel_size_2, padding='same'),
-            ELU(),
+            Conv2D(64, kernel_size_2, padding='same', activation='relu'),
+            Conv2D(64, kernel_size_2, padding='same', activation='relu'),
             MaxPooling2D(pool_size=(pool_size, pool_size)),
             BatchNormalization(axis=-1),
+            Conv2D(128, kernel_size_2, padding='same', activation='relu'),
+            Conv2D(128, kernel_size_2, padding='same', activation='relu'),
             dropout_kind(0.5),
-            Conv2D(128, kernel_size_2, padding='same'),
-            ELU(),
+            Conv2D(256, kernel_size_2, padding='same', activation='relu'),
             dropout_kind(0.4),
-            Conv2D(128, kernel_size_2, padding='same'),
-            ELU(),
+            Conv2D(256, kernel_size_2, padding='same', activation='relu'),
+            BatchNormalization(axis=-1),
             dropout_kind(0.3),
             Flatten(),
-            Dense(1024),
-            ELU(),
+            Dense(1024, activation='relu'),
             Dropout(0.2),
-            Dense(1024),
-            ELU(),
+            Dense(1024, activation='relu'),
             Dropout(0.2),
-            Dense(1024),
-            ELU(),
+            Dense(1024, activation='relu'),
+            BatchNormalization(axis=-1),
             Dense(1, activation='sigmoid')
         ])
 def main():
