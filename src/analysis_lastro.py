@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from helpers import build_generator_dataframe, get_file_id
 from data_generator_function import TiffImageDataGenerator
-from sklearn.metrics import roc_curve
+from sklearn.metrics import roc_curve, fbeta_score
 from sklearn.model_selection import train_test_split
 import tensorflow as tf
 import pandas as pd
@@ -213,12 +213,13 @@ def main():
                                  use_multiprocessing=True)
     fpr, tpr, thresholds = roc_curve(np.ravel(labels_true),
                                      np.ravel(labels_score))
+    labels_10_predicted = (labels_score > 0.5).astype(int)
+    fbetascore = fbeta_score(labels_true, labels_10_predicted, beta=0.01)
     scores = model.evaluate(images_val,
                             labels_true,
                             batch_size=True,
                             verbose=1,
-                            workers=16,
-                            use_multiprocessing=True)
+                            workers=16)
     scores_dict = {
         metric: value
         for metric, value in zip(model.metrics_names, scores)
@@ -241,7 +242,7 @@ def main():
 
     plt.plot(fpr,
              tpr,
-             label='Validation\nAUC=%.3f\nACC=%.3f' % (auc, acc),
+             label='Validation\nAUC=%.3f\nACC=%.3f\nF$\\beta$=%.3f' % (auc, acc, fbetascore),
              lw=3)
     plt.xlabel('FPR')
     plt.ylabel('TPR')

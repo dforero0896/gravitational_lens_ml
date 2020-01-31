@@ -5,7 +5,7 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import numpy as np
 import tifffile
 import os
-
+from astropy.io import fits
 
 class TiffImageDataGenerator(ImageDataGenerator):
     def __init__(self, *args, **kwargs):
@@ -22,7 +22,9 @@ class TiffImageDataGenerator(ImageDataGenerator):
         if binary:
             img = np.load(path)
         else:
-            img = tifffile.imread(path)
+#            img = tifffile.imread(path)
+            with fits.open(path, ignore_missing_end=True) as tab:
+                img = tab[0].data
         return img
 
     def image_generator_dataframe(self,
@@ -65,8 +67,9 @@ class TiffImageDataGenerator(ImageDataGenerator):
             if get_ids: batch_id = []
             # Read in each input, perform preprocessing and get labels
             for input_path in batch_paths:
-                input = self.get_input(os.path.join(directory, input_path),
-                                       binary=binary)[:, :, bands]
+                input = self.get_input(os.path.join(directory,input_path), binary=binary)
+                if len(input.shape)==3: input = input[:,:,bands]
+                else:input=input[:,:,None]
                 output = dataframe[dataframe[x_col] ==
                                    input_path][y_col].values[0]
                 if self.preprocessing_function:
@@ -137,8 +140,9 @@ class TiffImageDataGenerator(ImageDataGenerator):
             if get_ids: batch_id = []
             # Read in each input, perform preprocessing and get labels
             for input_path in batch_paths:
-                input = self.get_input(os.path.join(directory, input_path),
-                                       binary=binary)[:, :, bands]
+                input = self.get_input(os.path.join(directory,input_path), binary=binary)
+                if len(input.shape)==3: input = input[:,:,bands]
+                else:input=input[:,:,None]
                 output = dataframe[dataframe[x_col] ==
                                    input_path][y_col].values[0]
                 if self.preprocessing_function:
@@ -165,7 +169,9 @@ class TiffImageDataGenerator(ImageDataGenerator):
             batch_input = []
             for i in range(batch_size):
                 fn = next(files)
-                input = self.get_input(os.path.join(directory,fn), binary=binary)[:,:,bands]
+                input = self.get_input(os.path.join(directory,fn), binary=binary)
+                if len(input.shape)==3: input = input[:,:,bands]
+                else:input=input[:,:,None]
                 batch_input += [input]
                 id_logger += [fn]
             batch_x = np.array(batch_input)
