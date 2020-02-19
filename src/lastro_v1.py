@@ -172,7 +172,7 @@ def main():
     RESULTS = os.path.join(WORKDIR, 'results')
     TRAIN_MULTIBAND = config['general']['train_multiband']
     TEST_MULTIBAND = os.path.join(DATA, 'test_multiband')
-    # Catalog (should be updated to last version)
+    # Catalog 
     lens_df = pd.read_csv(os.path.join(RESULTS, 'lens_id_labels.csv'), index_col=0)
     dataframe_for_generator = build_generator_dataframe(lens_df, TRAIN_MULTIBAND)
     # Extract data proportions for loss weighting
@@ -199,21 +199,6 @@ def main():
     pool_size = int(config['trainparams']['pool_size'])
 
     
-    if config['trainparams']['subsample_train'] == 'total': #Import subsample size and check values are as expected.
-        subsample_train = total_train
-        subsample_val = total_val
-    else:
-        try:
-            subsample_train = int(config['trainparams']['subsample_train'])
-            subsample_val = int(subsample_train*test_fraction/(1.-test_fraction))
-        except:
-            raise ValueError('subsample_train should be \'total\' or int.')
-    print("The number of objects in the training subsample is: ", subsample_train)
-    print("The number of objects in the validation subsample is: ", subsample_val)
-    train_steps_per_epoch = int(subsample_train//batch_size)
-    val_steps_per_epoch = int(subsample_val//batch_size)
-    print("The number of training steps is: ", train_steps_per_epoch)
-    print("The number of validation steps is: ", val_steps_per_epoch)
     bands = [config['bands'].getboolean('VIS0'),
             config['bands'].getboolean('NIR1'),
             config['bands'].getboolean('NIR2'),
@@ -229,6 +214,21 @@ def main():
     print("The number of objects in the whole training sample is: ", total_train)
     print("The number of objects in the whole validation sample is: ", total_val)
     print("The test fraction is: ", test_fraction)
+    if config['trainparams']['subsample_train'] == 'total': #Import subsample size and check values are as expected.
+        subsample_train = total_train
+        subsample_val = total_val
+    else:
+        try:
+            subsample_train = int(config['trainparams']['subsample_train'])
+            subsample_val = int(subsample_train*test_fraction/(1.-test_fraction))
+        except:
+            raise ValueError('subsample_train should be \'total\' or int.')
+    print("The number of objects in the training subsample is: ", subsample_train)
+    print("The number of objects in the validation subsample is: ", subsample_val)
+    train_steps_per_epoch = int(subsample_train//batch_size)
+    val_steps_per_epoch = int(subsample_val//batch_size)
+    print("The number of training steps is: ", train_steps_per_epoch)
+    print("The number of validation steps is: ", val_steps_per_epoch)
 
     # Create TiffImageDataGenerator objects to inherit random transformations from Keras' class.
     image_data_gen_train = TiffImageDataGenerator(featurewise_center=False,
@@ -406,10 +406,10 @@ def main():
     # Expect tf update to use threadsafe_iter class.
     history = model.fit_generator(
         train_data_gen,
-        steps_per_epoch=total_train//batch_size,
+        steps_per_epoch=subsample_train//batch_size,
         epochs=epochs,
         validation_data=val_data_gen,
-        validation_steps=total_val//batch_size,
+        validation_steps=subsample_val//batch_size,
         callbacks=[cp_callback, es_callback, lr_reducer,
                 cp_best_callback, history_callback, logger_callback, tensorboard_callback],
         class_weight=class_weights,

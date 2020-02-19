@@ -9,6 +9,7 @@ import pandas as pd
 import os
 import sys
 import tifffile
+from tensorflow.keras.preprocessing.image import array_to_img, save_img
 
 def get_image_filename_from_id(id_, band, set_):
     fname = os.path.join(set_, '{0}/image{0}-{1}.fits'.format(band, id_))
@@ -38,6 +39,30 @@ def build_image(id_, set_, bands = ['EUC_VIS', 'EUC_H', 'EUC_J', 'EUC_Y'], img_s
     for t in tables:
         t.close()
     return data.astype(np.float32)
+def fits_to_npy(ifile, odir):
+    ibase = os.path.basename(ifile)
+    ofile = os.path.join(odir, ibase.replace('fits', 'npy'))
+    with fits.open(ifile) as itable:
+        data = itable[0].data
+    np.save(ofile, data)
+def preprocess_band(image, clip=True):
+    """Do clip preprocessing of a single band.
+
+    param: image (ndarray): 2D array containing a single band's data.
+    param: clip (bool): Whether or not to do clip preprocessing. if False log-stretches the image.
+           Defaults to True.
+    returns: newimage (ndarray): Preprocessed 2D array."""
+
+    image[np.isnan(image)] = 0.
+    if clip:
+        interval = AsymmetricPercentileInterval(0.25, 99.75, n_samples=100000)
+        vmin, vmax = interval.get_limits(image)
+        stretch = MinMaxInterval() +  LogStretch()
+        newimage = stretch(((np.clip(image, -vmin*0.7, vmax))/(vmax)))
+    else:
+        stretch =  LogStretch() + MinMaxInterval()
+        newimage = stretch(image)
+    return newimage
 def save_img_dataset(id_list, set_, outpath='.', clip = False, overwrite = False):
     sys.stdout.write('Saving into directory %s\n'%os.path.realpath(outpath))
     sys.stdout.write('clip = %s\noverwrite = %s\n'%(clip, overwrite))

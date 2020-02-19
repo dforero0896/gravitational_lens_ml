@@ -13,7 +13,13 @@ from sklearn.model_selection import train_test_split
 import tensorflow as tf
 import pandas as pd
 import matplotlib as mpl
-
+## Fix errors about not finding Conv                                                                                                                                                 
+from tensorflow.compat.v1 import ConfigProto                                                                                                                                         
+from tensorflow.compat.v1 import InteractiveSession                                                                                                                                  
+                                                                                                                                                                                   
+config = ConfigProto()                                                                                                                                                               
+config.gpu_options.allow_growth = True                                                                                                                                               
+session = InteractiveSession(config=config)
 
 def main():
     if len(sys.argv) == 2:
@@ -96,30 +102,25 @@ def main():
     image_data_gen_val = TiffImageDataGenerator(dtype='float32')
 
     # Create generators for Images and Labels
-    test_data_gen = image_data_gen_val.image_generator_dataframe(
-        val_df,
-        directory='',
-        x_col='filenames',
-        y_col='labels',
-        batch_size=10,
-        validation=True,
+    prediction_ids = []
+    test_data_gen = image_data_gen_val.generator_from_directory(
+        directory=TEST_MULTIBAND,
+        id_logger=prediction_ids,
+        batch_size=1,
         bands=bands,
-        binary=True,
-        get_ids=True)
+        binary=True)
 
     # Obtain model from the saving directory
     model_name_base = os.path.basename(model_name)
     model = tf.keras.models.load_model(model_name)
     model.summary()
-
-    images_val, labels_true, ids = next(test_data_gen)
-    predictions = model.predict(images_val,
-                                verbose=2,
-                                workers=16,
-                                use_multiprocessing=True)
-    
+    len_gen = len(os.listdir(TRAIN_MULTIBAND))
+    print(len_gen)
+    predictions = model.predict_generator(test_data_gen,
+                                verbose=1, steps = len_gen)
+    int_prediction_ids = np.array([get_file_id(fn) for fn in prediction_ids], dtype=int)
     np.savetxt(os.path.join(RESULTS, model_name_base.replace(
-        '.h5', 'predictions.dat')), np.array([np.squeeze(ids), np.squeeze(predictions>0.5), np.squeeze(labels_true)], dtype=int).T)
+        '.h5', 'predictions.dat')), np.array([np.squeeze(int_prediction_ids).astype(int), np.squeeze(predictions)]).T, fmt='%i %.5f')
 
 
 if __name__ == '__main__':

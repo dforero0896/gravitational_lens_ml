@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from helpers import build_generator_dataframe, get_file_id
 from data_generator_function import TiffImageDataGenerator
-from sklearn.metrics import roc_curve
+from sklearn.metrics import roc_curve, fbeta_score
 from sklearn.model_selection import train_test_split
 import tensorflow as tf
 import pandas as pd
@@ -14,7 +14,13 @@ import re
 import configparser
 import pickle
 import numpy as np
-
+## Fix errors about not finding Conv                                                                                                                                                 
+from tensorflow.compat.v1 import ConfigProto                                                                                                                                         
+from tensorflow.compat.v1 import InteractiveSession                                                                                                                                  
+                                                                                                                                                                                
+config = ConfigProto()                                                                                                                                                               
+config.gpu_options.allow_growth = True                                                                                                                                               
+session = InteractiveSession(config=config)  
 
 def main():
     if len(sys.argv) == 2:
@@ -60,11 +66,13 @@ def main():
         [bands.append(True) for i in range(3)]
     bands = list(np.array(bands).reshape(-1))
     print("The bands are: ", bands)
-    # Extract split ratio from filename
+    # Extract split ratio from filename or binary
+    binary = False
     for param in model_name.split('_'):
         if 'ratio' in param:
             ratio = float(param.replace('ratio', ''))
-
+        if 'bin' in param:
+            binary = True
     # Paths
     WORKDIR = config['general']['workdir']
     sys.stdout.write('Project directory: %s\n' % WORKDIR)
@@ -131,7 +139,7 @@ def main():
         batch_size=total_val,
         validation=True,
         bands=bands,
-        binary=False)
+        binary=binary)
 
     # Obtain model from the saving directory
     model_name_base = os.path.basename(model_name)
@@ -205,12 +213,13 @@ def main():
                                  use_multiprocessing=True)
     fpr, tpr, thresholds = roc_curve(np.ravel(labels_true),
                                      np.ravel(labels_score))
+    labels_10_predicted = (labels_score > 0.5).astype(int)
+    fbetascore = fbeta_score(labels_true, labels_10_predicted, beta=0.01)
     scores = model.evaluate(images_val,
                             labels_true,
                             batch_size=True,
                             verbose=1,
-                            workers=16,
-                            use_multiprocessing=True)
+                            workers=16)
     scores_dict = {
         metric: value
         for metric, value in zip(model.metrics_names, scores)
@@ -233,7 +242,7 @@ def main():
 
     plt.plot(fpr,
              tpr,
-             label='Validation\nAUC=%.3f\nACC=%.3f' % (auc, acc),
+             label='Validation\nAUC=%.3f\nACC=%.3f\nF$\\beta$=%.3f' % (auc, acc, fbetascore),
              lw=3)
     plt.xlabel('FPR')
     plt.ylabel('TPR')

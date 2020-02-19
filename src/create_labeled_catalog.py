@@ -28,15 +28,19 @@ missing_img = np.setdiff1d(image_catalog.ID.values,
 # http://metcalf1.difa.unibo.it/DATA3/evaluation.pdf
 #image_catalog['is_lens'] = (image_catalog['mag_lens'] > 1.2) & (
 #    image_catalog['n_sources'] != 0)
-image_catalog['is_lens'] = (image_catalog['mag_eff'] > 2)
-image_catalog['is_non_lens'] = (image_catalog['mag_eff']<1.2) | (image_catalog['n_sources']==0)
-image_catalog['not_none'] = image_catalog['is_lens'] | image_catalog['is_non_lens']
-image_catalog = image_catalog[image_catalog['not_none']]
+image_catalog['is_lens'] = (image_catalog['mag_eff'] > 1.6) & (image_catalog['n_source_im'] > 0) & (image_catalog['n_pix_source'] > 20) # True for lenses
+image_catalog['is_non_lens'] = (image_catalog['mag_eff']<1) | (image_catalog['n_sources']==0) # True for nonlenses
+image_catalog['not_none'] = image_catalog['is_lens'] | image_catalog['is_non_lens'] # True for lenses or nonlenses
+image_catalog = image_catalog[image_catalog['not_none']] # Remove lines which are neither
 # Add a flag to lines with no corresponding image
-image_catalog['img_exists'] = True
+image_catalog['img_exists'] = True 
 image_catalog['img_exists'].loc[image_catalog['ID'].isin(missing_img)] = False
 # Remove duplicate IDs
 image_catalog = image_catalog.drop_duplicates('ID')
+# Randomly choose lenses to save a fair (equal proportion) catalog
+select_lens = image_catalog[image_catalog['is_lens']].sample((~image_catalog['is_lens']).sum())
+fair_catalog = pd.concat([image_catalog[(~image_catalog['is_lens'])], select_lens])
+image_catalog = fair_catalog.sample(frac = 1)
 print('Number of lenses: %i' % image_catalog['is_lens'].sum())
 print('Number of non lenses: %i' % (~image_catalog['is_lens']).sum())
 print('Total lines remaining: %i'%len(image_catalog[image_catalog['img_exists']]))
